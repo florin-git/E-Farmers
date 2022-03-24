@@ -1,0 +1,29 @@
+{% extends 'views/common.html' %}
+
+{% block content %}
+
+<style type="text/css">
+    td {
+      padding: 0 15px;
+    }
+  </style>
+  
+
+<table>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Expiring in</th>
+      <th>Gathering location</th>
+    </tr>
+    {% for insertion in insertions%}
+        <tr>
+            <td>{{insertion.title}}</td>
+            <td>{{insertion.description}}</td>
+            <td>{{insertion.expiring_in}}</td>
+            <td>{{insertion.gathering_location}}</td>
+        </tr>
+    {% endfor %}
+  </table> 
+
+{% endblock %}
