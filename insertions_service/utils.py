@@ -1,3 +1,4 @@
+"""
 from pymongo import MongoClient
 def get_db_handle(db_name, host, port, username, password):
 
@@ -8,3 +9,4 @@ def get_db_handle(db_name, host, port, username, password):
                      )
  db_handle = client['db_name']
  return db_handle, client
+"""
