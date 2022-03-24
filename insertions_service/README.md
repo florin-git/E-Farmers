@@ -15,6 +15,7 @@ Since there is no way to create new insertions as a user, a dedicated page has b
 This page is temporary, as soon as the creation of an insertion will be developed this page can be deleted.
 
 ## Usage
+- Install Djongo (check out [this](https://e-farmers.atlassian.net/wiki/spaces/EF/pages/3342337/MongoDB+Tutorial+and+Tooltip?parentProduct=JSW&NO_SSR=1#Djongo-installation) page)
 - Create a database in MongoDB called 'insertions'
 - Start the django server
 - Navigate to /insertions/generate_test_insertions in order to initialize the database with insertions example
