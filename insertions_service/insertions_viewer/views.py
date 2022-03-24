@@ -9,8 +9,8 @@ from django.core import serializers
 
 # Create your views here.
 def index(request):
-    insertions = Insertion.getAllInsertions()
-    json_data = serializers.serialize("json",insertions)    
+    # insertions = Insertion.getAllInsertions()
+    insertions = Insertion.objects.filter()
     context = {}
     context['insertions'] = insertions
     return render(request, 'views/index.html', context)

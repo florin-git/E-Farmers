@@ -15,13 +15,3 @@ class Insertion(models.Model):
     gathering_location = models.CharField(max_length=100)
     image = models.ImageField()
     reported = models.BooleanField()
-
-    def _str_(self):
-        return "Title: " + self.title + "\nDescription: " + self.description + "\nExpiring in: " + str(self.expiring_in) + " days\nGathering location: " + self.gathering_location + "\n\n"
-
-    @staticmethod
-    def getAllInsertions():
-        insertions = Insertion.objects.filter()
-        for insertion in insertions:
-            print("insertion:\n", Insertion._str_(insertion))
-        return insertions
