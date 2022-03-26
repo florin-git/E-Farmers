@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from insertions_manager.models import Insertion
+from insertions_manager.models import *
 from djongo import *
 import datetime
 import os
@@ -19,6 +19,8 @@ def generate_test_insertions(request):
     insertion_1.save()
     insertion_2.save()
     insertion_3.save()
+    box_1 = Box(insertion=insertion_1, weight=10, size=10, price=10)
+    box_1.save()
     return HttpResponse("Generated test insertions 'Melanzane', 'Cipolle' and 'Zucchine'")
 
 def test_image(request):

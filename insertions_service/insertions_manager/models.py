@@ -8,3 +8,9 @@ class Insertion(models.Model):
     gathering_location = models.CharField(max_length=100)
     image = models.ImageField()
     reported = models.BooleanField()
+
+class Box(models.Model):
+    insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
+    weight = models.IntegerField()
+    size = models.IntegerField()
+    price = models.IntegerField()
