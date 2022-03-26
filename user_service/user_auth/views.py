@@ -1,13 +1,26 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import generic
-
+from .forms import RegisterUserForm
+#for show profile
+from django.views.generic import DetailView
+from .models import Profile
 
 # Create your views here.
+
+class ShowProfilePageView(DetailView):
+    model = Profile
+    template_name = 'user_auth/userProfile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        users = Profile.objects.all()
+        context = super(ShowProfilePageView, self).get_context_data(*args,**kwargs)
+        
+        page_user = get_object_or_404(Profile, id = self.kwargs['pk'])
+        
+        context["page_user"] = page_user
+        return context
+    
 
 def show_home(request):
     return render( request, 'user_auth/homePage.html')
@@ -29,7 +42,7 @@ def login_user(request):
 
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()         #save the information that u fill on the form
             username = form.cleaned_data['username']
@@ -39,7 +52,7 @@ def signup(request):
             messages.success(request, ("Registration Successfull! "))
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = RegisterUserForm()
 
     return render(request, 'user_auth/signup.html', {
         'form' : form,
@@ -50,6 +63,4 @@ def logout_user(request):
     messages.success(request,(" Successfully logged out"))
     return redirect('home')
 
-def viewProfile(request):
-    return render(request, 'user_auth/userProfile.html')
 

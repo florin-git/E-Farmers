@@ -23,7 +23,7 @@
             </a>
             <div class="text-end">    
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" type = "button" class="btn btn-outline-info btn-lg fw-bold">Profile</a>
+                    <a href="{% url 'show_profile_page' request.user.id %}" type = "button" class="btn btn-outline-info btn-lg fw-bold">Profile</a>
                     <a href="{% url 'logout' %}" type = "button" class="btn btn-outline-light btn-lg px-4">Logout</a>
                 {% else %}
                     <a href="{% url 'login' %}" type = "button" class="btn btn-outline-light btn-lg px-4">Login</a>
