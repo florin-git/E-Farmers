@@ -45,12 +45,11 @@ def signup(request):
         'form' : form,
     })
 
-class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'user_auth/signup.html'
-
 def logout_user(request):
     logout(request)
     messages.success(request,(" Successfully logged out"))
     return redirect('home')
+
+def viewProfile(request):
+    return render(request, 'user_auth/userProfile.html')
+
