@@ -1,9 +1,9 @@
-from django.urls import include, path
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
     path('', views.index, name='insertions'),
-    path('generate_test_insertions/', views.generate_test_insertions),
-    path('test_image', views.test_image),
+    path('new/', views.new, name='new'),
+    path('<int:insertion_id>', views.show, name='show'),
 ]

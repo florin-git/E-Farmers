@@ -2,38 +2,42 @@
 
 {% block content %}
 
-  <style type="text/css">
-    td {
-      padding: 0 15px;
-    }
-  </style>
+<br>
 
-  <hr/>
-
-  <div class="container-xl">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-      {% for insertion in insertions %}
-        <div class="col">
-          <div class="card">
-            <img src="test_image" class="card-img-top">
-            <div class="card-body">
-              <h5 class="card-title">{{insertion.title}}</h5>
-              <p class="card-text">Description: {{insertion.description}}</p>
-              <p class="card-text">Expiration date: {{insertion.expiration_date}}</p>
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm">
-                    <button type="button" class="btn btn-outline-secondary">Go to insertion page</button>
-                  </div>
-                  <div class="col-sm">
-                    <button type="button" class="btn btn-outline-success">Buy now</button>
-                  </div>
+<div class="container-xl">
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for insertion in insertions %}
+      <div class="col">
+        <div class="card">
+          {% if insertion.image != '' %}
+          <img src="/media/{{insertion.image}}" class="card-img-top">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{insertion.title}}</h5>
+            {% if insertion.description != '' %}
+            <p class="card-text">Description: {{insertion.description}}</p>
+            {% endif %}
+            {% if insertion.expiration_date.year != 1977 %}
+            <p class="card-text">Expiration date: {{insertion.expiration_date}}</p>
+            {% endif %}
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <script type="text/javascript"> function redirect_to_insertion(clicked_id){ window.location.href = "/insertions/" + clicked_id } </script>
+                  <button type="button" onclick="redirect_to_insertion(this.id)" class="btn btn-outline-secondary" id="{{insertion.id}}">Go to insertion page</button>
+                </div>
+                <div class="col-sm">
+                  <button type="button" class="btn btn-outline-success">Buy now</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
   </div>
+</div>
+
+<br>
+
 {% endblock %}

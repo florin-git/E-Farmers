@@ -1,0 +1,39 @@
+{% extends 'views/common.html' %}
+
+{% block content %}
+
+<div class="container-xl">
+    <br>
+    <h1>{{ insertion.title }}</h1>
+    {% if insertion.image != '' %}
+    <img src="/media/{{insertion.image}}" style="width:30%" class="card-img-top">
+    {% endif %}
+    {% if insertion.description != '' %}
+    <p class="card-text">Description: {{insertion.description}}</p>
+    {% endif %}
+    {% if insertion.expiration_date.year != 1977 %}
+    <p class="card-text">Expiration date: {{insertion.expiration_date}}</p>
+    {% endif %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for box in boxes %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% if box.size == 0 %}
+                    <h5 class="card-title">Small boxes</h5>
+                    {% elif box.size == 1 %}
+                    <h5 class="card-title">Medium boxes</h5>
+                    {% elif box.size == 2 %}
+                    <h5 class="card-title">Big boxes</h5>
+                    {% endif %}
+                    <p class="card-text">Weight of the box: {{box.weight}}kg</p>
+                    <p class="card-text">Price of the box: {{box.price}}€</p>
+                    <p class="card-text">Number of available boxes: {{box.number_of_available_boxes}}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

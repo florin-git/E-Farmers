@@ -1,0 +1,44 @@
+{% extends 'views/common.html' %}
+
+{% block content %}
+
+<br>
+
+<div class="container-xl">
+    <form action="/insertions/manager/publish/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" />
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" placeholder="Write your description here" id="description" name="description" style="height: 100px"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <!-- <input type="image" class="form-control" id="image"> -->
+            <input type="file" id="image" accept="image/png, image/jpeg" name="image" />
+        </div>
+        <div class="mb-3">
+            <label for="expiration_date" class="form-label">Expiration date</label>
+            <input type="date" class="form-control" id="expiration_date" name="expiration_date" />
+        </div>
+        <div class="mb-3">
+            <label for="gathering_location" class="form-label">Gathering location</label>
+            <input type="text" class="form-control" id="gathering_location" name="gathering_location" />
+        </div>
+        {% for size in sizes %}
+        <div class="input-group">
+            <span class="input-group-text">Number of {{size}} boxes, weight and price</span>
+            <input type="text" class="form-control" placeholder="Number of available {{size}} boxes" name="number_{{size}}_boxes">
+            <input type="text" class="form-control" placeholder="Weight of each box (kg)" name="weight_{{size}}_boxes">
+            <input type="text" class="form-control" placeholder="Price for each box (€)" name="price_{{size}}_boxes">
+        </div>
+        <br>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
