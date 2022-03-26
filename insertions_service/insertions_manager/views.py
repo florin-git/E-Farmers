@@ -27,3 +27,8 @@ def publish(request):
 
     
     return redirect('insertions')
+
+def delete(request, insertion_id):
+    insertion = Insertion.objects.get(id=insertion_id)
+    insertion.delete()
+    return redirect('insertions')

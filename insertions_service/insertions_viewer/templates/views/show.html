@@ -29,11 +29,15 @@
                     <p class="card-text">Weight of the box: {{box.weight}}kg</p>
                     <p class="card-text">Price of the box: {{box.price}}€</p>
                     <p class="card-text">Number of available boxes: {{box.number_of_available_boxes}}</p>
+                    <button type="button" class="btn btn-outline-success">Buy box</button>
                 </div>
             </div>
         </div>
     {% endfor %}
     </div>
+    <br>
+    <script type="text/javascript"> function redirect_to_insertion(insertion_id){ window.location.href = "/insertions/edit/" + insertion_id } </script>
+    <button type="button" onclick="redirect_to_insertion(this.id)" class="btn btn-outline-secondary" id="{{insertion.id}}">Edit insertion</button>
 </div>
 
 {% endblock %}

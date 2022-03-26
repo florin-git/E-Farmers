@@ -25,3 +25,9 @@ def show(request, insertion_id):
     context['insertion'] = insertion
     context['boxes'] = boxes
     return render(request, 'views/show.html', context)
+
+def edit(request, insertion_id):
+    insertion = Insertion.objects.get(id=insertion_id)
+    context = {}
+    context['insertion'] = insertion
+    return render(request, 'views/edit.html', context)
