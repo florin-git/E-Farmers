@@ -1,0 +1,28 @@
+{% extends 'user_auth/common.html' %}
+
+{% block content %}
+<br><br>
+
+{% if form.errors %}
+    <div class="alert alert-danger alert-dismissible d-flex fade show" role="alert">
+        <strong>WARNING : </strong>    There was an error with you form..
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 rounded-3 border shadow-lg">
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-2">
+        <h1 class="display-4 fw-bold lh-1">Create account</h1><br>
+        <form action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                <button type="submit" class="btn btn-outline-info btn-lg px-4">Sign Up</button>
+            </div>
+        </form> 
+      </div>
+    </div>
+</div>
+
+{% endblock %}
