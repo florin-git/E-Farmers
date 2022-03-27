@@ -17,14 +17,13 @@ def publish(request):
             new_small_box = Box(insertion=new_insertion, weight=request.POST['weight_small_boxes'], size=0, price=request.POST['price_small_boxes'], number_of_available_boxes=request.POST['number_small_boxes'])
             new_small_box.save()
 
-        if request.POST['number_medium_boxes'] != '':
+        if request.POST['number_medium_boxes'] != '' and request.POST['weight_medium_boxes'] != '' and request.POST['price_medium_boxes'] != '':
             new_medium_box = Box(insertion=new_insertion, weight=request.POST['weight_medium_boxes'], size=1, price=request.POST['price_medium_boxes'], number_of_available_boxes=request.POST['number_medium_boxes'])
             new_medium_box.save()
 
-        if request.POST['number_big_boxes'] != '':
+        if request.POST['number_big_boxes'] != '' and request.POST['weight_big_boxes'] != '' and request.POST['price_big_boxes'] != '':
             new_big_box = Box(insertion=new_insertion, weight=request.POST['weight_big_boxes'], size=2, price=request.POST['price_big_boxes'], number_of_available_boxes=request.POST['number_big_boxes'])
             new_big_box.save()
-
     
     return redirect('insertions')
 

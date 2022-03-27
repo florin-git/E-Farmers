@@ -10,7 +10,6 @@ def index(request):
     insertions = Insertion.objects.filter()
     context = {}
     context['insertions'] = insertions
-    print(type(insertions))
     return render(request, 'views/index.html', context)
 
 def new(request):
