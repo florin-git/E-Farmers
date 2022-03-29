@@ -1,5 +1,6 @@
 from email.policy import default
 from djongo import models
+from django.forms import ModelForm
 import datetime
 
 class Insertion(models.Model):
@@ -10,6 +11,9 @@ class Insertion(models.Model):
     image = models.ImageField(upload_to='images/')
     reported = models.BooleanField(default=False)
 
+    def check_expiration_date(expiration_date):
+        return 0
+
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
     weight = models.IntegerField(default=0)
@@ -18,5 +22,6 @@ class Box(models.Model):
     ### 1 is a medium box
     ### 2 is a big box
     size = models.IntegerField(default=0)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5)
     number_of_available_boxes = models.IntegerField(default=0)
+
