@@ -3,9 +3,12 @@
 {% block content %}
 
 <br>
+
 <div class="container-xl">
     <script type="text/javascript"> function redirect_to_insertion(insertion_id){ window.location.href = "/insertions/" + insertion_id + "/delete/"; } </script>
     <button type="button" onclick="redirect_to_insertion(this.id)" class="btn btn-outline-danger" id="{{insertion.id}}">Delete insertion</button>
 </div>
+
+<br>
 
 {% endblock %}
