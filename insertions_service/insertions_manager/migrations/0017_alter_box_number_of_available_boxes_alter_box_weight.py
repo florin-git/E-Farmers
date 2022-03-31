@@ -16,9 +16,4 @@ class Migration(migrations.Migration):
             name='number_of_available_boxes',
             field=models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)]),
         ),
-        migrations.AlterField(
-            model_name='box',
-            name='weight',
-            field=models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)]),
-        ),
     ]

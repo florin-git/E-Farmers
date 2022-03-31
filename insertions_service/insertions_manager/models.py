@@ -17,11 +17,7 @@ class Insertion(models.Model):
 
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
-    weight = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    ### The attribute size will take one of the three values: 0, 1 and 2
-    ### 0 is a small box
-    ### 1 is a medium box
-    ### 2 is a big box
+    weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
     size = models.IntegerField(choices=BOXES_SIZES, default=0)
     price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5, validators=[MinValueValidator(0)])
     number_of_available_boxes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
