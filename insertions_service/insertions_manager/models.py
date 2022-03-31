@@ -3,7 +3,9 @@ from typing_extensions import Required
 from djongo import models
 from django import forms
 from django.forms import ModelForm, DateInput
-import datetime
+from datetime import datetime
+from insertions_manager.boxes_sizes import *
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Insertion(models.Model):
     title = models.CharField(max_length=50)
@@ -13,29 +15,32 @@ class Insertion(models.Model):
     image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
 
-    def check_expiration_date(expiration_date):
-        return 0
-
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
-    weight = models.IntegerField(default=0)
+    weight = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     ### The attribute size will take one of the three values: 0, 1 and 2
     ### 0 is a small box
     ### 1 is a medium box
     ### 2 is a big box
-    size = models.IntegerField(default=0)
-    price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5)
-    number_of_available_boxes = models.IntegerField(default=0)
+    size = models.IntegerField(choices=BOXES_SIZES, default=0)
+    price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5, validators=[MinValueValidator(0)])
+    number_of_available_boxes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
 class InsertionForm(ModelForm):
     class Meta:
         model = Insertion
         fields = ['title', 'description', 'expiration_date', 'gathering_location', 'image']
         widgets = {
-            'expiration_date': forms.widgets.DateInput(attrs={'type': 'date'}),
+            'expiration_date': forms.widgets.DateInput(attrs={'type': 'date', 'min': datetime.today().strftime('%Y-%m-%d')}),
         }
 
 class BoxForm(ModelForm):
+    size = forms.ChoiceField(choices=BOXES_SIZES, label="Size", initial='', widget=forms.Select(), required=True)
     class Meta:
         model = Box
         fields = ['weight', 'size', 'price', 'number_of_available_boxes']
+        widgets = {
+            'weight': forms.NumberInput(attrs={'min': '0'}),
+            'price': forms.NumberInput(attrs={'min': '0'}),
+            'number_of_available_boxes': forms.NumberInput(attrs={'min': '0'}),
+        }
