@@ -1,0 +1,28 @@
+{% extends 'views/common.html' %}
+
+{% block content %}
+
+<br>
+
+<div class="container-xl">
+    <h1>Boxes available</h1>
+    <form action="/insertions/{{ insertion_id }}/boxes/add/" method="post">
+      {% csrf_token %}
+      {% for field in box_form %}
+        <div class="mb-3">
+          {{ field.errors }}
+          <label> 
+              {{ field.label_tag }}
+          </label>
+          <div>
+              {{ field }}
+          </div>
+        </div>
+      {% endfor %}
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+
+<br>
+
+{% endblock %}

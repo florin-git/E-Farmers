@@ -19,6 +19,5 @@ Just one: `insertions_service`
 - Install dependencies: `/path/to/E-Farmers/insertions_service$ pip install -r requirements.txt`
 - Create a database in MongoDB called 'insertions'
 - Check if the `mongod` service is up and running (`systemctl status mongod`) if not, start it: `sudo systemctl start mongod`
-- Make the migrations: `/path/to/E-Farmers/insertions_service$ python3 manage.py makemigrations`
 - Migrate the db: `/path/to/E-Farmers/insertions_service$ python3 manage.py migrate`
 - Start the django server: `/path/to/E-Farmers/insertions_service$ python3 manage.py runserver`

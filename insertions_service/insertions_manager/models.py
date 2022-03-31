@@ -1,14 +1,16 @@
 from email.policy import default
+from typing_extensions import Required
 from djongo import models
-from django.forms import ModelForm
+from django import forms
+from django.forms import ModelForm, DateInput
 import datetime
 
 class Insertion(models.Model):
     title = models.CharField(max_length=50)
-    description = models.TextField()
-    expiration_date = models.DateField(default=datetime.date(1977, 1, 1))
-    gathering_location = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='images/')
+    description = models.TextField(blank=True)
+    expiration_date = models.DateField()
+    gathering_location = models.CharField(max_length=100, blank=True)
+    image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
 
     def check_expiration_date(expiration_date):
@@ -25,3 +27,15 @@ class Box(models.Model):
     price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5)
     number_of_available_boxes = models.IntegerField(default=0)
 
+class InsertionForm(ModelForm):
+    class Meta:
+        model = Insertion
+        fields = ['title', 'description', 'expiration_date', 'gathering_location', 'image']
+        widgets = {
+            'expiration_date': forms.widgets.DateInput(attrs={'type': 'date'}),
+        }
+
+class BoxForm(ModelForm):
+    class Meta:
+        model = Box
+        fields = ['weight', 'size', 'price', 'number_of_available_boxes']

@@ -3,3 +3,4 @@ Djongo
 pymongo==3.12.3
 pytz
 Pillow
+typing-extensions

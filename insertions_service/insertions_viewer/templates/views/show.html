@@ -11,8 +11,9 @@
     {% if insertion.description != '' %}
     <p class="card-text">Description: {{insertion.description}}</p>
     {% endif %}
-    {% if insertion.expiration_date.year != 1977 %}
     <p class="card-text">Expiration date: {{insertion.expiration_date}}</p>
+    {% if insertion.gathering_location != '' %}
+    <p class="card-text">Gathering location: {{insertion.gathering_location}}</p>
     {% endif %}
     <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for box in boxes %}
@@ -36,7 +37,7 @@
     {% endfor %}
     </div>
     <br>
-    <script type="text/javascript"> function redirect_to_insertion(insertion_id){ window.location.href = "/insertions/edit/" + insertion_id } </script>
+    <script type="text/javascript"> function redirect_to_insertion(insertion_id){ window.location.href = "/insertions/" + insertion_id + "/edit/"} </script>
     <button type="button" onclick="redirect_to_insertion(this.id)" class="btn btn-outline-secondary" id="{{insertion.id}}">Edit insertion</button>
 </div>
 
