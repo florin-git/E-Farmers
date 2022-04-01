@@ -2,18 +2,18 @@
 
 ## Functionalities
 - Publish a new insertion
+- Add boxes to insertions
 - View the index of insertions
 - Show the details of an insertion
 - Delete an insertion
 
 ## Structure
 
-#### Django project
+#### Django projects
 Just one: `insertions_service`
 
 #### Project apps
-- `insertions_manager`: handles the requests that manipulate the models. The publishing and deletion of an insertion happen here.
-- `insertions_viewer`: all the requests that ask for the visualization of insertions go here. Insertions index, show, edit and delete pages are generated here.
+Just one: `insertions_manager`
 
 ## Usage
 - Install dependencies: `/path/to/E-Farmers/insertions_service$ pip install -r requirements.txt`
