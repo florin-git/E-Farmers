@@ -18,7 +18,6 @@ def new(request):
     elif request.method == 'POST':
         insertion_form = InsertionForm(request.POST, request.FILES)
         if insertion_form.is_valid():
-            print(request.POST)
             insertion = insertion_form.save()
             return HttpResponseRedirect(f'/insertions/{insertion.id}/boxes/add/')
         else: return HttpResponseBadRequest("Something went wrong with the data supplied")
@@ -34,20 +33,27 @@ def show(request, insertion_id):
 
 def edit(request, insertion_id):
     context = {}
+    boxes = Box.objects.filter(insertion_id=insertion_id)
+    can_add_new_boxes = True
+    sizes = [0, 1, 2]
+    for box in boxes:
+        box_size = BOX_SIZES[box.size][0]
+        if box_size in sizes: sizes.remove(box_size)
+    if len(sizes) == 0: can_add_new_boxes = False
     context['insertion'] = Insertion.objects.get(id=insertion_id)
+    context['can_add_new_boxes'] = can_add_new_boxes
     return render(request, 'views/edit.html', context)
 
 def add_boxes(request, insertion_id):
     if request.method == 'GET':
         context = {}
-        box_form = BoxForm()
+        box_form = BoxForm(insertion_id)
         context['insertion_id'] = insertion_id
         context['box_form'] = box_form
         return render(request, 'views/add_boxes.html', context)
     if request.method == 'POST':
-        box_form = BoxForm(request.POST)
+        box_form = BoxForm(insertion_id, request.POST)
         if box_form.is_valid():
-            print(request.POST)
             box = box_form.save(commit=False)
             box.insertion = Insertion.objects.get(id=insertion_id)
             box_form.save()
