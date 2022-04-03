@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
@@ -31,7 +32,6 @@ function Insertions(props) {
 
     const delete_insertion = async (insertion_id) => {
         if (window.confirm("Are you sure you want to delete this insertion?")) {
-            console.log(insertion_id)
             await fetch(
                 `http://localhost:8000/api/insertions/${insertion_id}`,
                 {
@@ -84,12 +84,12 @@ function Insertions(props) {
                         <div className="container">
                             <div className="row">
                                 <div className="col-sm">
-                                    <button
-                                        type="button"
+                                    <Link
                                         className="btn btn-outline-secondary"
+                                        to={`${insertion.id}`}
                                     >
                                         Go to insertion page
-                                    </button>
+                                    </Link>
                                 </div>
                                 <div className="col-sm">
                                     <button

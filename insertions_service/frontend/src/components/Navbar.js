@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar(props) {
     function NavDropdownExample() {
@@ -36,10 +36,10 @@ function Navbar(props) {
         // </Nav>
         <nav className="navbar navbar-dark bg-dark">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">
+                <Link className="navbar-brand" to={"insertions/"}>
                     e-Farmers
-                </a>
-                <Link className="btn btn-primary" to={"insertions/new"}>Go to insertion page</Link>
+                </Link>
+                <Link className="btn btn-primary" to={"insertions/new"}>Publish an Insertion</Link>
             </div>
         </nav>
     );
