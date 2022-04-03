@@ -55,8 +55,8 @@ However, I did not pay much attention to all the checks and to many other detail
 - Start the django server: `/path/to/E-Farmers/insertions_service$ python3 manage.py runserver`
 
 ## React
-- Make sure you have install and setup ReactJS. Please follow this [tutoral](https://e-farmers.atlassian.net/wiki/spaces/EF/pages/4554753/Setup+ReactJS?atlOrigin=eyJpIjoiMmQ5MDM3YmZlMGNkNDYzNThlNjMyNjk0ODUwYWY2NDQiLCJwIjoiaiJ9). 
+- Make sure you have install and setup ReactJS. Please follow this [tutorial](https://e-farmers.atlassian.net/wiki/spaces/EF/pages/4554753/Setup+ReactJS?atlOrigin=eyJpIjoiMmQ5MDM3YmZlMGNkNDYzNThlNjMyNjk0ODUwYWY2NDQiLCJwIjoiaiJ9).
 
-- All the needed npm packages should be installed, but if you have some problems you can find the packages I installed in the file `react_packages.txt`.
+- All the needed npm packages should be installed, but if you have some problems you can find the packages I installed in the file `react_packages.txt`. I used React v **17.0.0**.
 
 - Start React server (you have to be in the `frontened` folder): `npm start`
