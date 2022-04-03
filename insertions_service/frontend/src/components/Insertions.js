@@ -19,7 +19,7 @@ function Insertions(props) {
         (async () => {
             /* 
                 Because the 'await' keyword, the asynchronous
-                function is paused unitl the request completes. 
+                function is paused until the request completes. 
                 */
             const response = await fetch(
                 "http://localhost:8000/api/insertions/"
@@ -47,25 +47,6 @@ function Insertions(props) {
 
     const insertions_array = insertions.map((insertion) => {
         return (
-            // <Col key={insertion.id}>
-            //     <Card style={{ width: "18rem" }}>
-            //         <Card.Img variant="top" src={insertion.image} alt="img" />
-            //         <Card.Body>
-            //             <Card.Title>{insertion.title}</Card.Title>
-            //             <Card.Text>{insertion.description}</Card.Text>
-            //         </Card.Body>
-            //         <ListGroup className="list-group-flush">
-            //             <ListGroupItem>
-            //                 {insertion.expiration_date}
-            //             </ListGroupItem>
-            //         </ListGroup>
-            //         <Card.Footer>
-            //             <Button variant="info">Go to insertion page</Button>
-            //             <Button variant="info">Buy Now</Button>
-            //         </Card.Footer>
-            //     </Card>
-            // </Col>
-
             <div className="col" key={insertion.id}>
                 <div className="card">
                     <img src={insertion.image} className="card-img-top" />

@@ -4,3 +4,5 @@ pymongo==3.12.3
 pytz
 Pillow
 typing-extensions
+djangorestframework
+django-cors-headers

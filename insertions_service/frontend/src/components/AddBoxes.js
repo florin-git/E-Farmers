@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 
 function AddBoxes(props) {
     const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ function AddBoxes(props) {
     });
 
     const [redirect, setRedirect] = useState(false);
+    const { insertion_id } = useParams();
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -26,14 +27,15 @@ function AddBoxes(props) {
         event.preventDefault();
 
         try {
-            const response = await fetch(URL, {
+            const response = await fetch(`http://localhost:8000/api/insertions/${insertion_id}/boxes`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    insertion: insertion_id,
                     weight: formData.weight,
                     size: formData.size,
                     price: formData.price,
-                    number_of_available_boxes: formData.number_of_available_boxes,
+                    number_of_available_boxes: formData.number_of_available_boxes
                 }),
             });
 
@@ -59,7 +61,7 @@ function AddBoxes(props) {
     // console.log(formData)
 
     if (redirect) {
-        return <Navigate replace to="../insertions" />
+        return <Navigate replace to={`../insertions/${insertion_id}`} />
     }
 
     return (

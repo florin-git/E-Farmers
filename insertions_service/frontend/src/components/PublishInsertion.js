@@ -89,42 +89,10 @@ function PublishInsertion(props) {
     };
 
     if (redirect) {
-        return ( 
-        //     <Routes>
-        //         <Route path='/insertions' exact element={<Insertions />} />
-        //     </Routes>
-            <Navigate replace to="../insertions" />
-        )
-        // window.location.href = "../insertions"
+        return <Navigate replace to="../insertions" />
     }
 
     return (
-        // <div className="container-xl">
-        //     <h1>Insertion</h1>
-        //     <form>
-        //         <div className="form-group">
-        //             <label>Title</label>
-        //             <input
-        //                 type="text"
-        //                 className="form-control"
-        //                 onChange={handleChange}
-        //                 name="title"
-        //             />
-        //         </div>
-
-        //         <div className="form-group">
-        //             <label>Description</label>
-        //             <input
-        //                 type="text"
-        //                 className="form-control"
-        //                 onChange={handleChange}
-        //                 name="description"
-        //             />
-        //         </div>
-
-        //         <button className="btn btn-outline-secondary">Save</button>
-        //     </form>
-        // </div>
         <div className="container-md">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -195,7 +163,7 @@ function PublishInsertion(props) {
                         type="text"
                         className="form-control is-valid"
                         id="image"
-                        placeholder="Gathering Location"
+                        placeholder="Image"
                         value={formData.image}
                         name="image"
                         onChange={handleChange}

@@ -21,7 +21,7 @@ function App(props) {
                     <Route path='insertions/' exact element={<Insertions />} />
                     <Route path='insertions/new' exact element={<PublishInsertion />} />
                     <Route path="insertions/:insertion_id" exact element={<InsertionDetail />} />
-                    <Route path='insertions/add_boxes' exact element={<AddBoxes />} />
+                    <Route path='insertions/:insertion_id/boxes' exact element={<AddBoxes />} />
                 </Routes>
             </BrowserRouter>
 
