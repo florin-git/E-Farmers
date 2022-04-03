@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('weight', models.DecimalField(decimal_places=3, default=0.0, max_digits=6, validators=[django.core.validators.MinValueValidator(0)])),
                 ('size', models.IntegerField()),
-                ('price', models.IntegerField()),
+                ('price', models.DecimalField(decimal_places=2, default=0.0, max_digits=5)),
                 ('insertion', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='insertions_manager.insertion')),
             ],
         ),
