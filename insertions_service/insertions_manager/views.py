@@ -2,12 +2,79 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from djongo import *
 from .models import *
+# from rest_framework.views import APIView
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from .serializer import *
+from insertions_manager import serializer
 
-def index(request):
-    insertions = Insertion.objects.filter()
-    context = {}
-    context['insertions'] = insertions
-    return render(request, 'views/index.html', context)
+
+class InsertionsView(viewsets.ViewSet):
+    def list_insertions(self, request): # GET /api/insertions
+        """
+        Return a list of all the insertions.
+        """
+        insertions = Insertion.objects.all()
+        serializer = InsertionSerializer(insertions, many=True)
+        return Response(serializer.data)
+
+    def publish_insertion(self, request): # POST /api/insertions
+        serializer = InsertionSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)
+        serializer = InsertionSerializer(insertion)
+        return Response(serializer.data)
+
+    def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)  
+        serializer = InsertionSerializer(instance=insertion, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+    def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)
+        insertion.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class BoxesView(viewsets.ViewSet):
+    def show_detail(self, request): # GET /api/insertions
+        insertions = Insertion.objects.all()
+        serializer = InsertionSerializer(insertions, many=True)
+        return Response(serializer.data)
+
+    def publish_insertion(self, request): # POST /api/insertions
+        serializer = InsertionSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)
+        serializer = InsertionSerializer(insertion)
+        return Response(serializer.data)
+
+    def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)  
+        serializer = InsertionSerializer(instance=insertion, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+    def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<str:id>
+        insertion = Insertion.objects.get(id=insertion_id)
+        insertion.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# def index(request):
+#     insertions = Insertion.objects.filter()
+#     context = {}
+#     context['insertions'] = insertions
+#     return render(request, 'views/index.html', context)
 
 def new(request):
     if request.method == 'GET':

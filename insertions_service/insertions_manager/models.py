@@ -12,7 +12,7 @@ class Insertion(models.Model):
     description = models.TextField(blank=True)
     expiration_date = models.DateField()
     gathering_location = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(upload_to='images/', blank=True)
+    image = models.CharField(max_length=100)
     reported = models.BooleanField(default=False)
 
 class Box(models.Model):
@@ -22,13 +22,13 @@ class Box(models.Model):
     price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5, validators=[MinValueValidator(0)])
     number_of_available_boxes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
-class InsertionForm(ModelForm):
-    class Meta:
-        model = Insertion
-        fields = ['title', 'description', 'expiration_date', 'gathering_location', 'image']
-        widgets = {
-            'expiration_date': forms.widgets.DateInput(attrs={'type': 'date', 'min': datetime.today().strftime('%Y-%m-%d')}),
-        }
+# class InsertionForm(ModelForm):
+#     class Meta:
+#         model = Insertion
+#         fields = ['title', 'description', 'expiration_date', 'gathering_location']
+#         widgets = {
+#             'expiration_date': forms.widgets.DateInput(attrs={'type': 'date', 'min': datetime.today().strftime('%Y-%m-%d')}),
+#         }
 
 class BoxForm(ModelForm):
     size = forms.ChoiceField(choices=BOX_SIZES, label="Size", initial='', widget=forms.Select(), required=True)
