@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='box',
             name='size',
-            field=models.IntegerField(choices=[(0, 'Small'), (1, 'Medium'), (2, 'Big')], default=0),
+            field=models.PositiveIntegerField(choices=[(0, 'Small'), (1, 'Medium'), (2, 'Big')], default=0),
         ),
     ]
