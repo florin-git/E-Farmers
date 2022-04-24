@@ -27,7 +27,7 @@ function AddBoxes(props) {
         event.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:8000/api/insertions/${insertion_id}/boxes`, {
+            await fetch(`http://localhost:8000/api/insertions/${insertion_id}/boxes`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -68,18 +68,19 @@ function AddBoxes(props) {
         <div className="container-md">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="weight">Weight</label>
+                    <label htmlFor="weight">Weight (kg)</label>
                     <input
                         type="number"
-                        className="form-control is-valid"
+                        className="form-control"
                         id="title"
-                        min="0"
+                        min="0.01"
+                        step="0.1"
                         value={formData.weight}
                         name="weight"
                         onChange={handleChange}
                         required
                     />
-                    <div className="valid-feedback">Looks good!</div>
+      
                 </div>
 
                 <div className="form-group">
@@ -102,7 +103,7 @@ function AddBoxes(props) {
                     <label htmlFor="price">Price</label>
                     <input
                         type="number"
-                        className="form-control is-valid"
+                        className="form-control"
                         id="price"
                         min="0.00"
                         step="0.1"
@@ -118,7 +119,7 @@ function AddBoxes(props) {
                     <label htmlFor="number_of_available_boxes">Number of Available Boxes</label>
                     <input
                         type="number"
-                        className="form-control is-valid"
+                        className="form-control"
                         id="number_of_available_boxes"
                         min="0"
                         value={formData.number_of_available_boxes}
@@ -126,7 +127,7 @@ function AddBoxes(props) {
                         onChange={handleChange}
                         required
                     />
-                    <div className="valid-feedback">Looks good!</div>
+
                 </div>
 
                 <button className="btn btn-primary" type="submit">

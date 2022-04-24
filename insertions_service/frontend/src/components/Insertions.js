@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
-import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
 
 function Insertions(props) {
     const [insertions, setInsertions] = useState([]);
-
-    // setInsertions(insert);
 
     // One possiblity
     useEffect(() => {
@@ -30,6 +21,7 @@ function Insertions(props) {
         })();
     }, []);
 
+    // Deletion
     const delete_insertion = async (insertion_id) => {
         if (window.confirm("Are you sure you want to delete this insertion?")) {
             await fetch(
@@ -90,9 +82,6 @@ function Insertions(props) {
     });
 
     return (
-        // <Container>
-        //     <Row>{insertions_array}</Row>
-        // </Container>
         <div className="container-xl">
             <div className="row row-cols-1 row-cols-md-2 g-4">
                 {insertions_array}

@@ -2,11 +2,11 @@ import React from "react";
 import Insertions from "./components/Insertions";
 import Navbar from "./components/Navbar";
 import PublishInsertion from "./components/PublishInsertion";
-
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import AddBoxes from "./components/AddBoxes";
 import InsertionDetail from "./components/InsertionDetail";
+import AddBoxes from "./components/AddBoxes";
 
+// For managing routing
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 
 
