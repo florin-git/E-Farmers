@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, Route, Navigate } from "react-router-dom";
 import Box from "./Box";
 
 function InsertionDetail(props) {
@@ -8,8 +8,11 @@ function InsertionDetail(props) {
     // Retrieve the id from the URL
     const { insertion_id } = useParams();
 
+    // array that contains the sizes of the boxes of the insertion
+    const box_sizes = [];
+
     useEffect(() => {
-        // Make an asynchronous HTTP request.
+        // Retrieve Insertion details
         (async () => {
             /* 
                 Because the 'await' keyword, the asynchronous
@@ -23,6 +26,7 @@ function InsertionDetail(props) {
             setInsertion(data);
         })();
 
+        // Retrieve Boxes of the insertion
         (async () => {
             /* 
                 Because the 'await' keyword, the asynchronous
@@ -37,10 +41,10 @@ function InsertionDetail(props) {
         })();
     }, []);
 
-
-    // console.log(boxes)
-
     const boxes_array = boxes.map((box) => {
+        // Add sizes already present
+        box_sizes.push(box.size);
+
         // # With the notation ...box are passed
         // all the attributes of box to the Componenet Box
         return <Box key={box.id} {...box} />;
@@ -62,9 +66,13 @@ function InsertionDetail(props) {
                 {boxes_array}
             </div>
 
-            <Link to={`boxes/`} className="btn btn-outline-secondary">
-                Edit insertion
-            </Link>
+            {/* If the insertion contains already all the possible boxes
+            then you cannot add more boxes */}
+            {box_sizes.length !== 3 && (
+                <Link to={`boxes/`} className="btn btn-outline-secondary">
+                    Add Boxes
+                </Link>
+            )}
         </div>
     );
 }
