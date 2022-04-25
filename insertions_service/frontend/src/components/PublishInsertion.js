@@ -211,6 +211,7 @@ function PublishInsertion(props) {
                     />
                 </div>
 
+                {/* // TODO: Change the type from text to image */}
                 <div className="form-group">
                     <label htmlFor="image">Image</label>
                     <input
