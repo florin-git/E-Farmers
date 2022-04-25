@@ -81,5 +81,5 @@ I strongly suggest to install the following VSCode Extensions:
 - **ES7+ React/Redux/React-Native snippets**: React Snippets. For example, if you want to create a new Component the only thing you need to do is to write `rsf` and press enter.
 - **Prettier - Code formatter**: Simply press `CTRL + S` and your code is formatted in a nice way. If it does not work with a particular language, then go to your `settings.json` file of VSCode and add this line: 
 `"[your_language]": {"editor.defaultFormatter": "esbenp.prettier-vscode"}`
-Let's say React you want to add React, then you simply add the following line:
+Let's say you want to add React, then you simply add the following line:
  `"[javascriptreact]": {"editor.defaultFormatter": "esbenp.prettier-vscode"}`
