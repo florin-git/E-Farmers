@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Insertions(props) {
+    /**
+     ** VARIABLES
+     */
     const [insertions, setInsertions] = useState([]);
 
-    // One possiblity
+    /**
+     ** FUNCTIONS
+     */
+
     useEffect(() => {
-        // Make an asynchronous HTTP request.
+        /**
+         * Retrieve insertions from backend
+         */
         (async () => {
-            /* 
-                Because the 'await' keyword, the asynchronous
-                function is paused until the request completes. 
-                */
+            /**
+             * Because the 'await' keyword, the asynchronous 
+             * function is paused until the request completes. 
+             */
             const response = await fetch(
                 "http://localhost:8000/api/insertions/"
             );
@@ -32,7 +40,9 @@ function Insertions(props) {
             );
             // Keep all the insertions except the one deleted
             setInsertions(
-                insertions.filter((prevInsertion) => prevInsertion.id !== insertion_id)
+                insertions.filter(
+                    (prevInsertion) => prevInsertion.id !== insertion_id
+                )
             );
         }
     };
@@ -67,7 +77,9 @@ function Insertions(props) {
                                 <div className="col-sm">
                                     <button
                                         type="button"
-                                        onClick={() => delete_insertion(insertion.id)}
+                                        onClick={() =>
+                                            delete_insertion(insertion.id)
+                                        }
                                         className="btn btn-outline-success"
                                     >
                                         Delete

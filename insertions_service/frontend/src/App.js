@@ -5,11 +5,8 @@ import PublishInsertion from "./components/PublishInsertion";
 import InsertionDetail from "./components/InsertionDetail";
 import AddBoxes from "./components/AddBoxes";
 
-// For managing routing
+// For managing the routing
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-
-
-
 
 function App(props) {
     return (

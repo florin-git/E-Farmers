@@ -1,23 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useState } from "react";
-// import {
-//     faCheck,
-//     faTimes,
-//     faInfoCircle,
-// } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import Form from "react-bootstrap/Form";
-// import Feedback from "react-bootstrap/Feedback";
-
-
 import { Routes, Route, Navigate } from "react-router-dom";
-const URL = "http://localhost:8000/api/insertions/";
 
-// At leat 3 characters
-const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,50}$/;
+// Possible REGEX
+// https://www.youtube.com/watch?v=brcHK3P6ChQ
+// const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,50}$/;
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function PublishInsertion(props) {
+    /**
+     ** VARIABLES
+     */
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -27,19 +20,30 @@ function PublishInsertion(props) {
         reported: false,
     });
 
+    /**
+     * Variables for managing the input checks.
+     * If formValidation contains only empty strings,
+     * everything is ok;
+     * otherwise, it contains the message errors to be
+     * displayed.
+     */
     const [formValidation, setformValidation] = useState({
         title: "",
         expiration_date: "",
     });
 
+    // If redirect is true then redirect to the insertion page
     const [redirect, setRedirect] = useState(false);
 
-
-    // https://www.youtube.com/watch?v=brcHK3P6ChQ
+    /**
+     ** FUNCTIONS
+     */
 
     function handleChange(event) {
+        // Get name and value of the changed field
         const { name, value } = event.target;
 
+        // Update formData with the changed value
         setFormData((prevFormData) => {
             return {
                 ...prevFormData,
@@ -48,11 +52,14 @@ function PublishInsertion(props) {
         });
     }
 
-    // Call on submit
-    // Check the fields and write formValidation
-    // elements when one of them contains errors
+    /**
+     * Call on submit.
+     * It checks the input fields and possibly modifies
+     * formValidation values with the respective error messages.
+     */
     function validate() {
         const date = new Date();
+        // Get the date of today
         const today_str =
             date.getFullYear() +
             "-" +
@@ -61,16 +68,17 @@ function PublishInsertion(props) {
             date.getDate();
         const today = new Date(today_str);
 
-
-        // If we want to force a larger input
+        // ? Do we want to check also the length of the title?
         // formValidation.title =
-        //     // if len < 5
         //     formData.title.length < 5
         //         ? "The title must be at least 5 characters long!"
         //         : "";
 
+        // If the expiration_date was inputted
         if (formData.expiration_date) {
+            // Convert the string into a Date object
             const expiration_date = new Date(formData.expiration_date);
+
             formValidation.expiration_date =
                 // if expiration_date < today
                 expiration_date < today
@@ -80,6 +88,7 @@ function PublishInsertion(props) {
                       "";
         }
 
+        // Update formValidation
         setformValidation((prevFormValidation) => {
             return {
                 ...prevFormValidation,
@@ -88,58 +97,46 @@ function PublishInsertion(props) {
 
         let valid = true;
 
+        /**
+         * The inputs are valid if formValidation does not
+         * contain error messages (i.e., strings with lengths
+         * greater than 0)
+         */
         Object.values(formValidation).forEach(
             // if val.length > 0 then valid = false
             (val) => val.length > 0 && (valid = false)
         );
 
-        return valid
+        return valid;
     }
 
-
+    // On submit
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // If all the inputs are valid
         if (validate()) {
+            await fetch("http://localhost:8000/api/insertions/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: formData.title,
+                    description: formData.description,
+                    expiration_date: formData.expiration_date,
+                    gathering_location: formData.gathering_location,
+                    image: formData.image,
+                    reported: formData.reported,
+                }),
+            });
 
-            try {
-                await fetch(URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        title: formData.title,
-                        description: formData.description,
-                        expiration_date: formData.expiration_date,
-                        gathering_location: formData.gathering_location,
-                        image: formData.image,
-                        reported: formData.reported,
-                    }),
-                });
-
-                // If the submission was successfull
-                setRedirect(true);
-
-            } catch (err) {
-                /*
-                ?. is the optional chaining operator.
-                It is usefull because React automatically checks if
-                the attribute is null or undefined without raising
-                an exception if that field does not exist
-                */
-                // if (!err?.response) {
-                //     setErrMsg("No Server Response");
-                // }
-                // else {
-                // }
-            }
-        };
- 
-    }
+            // If the submission was successful
+            setRedirect(true);
+        }
+    };
 
     if (redirect) {
         return <Navigate replace to="../insertions" />;
     }
-
 
     return (
         <div className="container-md">
@@ -161,6 +158,7 @@ function PublishInsertion(props) {
                         }}
                         required
                     />
+                    {/* Display error if the condition is not satisfied */}
                     {formValidation.title.length > 0 && (
                         <span className="error">{formValidation.title}</span>
                     )}

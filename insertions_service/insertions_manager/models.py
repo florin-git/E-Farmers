@@ -1,4 +1,3 @@
-# from typing_extensions import Required
 from djongo import models
 from insertions_manager.box_sizes import *
 from django.core.validators import MinValueValidator

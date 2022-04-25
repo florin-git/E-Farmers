@@ -3,21 +3,31 @@ import { useParams, Link, Route, Navigate } from "react-router-dom";
 import Box from "./Box";
 
 function InsertionDetail(props) {
+    /**
+     ** VARIABLES
+     */
     const [insertion, setInsertion] = useState([]);
     const [boxes, setBoxes] = useState([]);
+
     // Retrieve the id from the URL
     const { insertion_id } = useParams();
 
-    // array that contains the sizes of the boxes of the insertion
+    // Array containing the sizes of the boxes of this insertion
     const box_sizes = [];
 
+    /**
+     ** FUNCTIONS
+     */
+
     useEffect(() => {
-        // Retrieve Insertion details
+        /**
+         * Retrieve insertions from backend
+         */
         (async () => {
             /* 
                 Because the 'await' keyword, the asynchronous
                 function is paused until the request completes. 
-                */
+            */
             const response = await fetch(
                 `http://localhost:8000/api/insertions/${insertion_id}`
             );
@@ -26,12 +36,10 @@ function InsertionDetail(props) {
             setInsertion(data);
         })();
 
-        // Retrieve Boxes of the insertion
+        /**
+         * Retrieve the boxes of this insertion from backend
+         */
         (async () => {
-            /* 
-                Because the 'await' keyword, the asynchronous
-                function is paused until the request completes. 
-                */
             const response = await fetch(
                 `http://localhost:8000/api/insertions/${insertion_id}/boxes`
             );
@@ -45,8 +53,10 @@ function InsertionDetail(props) {
         // Add sizes already present
         box_sizes.push(box.size);
 
-        // # With the notation ...box are passed
-        // all the attributes of box to the Componenet Box
+        /**
+         * With the notation ...box are passed
+         * all the attributes of box to the Componenet Box
+         */
         return <Box key={box.id} {...box} />;
     });
 
@@ -66,7 +76,8 @@ function InsertionDetail(props) {
                 {boxes_array}
             </div>
 
-            {/* If the insertion contains already all the possible boxes
+            {/* If the insertion already contains all the possible boxes 
+            (i.e., small, medium, large; so the array length is 3),
             then you cannot add more boxes */}
             {box_sizes.length !== 3 && (
                 <Link to={`boxes/`} className="btn btn-outline-secondary">
