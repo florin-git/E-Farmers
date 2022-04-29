@@ -69,11 +69,19 @@ Now, all you could have done in Django is possibile through a Frontend interface
 
   
 
-- All the needed npm packages should be installed, but if you have some problems you can find the packages I installed in the file `react_packages.txt`. I used React v **17.0.0**.
+- All the needed npm packages should be loaded in `package.json`, but if you have some problems you can find the packages I installed in the file `react_packages.txt`. I used React v **17.0.0**.
 
-  
 
-- Start React server (you have to be in the `frontened` folder): `npm start`
+- In order to run the app you should move to the `frontened` folder. Here, apply the following steps.
+
+
+- The React app also needs its `node_modules` folder with the used packages. However, that folder is ignored on GitHub, therefore you need to retrieve it by running: `npm i`
+
+
+- If you get some warnings simply run: `npm audit fix --force`
+
+
+- Start React server: `npm start`
 
 ## Best Practises
 I strongly suggest to install the following VSCode Extensions:
