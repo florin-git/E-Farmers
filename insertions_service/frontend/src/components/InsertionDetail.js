@@ -118,13 +118,13 @@ function InsertionDetail(props) {
             </div>
           </div>
 
-          <div className="row row-cols-1 row-cols-md-3 g-4">{boxes_array}</div>
+          <div className="row row-cols-1 row-cols-md-3 g-4 my-4">{boxes_array}</div>
 
           {/* If the insertion already contains all the possible boxes 
 						(i.e., small, medium, large; so the array length is 3),
 						then you cannot add more boxes */}
           {box_sizes.length !== 3 && (
-            <div className="mt-4">
+            <div className="my-2">
               <Link to={`boxes/`} className="btn btn-warning btn-lg">
                 Add Boxes
               </Link>

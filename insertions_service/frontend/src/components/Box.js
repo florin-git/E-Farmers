@@ -20,7 +20,7 @@ function Box(props) {
             <strong className="text-primary">{props.weight}kg</strong>
           </p>
           <p className="card-text">
-            Price of the box:{" "}
+            Box Price:{" "}
             <strong className="text-primary">{props.price}€</strong>
           </p>
           <p className="card-text">
