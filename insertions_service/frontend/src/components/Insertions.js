@@ -12,6 +12,9 @@ function Insertions(props) {
 
   const [showModal, setShowModal] = useState(false);
 
+  // It will contain the id of the deleted insertion
+  const [idToDelete, setIdToDelete] = useState(-1);
+
   /**
    ** FUNCTIONS
    */
@@ -30,15 +33,20 @@ function Insertions(props) {
 
       setInsertions(data);
     })();
-  }, []);
+  }, [idToDelete]); // Whenever you delete an insertion, the fetch is repeated
 
   // Manage Modal
   const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
+
+  // If you push the 'Delete' button
+  const handleShowModal = (event) => {
+    setIdToDelete(event.target.id);
+    setShowModal(true);
+  };
 
   // Deletion
-  const handleDeletion = async (insertion_id) => {
-    await fetch(`http://localhost:8000/api/insertions/${insertion_id}`, {
+  const handleDeletion = async () => {
+    await fetch(`http://localhost:8000/api/insertions/${idToDelete}`, {
       method: "DELETE",
     });
 
@@ -46,15 +54,21 @@ function Insertions(props) {
 
     // Keep all the insertions except the one deleted
     setInsertions(
-      insertions.filter((prevInsertion) => prevInsertion.id !== insertion_id)
+      insertions.filter((prevInsertion) => prevInsertion.id !== idToDelete)
     );
+
+    setIdToDelete(-1); // Update again the variable for the reloading
   };
 
   const insertions_array = insertions.map((insertion) => {
     return (
-      <div className="col">
-        <div className="card w-75" key={insertion.id}>
-          <img src={insertion.image} alt="img" className="card-img-top img-fluid" />
+      <div className="col" key={insertion.id}>
+        <div className="card w-75">
+          <img
+            src={insertion.image}
+            alt="img"
+            className="card-img-top img-fluid"
+          />
 
           <div className="card-body">
             <h5 className="card-title">{insertion.title}</h5>
@@ -77,8 +91,10 @@ function Insertions(props) {
                 <div className="col-sm">
                   <button
                     type="button"
-                    onClick={handleShowModal}
-                    className="btn btn-outline-success"
+                    id={insertion.id}
+                    name="delete"
+                    onClick={(event) => handleShowModal(event)}
+                    className="btn btn-outline-danger"
                   >
                     Delete
                   </button>
@@ -101,7 +117,7 @@ function Insertions(props) {
                       </button>
                       <button
                         className="btn btn-primary"
-                        onClick={() => handleDeletion(insertion.id)}
+                        onClick={() => handleDeletion()}
                       >
                         Yes
                       </button>
@@ -118,7 +134,9 @@ function Insertions(props) {
 
   return (
     <div className="container-lg">
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">{insertions_array}</div>
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {insertions_array}
+      </div>
     </div>
   );
 }

@@ -25,9 +25,9 @@ function InsertionDetail(props) {
      */
     (async () => {
       /* 
-                Because the 'await' keyword, the asynchronous
-                function is paused until the request completes. 
-            */
+        Because the 'await' keyword, the asynchronous
+        function is paused until the request completes. 
+      */
       const response = await fetch(
         `http://localhost:8000/api/insertions/${insertion_id}`
       );
@@ -57,6 +57,7 @@ function InsertionDetail(props) {
      * With the notation ...box are passed
      * all the attributes of box to the Componenet Box
      */
+    // if (box.number_of_available_boxes !== 0) // If the box is available
     return <Box key={box.id} {...box} />;
   });
 
@@ -64,34 +65,71 @@ function InsertionDetail(props) {
     <section>
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 mb-5">
+          <div className="col-lg-6">
             <img
               src={insertion.image}
               alt="insertion_image"
               //   className="card-img-top w-50"
               className="img-fluid"
             />
-            <div className="col-lg-6 pl-md-5">
-              <h2>{insertion.title}</h2>
-              <p className="">Description: {insertion.description}</p>
-              <p className="">Expiration date: {insertion.expiration_date}</p>
-              <p className="">
-                Gathering location: {insertion.gathering_location}
-              </p>
-            </div>
-            {/* <div className="row row-cols-1 row-cols-md-3 g-4">
-              {boxes_array}
-            </div> */}
+          </div>
+          <div className="col-lg-6 mt-4 mt-lg-0">
+            <h2 className="fw-bold">{insertion.title}</h2>
+            <p className="">
+              <strong className="orange">Description</strong>:{" "}
+              {insertion.description}
+            </p>
+            <p className="">
+              <strong className="orange">Expiration date</strong>:{" "}
+              {insertion.expiration_date}
+            </p>
+            <p className="">
+              <strong className="orange">Gathering location</strong>:{" "}
+              {insertion.gathering_location}
+            </p>
 
-            {/* If the insertion already contains all the possible boxes 
-            (i.e., small, medium, large; so the array length is 3),
-            then you cannot add more boxes */}
-            {box_sizes.length !== 3 && (
-              <Link to={`boxes/`} className="btn btn-outline-secondary">
+            <hr />
+
+            <div className="row mb-4">
+              <div className=" col-4 mb-2">
+                <label className="form-label fw-bold col" htmlFor="size">
+                  Size
+                </label>
+                <select className="form-select col" id="size" name="size">
+                  <option>Small</option>
+                  <option>Medium</option>
+                  <option>Large</option>
+                </select>
+              </div>
+
+              <div className=" col-3 mb-2">
+                <label className="form-label fw-bold col" htmlFor="quantity">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  className="form-control col text-center"
+                  id="quantity"
+                  name="quantity"
+                  min="0"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row row-cols-1 row-cols-md-3 g-4">{boxes_array}</div>
+
+          {/* If the insertion already contains all the possible boxes 
+						(i.e., small, medium, large; so the array length is 3),
+						then you cannot add more boxes */}
+          {box_sizes.length !== 3 && (
+            <div className="mt-4">
+              <Link to={`boxes/`} className="btn btn-warning btn-lg">
                 Add Boxes
               </Link>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
