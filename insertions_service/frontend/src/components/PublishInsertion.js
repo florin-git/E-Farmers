@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ

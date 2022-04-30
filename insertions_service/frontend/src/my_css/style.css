@@ -1,0 +1,17 @@
+* {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* .my-card-img {
+    height: 250px;
+    width: 300px
+} */
+
+.error {
+    color: red;
+}
+
+.green {
+    color: #82AE46;
+}
+

@@ -75,7 +75,8 @@ function AddBoxes(props) {
 
             setBoxes(data);
         })();
-    }, []);
+    }, [insertion_id]);
+
 
     /**
      * Manage the presence of particular sizes.
