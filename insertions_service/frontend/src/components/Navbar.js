@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Navbar(props) {
   return (
-    <nav className="navbar navbar-expand-md navbar-light bg-light mb-5">
+    <nav className="navbar navbar-expand-md navbar-light bg-light ">
       <div className="container-fluid">
         <Link className="navbar-brand" to={"/"}>
           E-Farmers
