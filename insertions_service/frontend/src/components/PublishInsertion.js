@@ -32,6 +32,14 @@ function PublishInsertion(props) {
     expiration_date: "",
   });
 
+  /**
+   * Variables for managing the presence of 'valid' 
+   * class for inputs.
+   * The strings could be:
+   * - 'is-invalid' when you want to show the validation msg.
+   * - 'is-valid' when you insert the correct input after the wrong one.
+   * - empty string if the input is ok from the beginning.
+   */
 	const [formValidationClass, setformValidationClass] = useState({
 		expiration_date_for_class: ""
   });
@@ -79,7 +87,7 @@ function PublishInsertion(props) {
       // Convert the string into a Date object
       const expiration_date = new Date(formData.expiration_date);
 
-
+      // Check date
 			if (expiration_date < today) {
 				formValidation.expiration_date = "The expiration date cannot be in the past!"
 				formValidationClass.expiration_date_for_class = "is-invalid"
@@ -87,6 +95,7 @@ function PublishInsertion(props) {
 			else {
 				formValidation.expiration_date = ""
 
+        // If previously you inserted a wrong input
 				if(formValidationClass.expiration_date_for_class === "is-invalid")
 					formValidationClass.expiration_date_for_class = "is-valid"
 			}
@@ -99,6 +108,7 @@ function PublishInsertion(props) {
       };
     });
 
+    // Update formValidationClass
 		setformValidationClass((prevFormValidationClass) => {
       return {
         ...prevFormValidationClass,
@@ -123,9 +133,6 @@ function PublishInsertion(props) {
   // On submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-
- 
 
     // If all the inputs are valid
     if (validate()) {

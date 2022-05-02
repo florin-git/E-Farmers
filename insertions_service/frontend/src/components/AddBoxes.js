@@ -27,11 +27,19 @@ function AddBoxes(props) {
     // number_of_available_boxes: "",
   });
 
+
+  /**
+   * Variables for managing the presence of 'valid' 
+   * class for inputs.
+   * The strings could be:
+   * - 'is-invalid' when you want to show the validation msg.
+   * - 'is-valid' when you insert the correct input after the wrong one.
+   * - empty string if the input is ok from the beginning.
+   */
   const [formValidationClass, setformValidationClass] = useState({
     weight_for_class: "",
     size_for_class: "",
     price_for_class: "",
-    // number_of_available_boxes: "",
   });
 
   // If redirect is true then redirect to the insertion page
@@ -103,32 +111,38 @@ function AddBoxes(props) {
    * formValidation values with the respective error messages.
    */
   function validate() {
+    // Check weight
     if (formData.weight <= 0) {
       formValidation.weight = "The weight must be greater than 0 kg!";
       formValidationClass.weight_for_class = "is-invalid";
     } else {
       formValidation.weight = "";
-			
+
+			// If previously you inserted a wrong input
 			if (formValidationClass.weight_for_class === "is-invalid")
       	formValidationClass.weight_for_class = "is-valid";
     }
 
+    // Check price
     if (formData.price <= 0) {
       formValidation.price = "The price must be greater than 0!";
       formValidationClass.price_for_class = "is-invalid";
     } else {
       formValidation.price = "";
 
+      // If previously you inserted a wrong input
 			if (formValidationClass.price_for_class === "is-invalid")
       	formValidationClass.price_for_class = "is-valid";
     }
 
+    // Check size
     if (formData.size === "") {
       formValidation.size = "You must choose the size!";
       formValidationClass.size_for_class = "is-invalid";
     } else {
       formValidation.size = "";
 
+      // If previously you inserted a wrong input
 			if (formValidationClass.size_for_class === "is-invalid")
       	formValidationClass.size_for_class = "is-valid";
     }
@@ -141,6 +155,7 @@ function AddBoxes(props) {
       };
     });
 
+    // Update formValidationClass
     setformValidationClass((prevFormValidationClass) => {
       return {
         ...prevFormValidationClass,

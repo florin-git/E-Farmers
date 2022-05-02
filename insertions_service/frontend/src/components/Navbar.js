@@ -3,14 +3,6 @@ import { Link } from "react-router-dom";
 
 function Navbar(props) {
   return (
-    // <nav className="navbar navbar-dark bg-dark">
-    //     <div className="container-fluid">
-    //         <Link className="navbar-brand" to={"insertions/"}>
-    //             e-Farmers
-    //         </Link>
-    //         <Link className="btn btn-primary" to={"insertions/new"}>Publish an Insertion</Link>
-    //     </div>
-    // </nav>
     <nav className="navbar navbar-expand-md navbar-light bg-light mb-5">
       <div className="container-fluid">
         <Link className="navbar-brand" to={"/"}>
@@ -40,6 +32,8 @@ function Navbar(props) {
               </Link>
             </li>
 
+          </ul>
+          <ul className="navbar-nav navabr-right">
             <li className="nav-item">
               <Link className="btn btn-primary" to={"insertions/new"}>
                 Publish an Insertion

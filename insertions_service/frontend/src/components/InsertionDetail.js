@@ -45,6 +45,18 @@ function InsertionDetail(props) {
       );
       const data = await response.json();
 
+      /**
+       ** Sort boxes based on their size.
+       * In this way, "Small" boxes are shown
+       * before the others, even if in the 
+       * insertion "Small" comes after.
+       */
+      data.sort((a, b) => {
+        if (a.size < b.size) return -1;
+        else if (a.size > b.size) return 1;
+        else return 0;
+      });
+
       setBoxes(data);
     })();
   }, [insertion_id]);
@@ -91,7 +103,7 @@ function InsertionDetail(props) {
             <hr />
 
             <div className="row mb-4">
-              <div className=" col-4 mb-2">
+              {/* <div className=" col-4 mb-2">
                 <label className="form-label fw-bold col" htmlFor="size">
                   Size
                 </label>
@@ -100,7 +112,7 @@ function InsertionDetail(props) {
                   <option>Medium</option>
                   <option>Large</option>
                 </select>
-              </div>
+              </div> */}
 
               <div className=" col-3 mb-2">
                 <label className="form-label fw-bold col" htmlFor="quantity">
@@ -118,7 +130,9 @@ function InsertionDetail(props) {
             </div>
           </div>
 
-          <div className="row row-cols-1 row-cols-md-3 g-4 my-4">{boxes_array}</div>
+          <div className="row row-cols-1 row-cols-md-3 g-4 my-4">
+            {boxes_array}
+          </div>
 
           {/* If the insertion already contains all the possible boxes 
 						(i.e., small, medium, large; so the array length is 3),
