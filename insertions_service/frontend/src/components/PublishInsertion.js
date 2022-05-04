@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -33,19 +33,19 @@ function PublishInsertion(props) {
   });
 
   /**
-   * Variables for managing the presence of 'valid' 
+   * Variables for managing the presence of 'valid'
    * class for inputs.
    * The strings could be:
    * - 'is-invalid' when you want to show the validation msg.
    * - 'is-valid' when you insert the correct input after the wrong one.
    * - empty string if the input is ok from the beginning.
    */
-	const [formValidationClass, setformValidationClass] = useState({
-		expiration_date_for_class: ""
+  const [formValidationClass, setformValidationClass] = useState({
+    expiration_date_for_class: "",
   });
 
-  // If redirect is true then redirect to the insertion page
-  const [redirect, setRedirect] = useState(false);
+  // This variable is used for the redirection
+  const navigate = useNavigate();
 
   /**
    ** FUNCTIONS
@@ -88,17 +88,17 @@ function PublishInsertion(props) {
       const expiration_date = new Date(formData.expiration_date);
 
       // Check date
-			if (expiration_date < today) {
-				formValidation.expiration_date = "The expiration date cannot be in the past!"
-				formValidationClass.expiration_date_for_class = "is-invalid"
-			}
-			else {
-				formValidation.expiration_date = ""
+      if (expiration_date < today) {
+        formValidation.expiration_date =
+          "The expiration date cannot be in the past!";
+        formValidationClass.expiration_date_for_class = "is-invalid";
+      } else {
+        formValidation.expiration_date = "";
 
         // If previously you inserted a wrong input
-				if(formValidationClass.expiration_date_for_class === "is-invalid")
-					formValidationClass.expiration_date_for_class = "is-valid"
-			}
+        if (formValidationClass.expiration_date_for_class === "is-invalid")
+          formValidationClass.expiration_date_for_class = "is-valid";
+      }
     }
 
     // Update formValidation
@@ -109,7 +109,7 @@ function PublishInsertion(props) {
     });
 
     // Update formValidationClass
-		setformValidationClass((prevFormValidationClass) => {
+    setformValidationClass((prevFormValidationClass) => {
       return {
         ...prevFormValidationClass,
       };
@@ -149,14 +149,10 @@ function PublishInsertion(props) {
         }),
       });
 
-    // If the submission was successful
-      setRedirect(true);
+      // If the submission was successful
+      navigate("/insertions");
     }
   };
-
-  if (redirect) {
-    return <Navigate replace to="../insertions" />;
-  }
 
   return (
     <div className="container-md">
