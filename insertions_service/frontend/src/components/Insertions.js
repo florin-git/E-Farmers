@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
@@ -98,31 +98,6 @@ function Insertions(props) {
                   >
                     Delete
                   </button>
-                  {/* Modal */}
-                  <Modal show={showModal} onHide={handleCloseModal}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>
-                        <span>Deletion</span>
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      Are you sure you want to delete this insertion?
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <button
-                        className="btn btn-secondary"
-                        onClick={handleCloseModal}
-                      >
-                        Close
-                      </button>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleDeletion()}
-                      >
-                        Yes
-                      </button>
-                    </Modal.Footer>
-                  </Modal>
                 </div>
               </div>
             </div>
@@ -134,6 +109,23 @@ function Insertions(props) {
 
   return (
     <div className="container-lg mt-3">
+      {/* Modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <span>Deletion</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this insertion?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleCloseModal}>
+            Close
+          </button>
+          <button className="btn btn-primary" onClick={() => handleDeletion()}>
+            Yes
+          </button>
+        </Modal.Footer>
+      </Modal>
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {insertions_array}
       </div>

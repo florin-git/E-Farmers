@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-function Error(props) {
+function NotFound(props) {
   return (
     <div className='container mt-5'>
       <h2>404</h2>
@@ -12,4 +12,4 @@ function Error(props) {
   );
 }
 
-export default Error;
+export default NotFound;

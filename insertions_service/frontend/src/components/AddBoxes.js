@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddBoxes(props) {
   /**
@@ -42,13 +43,13 @@ function AddBoxes(props) {
     price_for_class: "",
   });
 
-  // If redirect is true then redirect to the insertion page
-  const [redirect, setRedirect] = useState(false);
-
   const [boxes, setBoxes] = useState([]);
 
   // Retrieve the id from the URL
   const { insertion_id } = useParams();
+
+  // This variable is used for the redirection
+  const navigate = useNavigate();
 
   /**
    ** FUNCTIONS
@@ -198,14 +199,10 @@ function AddBoxes(props) {
         }
       );
 
-      // If the submit was successful
-      setRedirect(true);
+      // If the submission was successful
+      navigate(`/insertions/${insertion_id}`);
     }
   };
-
-  if (redirect) {
-    return <Navigate replace to={`../insertions/${insertion_id}`} />;
-  }
 
   return (
     <div className="container-md">

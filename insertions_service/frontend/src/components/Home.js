@@ -11,14 +11,14 @@ function Home(props) {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img
-              src="./images/hero1.jpg"
+              src="./images/hero3.jpg"
               className="d-block w-100"
               alt="..."
               // width="1066px"
-              height="800px"
+              // height="800px"
             />
           </div>
-          <div className="carousel-item">
+          {/* <div className="carousel-item">
             <img
               src="./images/hero2.jpg"
               className="d-block w-100"
@@ -35,7 +35,7 @@ function Home(props) {
               width="1066px"
               height="800px"
             />
-          </div>
+          </div> */}
         </div>
         <button
           className="carousel-control-prev"

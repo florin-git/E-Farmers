@@ -1,12 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
 
-function SharedInsertionsLayout(props) {
+function SharedLayout(props) {
   return (
     <div>
+      <Navbar />
       <Outlet />
+      {/* Footer */}
     </div>
   );
 }
 
-export default SharedInsertionsLayout;
+export default SharedLayout;

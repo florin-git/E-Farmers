@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from "./Box";
 
-function InsertionDetail(props) {
+// The component receives the insertion's detail from ProtectedRouteInsertion
+function InsertionDetail({ insertion }) {
   /**
    ** VARIABLES
    */
-  const [insertion, setInsertion] = useState([]);
+
+  // Boxes of the insertion
   const [boxes, setBoxes] = useState([]);
 
   // Retrieve the id from the URL
@@ -21,22 +23,6 @@ function InsertionDetail(props) {
 
   useEffect(() => {
     /**
-     * Retrieve insertions from backend
-     */
-    (async () => {
-      /* 
-        Because the 'await' keyword, the asynchronous
-        function is paused until the request completes. 
-      */
-      const response = await fetch(
-        `http://localhost:8000/api/insertions/${insertion_id}`
-      );
-      const data = await response.json();
-
-      setInsertion(data);
-    })();
-
-    /**
      * Retrieve the boxes of this insertion from backend
      */
     (async () => {
@@ -48,7 +34,7 @@ function InsertionDetail(props) {
       /**
        ** Sort boxes based on their size.
        * In this way, "Small" boxes are shown
-       * before the others, even if in the 
+       * before the others, even if in the
        * insertion "Small" comes after.
        */
       data.sort((a, b) => {
@@ -81,7 +67,6 @@ function InsertionDetail(props) {
             <img
               src={insertion.image}
               alt="insertion_image"
-              //   className="card-img-top w-50"
               className="img-fluid"
             />
           </div>
