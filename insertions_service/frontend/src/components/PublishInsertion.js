@@ -76,12 +76,6 @@ function PublishInsertion(props) {
       date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     const today = new Date(today_str);
 
-    // ? Do we want to check also the length of the title?
-    // formValidation.title =
-    //     formData.title.length < 5
-    //         ? "The title must be at least 5 characters long!"
-    //         : "";
-
     // If the expiration_date was inputted
     if (formData.expiration_date) {
       // Convert the string into a Date object
@@ -177,7 +171,7 @@ function PublishInsertion(props) {
             />
             {/* Display error if the condition is not satisfied */}
             {formValidation.title.length > 0 && (
-              <span className="text-danger">{formValidation.title}</span>
+              <span className="invalid-feedback">{formValidation.title}</span>
             )}
           </div>
 

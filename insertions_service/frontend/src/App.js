@@ -30,6 +30,7 @@ function App(props) {
               exact
               element={<AddBoxes />}
             />
+            {/* Match all the other paths */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

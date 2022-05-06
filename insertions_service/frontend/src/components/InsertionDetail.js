@@ -55,7 +55,6 @@ function InsertionDetail({ insertion }) {
      * With the notation ...box are passed
      * all the attributes of box to the Componenet Box
      */
-    // if (box.number_of_available_boxes !== 0) // If the box is available
     return <Box key={box.id} {...box} />;
   });
 
