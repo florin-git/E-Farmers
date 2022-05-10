@@ -96,6 +96,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'insertions',
+        'CLIENT': {
+                'host': 'insertions_service_db',
+                'port': 27017,
+        }
     }
 }
 
