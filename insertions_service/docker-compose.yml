@@ -11,6 +11,14 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
+  frontend:
+    build: ./frontend
+    container_name: insertions_service_frontend
+    command: npm start
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
   mongodb:
     image: mongo
     container_name: insertions_service_db
