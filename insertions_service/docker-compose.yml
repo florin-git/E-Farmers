@@ -4,13 +4,14 @@ services:
   backend:
     build: .
     container_name: insertions_service_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "./wait-for-it.sh mongodb:27017 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/app
     ports:
       - "8000:8000"
     depends_on:
       - mongodb
+  
   frontend:
     build: ./frontend
     container_name: insertions_service_frontend
@@ -19,8 +20,30 @@ services:
       - "3000:3000"
     stdin_open: true
     tty: true
+    depends_on:
+      - mongodb
+      - backend
+  
   mongodb:
     image: mongo
     container_name: insertions_service_db
     ports:
       - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+  # Optional
+  mongo-express:
+    image: mongo-express
+    restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
+    ports:
+      - 8080:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
+    driver: local
