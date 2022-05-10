@@ -3,20 +3,21 @@ version: '3.3'
 services:
   backend:
     build: .
+    image: efarmerservices.azurecr.io/e-farmers_insertions_service_backend:v1
     container_name: insertions_service_backend
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/app
+    command: python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     depends_on:
       - mongodb
+    restart: always
   frontend:
     build: ./frontend
+    image: efarmerservices.azurecr.io/e-farmers_insertions_service_frontend:v1
     container_name: insertions_service_frontend
     command: npm start
     ports:
-      - "3000:3000"
+      - "80:3000"
     stdin_open: true
     tty: true
   mongodb:
@@ -24,3 +25,9 @@ services:
     container_name: insertions_service_db
     ports:
       - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
