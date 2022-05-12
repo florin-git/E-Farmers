@@ -3,8 +3,9 @@ version: '3.3'
 services:
   backend:
     build: .
+    image: insertions_service_backend:v5
     container_name: insertions_service_backend
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python3 wait_for_mongo.py insertions_service_db 27017 && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
@@ -12,6 +13,7 @@ services:
   
   frontend:
     build: ./frontend
+    image: insertions_service_frontend:v5
     container_name: insertions_service_frontend
     command: npm start
     ports:
