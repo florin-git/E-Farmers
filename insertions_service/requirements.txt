@@ -1,8 +1,8 @@
-Django
-Djongo
+Django==3.2.5
+Djongo==1.3.6
 pymongo==3.12.3
 pytz
-Pillow
-typing-extensions
-djangorestframework
-django-cors-headers
+Pillow==9.1.0
+typing-extensions==3.10.0.2
+djangorestframework==3.13.1
+django-cors-headers==3.11.0
