@@ -10,6 +10,9 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
+    environment:
+      # It coincides with the mongodb container name
+      DATABASE_URL: insertions_service_db
 
   frontend:
     build: ./frontend
@@ -23,6 +26,8 @@ services:
     depends_on:
       - mongodb
       - backend
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
 
   mongodb:
     image: mongo

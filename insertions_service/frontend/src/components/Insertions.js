@@ -28,7 +28,7 @@ function Insertions(props) {
        * Because the 'await' keyword, the asynchronous
        * function is paused until the request completes.
        */
-      const response = await fetch("http://localhost:8000/api/insertions/");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}insertions/`);
       const data = await response.json();
 
       setInsertions(data);
@@ -46,7 +46,7 @@ function Insertions(props) {
 
   // Deletion
   const handleDeletion = async () => {
-    await fetch(`http://localhost:8000/api/insertions/${idToDelete}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}insertions/${idToDelete}`, {
       method: "DELETE",
     });
 

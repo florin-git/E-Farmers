@@ -97,7 +97,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'insertions',
         'CLIENT': {
-                'host': 'insertions_service_db',
+                'host': os.getenv('DATABASE_URL'),
                 'port': 27017,
         }
     }

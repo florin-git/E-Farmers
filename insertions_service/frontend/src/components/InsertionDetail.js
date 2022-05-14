@@ -27,7 +27,7 @@ function InsertionDetail({ insertion }) {
      */
     (async () => {
       const response = await fetch(
-        `http://localhost:8000/api/insertions/${insertion_id}/boxes`
+        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes`
       );
       const data = await response.json();
 

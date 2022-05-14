@@ -130,7 +130,7 @@ function PublishInsertion(props) {
 
     // If all the inputs are valid
     if (validate()) {
-      await fetch("http://localhost:8000/api/insertions/", {
+      await fetch(`${process.env.REACT_APP_API_URL}insertions/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
