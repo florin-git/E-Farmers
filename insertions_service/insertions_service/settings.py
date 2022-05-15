@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'insertions',
-        'USER': 'davide',
+        'USER': 'efarmers',
+        'NAME': 'efarmers',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',

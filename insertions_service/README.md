@@ -7,17 +7,17 @@
 - Show the details of an insertion
 - Delete an insertion
 
-## Structure
-
-#### Django projects
-Just one: `insertions_service`
-
-#### Project apps
-Just one: `insertions_manager`
-
 ## Usage
 - Install dependencies: `/path/to/E-Farmers/insertions_service$ pip install -r requirements.txt`
-- Create a database in MongoDB called 'insertions'
-- Check if the `mongod` service is up and running (`systemctl status mongod`) if not, start it: `sudo systemctl start mongod`
+- Set up database: see next section
 - Migrate the db: `/path/to/E-Farmers/insertions_service$ python3 manage.py migrate`
 - Start the django server: `/path/to/E-Farmers/insertions_service$ python3 manage.py runserver`
+
+## Postgres database set up
+If the database is hosted locally, then the following steps must be done:
+1) Install postgres on your machine: `sudo apt-get install postgresql-12`
+2) Login into postgres user: `sudo -u postgres -i`
+3) Create the new database called efarmers: `createdb efarmers`
+4) Open the postgres database (the postgres db contains all the roles and permissions granted to each role): `psql`
+5) Create a new user (~role) called efarmers: `CREATE USER efarmers;` or `CREATE ROLE efarmers LOGIN;`
+6) Set the password of the user efarmers to "password": `ALTER ROLE efarmers PASSWORD 'password';`
