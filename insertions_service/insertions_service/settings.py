@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from djongo import *
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -78,8 +77,12 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'insertions',
+        'USER': 'davide',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
