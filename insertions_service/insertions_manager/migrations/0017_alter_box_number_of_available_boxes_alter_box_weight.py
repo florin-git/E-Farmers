@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='box',
             name='number_of_available_boxes',
-            field=models.PositiveIntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)]),
+            field=models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)]),
         ),
     ]

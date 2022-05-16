@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='box',
             name='number_of_available_boxes',
-            field=models.PositiveIntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)]),
+            field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
             model_name='box',
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='box',
             name='size',
-            field=models.PositiveIntegerField(choices=[(0, 'Small'), (1, 'Medium'), (2, 'Big')], default=0),
+            field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
             model_name='box',
