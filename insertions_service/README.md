@@ -21,3 +21,12 @@ If the database is hosted locally, then the following steps must be done:
 4) Open the postgres database (the postgres db contains all the roles and permissions granted to each role): `psql`
 5) Create a new user (~role) called efarmers: `CREATE USER efarmers;` or `CREATE ROLE efarmers LOGIN;`
 6) Set the password of the user efarmers to "password": `ALTER ROLE efarmers PASSWORD 'password';`
+
+## Remember 
+Add a .env files on main directory as u see :
+
+.env 
+```
+    DATABASE_PASSWORD=password
+    DATABASE_HOSTNAME=localhost
+```

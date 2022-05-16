@@ -15,3 +15,18 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     ports:
       - "8000:8000"
+
+  user_service:
+    build: ./user_service
+    image: user_service:v1.0
+    container_name: user_service
+    command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8080"
+    network_mode: "host"
+    environment:
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=efarmers
+      - DATABASE_USER=efarmers
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - "8080:8080"
