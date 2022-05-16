@@ -3,9 +3,15 @@ version: "3.3"
 services:
   insertions_service:
     build: ./insertions_service
-    image: insertions_service:v1
+    image: insertions_service:v1.2
     container_name: insertions_service
     command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     network_mode: "host"
+    environment:
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=efarmers
+      - DATABASE_USER=efarmers
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     ports:
       - "8000:8000"
