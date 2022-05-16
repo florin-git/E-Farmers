@@ -1,0 +1,11 @@
+version: "3.3"
+
+services:
+  insertions_service:
+    build: ./insertions_service
+    image: insertions_service:v1
+    container_name: insertions_service
+    command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    network_mode: "host"
+    ports:
+      - "8000:8000"
