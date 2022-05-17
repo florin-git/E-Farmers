@@ -27,6 +27,9 @@ Add a .env files on main directory as u see :
 
 .env 
 ```
-    DATABASE_PASSWORD=password
-    DATABASE_HOSTNAME=localhost
+DATABASE_PASSWORD=password
+DATABASE_HOSTNAME=db
+DATABASE_USER=efarmers
+DATABASE_NAME=efarmers
+DATABASE_PORT=5432
 ```
