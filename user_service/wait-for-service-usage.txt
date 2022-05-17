@@ -1,0 +1,14 @@
+wait-for-service.py
+Script that waits for a service to be online.
+
+Usage:
+    python wait-for-service.py [OPTIONS] [HOSTNAME] [PORT]
+
+    OPTIONS:
+        -d, --postgres-db               The service to be checked for availability is a postgresql database. 
+                                        If this option is used then the arguments: 
+                                            --postgres-db-name --postgres-db-user --postgres-db-password
+                                        must be provided as well.
+        -n, --postgres-db-name          The name of the postgresql database to connect to.
+        -u, --postgres-db-user          The user used to connect to the postgresql database.
+        -p, --postgres-db-password      The password of the user used to connect to the postgresql database.
