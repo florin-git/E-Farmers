@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from djongo import *
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,21 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
- 
-# In order to not block React when interacting with Django
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
-}
-
-###! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
-###! ONLY OUR ORIGIN
-CORS_ORIGIN_ALLOW_ALL = True
-
-
 
 ROOT_URLCONF = 'insertions_service.urls'
 
@@ -94,8 +77,12 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'insertions',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': os.getenv('DATABASE_USER'),
+        'NAME': os.getenv('DATABASE_NAME'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOSTNAME'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 
