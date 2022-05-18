@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: ./insertions_service/Dockerfile
-    image: insertions_service:v1.0.0
+    image: insertions_service:alpine1.0
     container_name: insertions_service
     command: sh -c "python3 wait-for-service.py -d -n efarmers -u efarmers -p password db 5432 && python3 wait-for-service.py user_service 8080 && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8081"
     environment:
@@ -25,7 +25,7 @@ services:
     build: 
       context: .
       dockerfile: ./user_service/Dockerfile
-    image: user_service:v1.0.0
+    image: user_service:alpine1.0
     container_name: user_service
     command: sh -c "python3 wait-for-service.py -d -n efarmers -u efarmers -p password db 5432 && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8080"
     environment:
