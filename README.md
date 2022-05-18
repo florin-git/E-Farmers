@@ -1,5 +1,16 @@
 # E-Farmers
 
+This web app is made for people that wish to sell and delivery their own fresh home-farm products to other people in their neighborhood.
+This is a project made for the course of *Laboratory of Advanced Programming* at **La Sapienza University**
+
+## Authors
+
+Florin Cuconasu \
+Antonio Grieco \
+Marco Settanni \
+Davide Bazzana \
+Andrea Nardocci
+
 ## Functionalities
 - Publish a new insertion
 - Add boxes to insertions
