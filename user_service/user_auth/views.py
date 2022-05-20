@@ -95,4 +95,3 @@ def logout_user(request):
     messages.success(request,(" Successfully logged out"))
     return redirect('home')
 
-

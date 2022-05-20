@@ -15,7 +15,7 @@ class InsertionsView(viewsets.ViewSet):
         insertions = Insertion.objects.all()
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+        
     def publish_insertion(self, request): # POST /api/insertions/
         serializer = InsertionSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -39,7 +39,6 @@ class InsertionsView(viewsets.ViewSet):
         insertion.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 ###
 #* Boxes
 ###
@@ -58,3 +57,4 @@ class BoxesView(viewsets.ViewSet):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
