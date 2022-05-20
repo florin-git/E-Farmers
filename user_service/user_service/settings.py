@@ -26,19 +26,23 @@ SECRET_KEY = 'django-insecure-jvlx8csi!r_y8hms_0amd5_96+!7e2+tg08k+kj&e47oc^%$i(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+###! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
+###! ONLY OUR ORIGIN
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'users_api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user_auth'
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +53,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# In order to not block React when interacting with Django
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+###! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
+###! ONLY OUR ORIGIN
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'user_service.urls'
 
@@ -78,11 +95,16 @@ WSGI_APPLICATION = 'user_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.getenv('DATABASE_USER'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOSTNAME'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        # 'USER': os.getenv('DATABASE_USER'),
+        # 'NAME': os.getenv('DATABASE_NAME'),
+        # 'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        # 'HOST': os.getenv('DATABASE_HOSTNAME'),
+        # 'PORT': os.getenv('DATABASE_PORT'),
+        'USER': 'efarmers',
+        'NAME':'efarmers',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
