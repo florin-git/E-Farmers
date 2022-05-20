@@ -18,15 +18,15 @@ function App(props) {
           <Route path="/" element={<SharedLayout />}>
             {/* All the links are nested here */}
             <Route index element={<Home />} />
-            <Route path="insertions/new" exact element={<PublishInsertion />} />
             <Route path="insertions" exact element={<Insertions />} />
+            <Route path="insertions/new/" exact element={<PublishInsertion />} />
             <Route
-              path="insertions/:insertion_id"
+              path="insertions/:insertion_id/"
               exact
               element={<ProtectedRouteInsertion />}
             />
             <Route
-              path="insertions/:insertion_id/boxes"
+              path="insertions/:insertion_id/boxes/"
               exact
               element={<AddBoxes />}
             />

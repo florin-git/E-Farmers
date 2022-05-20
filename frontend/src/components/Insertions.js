@@ -46,7 +46,7 @@ function Insertions(props) {
 
   // Deletion
   const handleDeletion = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}insertions/${idToDelete}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}insertions/${idToDelete}/`, {
       method: "DELETE",
     });
 
@@ -121,7 +121,7 @@ function Insertions(props) {
           <button className="btn btn-secondary" onClick={handleCloseModal}>
             Close
           </button>
-          <button className="btn btn-primary" onClick={() => handleDeletion()}>
+          <button className="btn btn-primary" onClick={handleDeletion}>
             Yes
           </button>
         </Modal.Footer>

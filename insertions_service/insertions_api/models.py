@@ -1,14 +1,14 @@
-from djongo import models
-from insertions_manager.box_sizes import *
+from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
+from insertions_api.box_sizes import *
 
 class Insertion(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     expiration_date = models.DateField()
     gathering_location = models.CharField(max_length=100, blank=True)
-    image = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
 
 class Box(models.Model):

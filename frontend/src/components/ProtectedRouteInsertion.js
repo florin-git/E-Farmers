@@ -35,7 +35,7 @@ function ProtectedRouteInsertion() {
       */
 
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}`
+        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/`
       );
 
       // If insertion doen not exists

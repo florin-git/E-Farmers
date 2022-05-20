@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
-class InsertionsManagerConfig(AppConfig):
+
+class InsertionsApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'insertions_manager'
+    name = 'insertions_api'

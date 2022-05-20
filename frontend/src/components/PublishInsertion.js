@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -62,6 +63,14 @@ function PublishInsertion(props) {
         [name]: value,
       };
     });
+  }
+
+  function handleImageChange(event) {
+    // Get previous data
+    let newFormData = { ...formData };
+    // Update formData with the changed value
+    newFormData["image"] = event.target.files[0];
+    setFormData(newFormData);
   }
 
   /**
@@ -128,26 +137,49 @@ function PublishInsertion(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Createa a new FormData object
+    let form_data = new FormData();
+
+    form_data.append("title", formData.title);
+    form_data.append("description", formData.description);
+    form_data.append("expiration_date", formData.expiration_date);
+    form_data.append("gathering_location", formData.gathering_location);
+    // form_data.append("image", formData.image, formData.image.name);
+    form_data.append("image", formData.image);
+    form_data.append("reported", formData.reported);
+
     // If all the inputs are valid
     if (validate()) {
-      await fetch(`${process.env.REACT_APP_API_URL}insertions/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          expiration_date: formData.expiration_date,
-          gathering_location: formData.gathering_location,
-          image: formData.image,
-          reported: formData.reported,
-        }),
-      });
+      // await fetch(`${process.env.REACT_APP_API_URL}insertions/`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "multipart/form-data" },
+      //   body: JSON.stringify({
+      //     title: formData.title,
+      //     description: formData.description,
+      //     expiration_date: formData.expiration_date,
+      //     gathering_location: formData.gathering_location,
+      //     image: formData.image.name,
+      //     reported: formData.reported,
+      //   }),
+      // });
 
-      // If the submission was successful
-      navigate("/insertions");
+      await axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API_URL}insertions/`,
+        headers: { "Content-Type": "multipart/form-data" },
+        data: form_data
+      })
+        .then((res) => { // If the submission was successful
+          navigate("/insertions");
+          // return res;
+        })
+        .catch((error) => {
+          return error.response;
+        });
     }
   };
 
+  
   return (
     <div className="container-md">
       <div className="row">
@@ -222,17 +254,17 @@ function PublishInsertion(props) {
               )}
             </div>
 
-            {/* // TODO: Change the type from text to image */}
             <div className="form-group col-lg-6 mt-3">
               <label htmlFor="image">Image</label>
               <input
-                type="text"
+                type="file"
+                accept="image/jpeg,image/png,image/gif"
                 className="form-control"
                 id="image"
                 placeholder="Image"
-                value={formData.image}
+                // value={formData.image}
                 name="image"
-                onChange={handleChange}
+                onChange={handleImageChange}
                 required
               />
             </div>

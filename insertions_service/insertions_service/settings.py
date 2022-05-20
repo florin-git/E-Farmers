@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from djongo import *
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,13 +26,15 @@ SECRET_KEY = 'django-insecure-fk&-84xy^cm!0=74wr4k4o$ou3lfsu_#^49ae=dc=4etg6!pp4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+###! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
+###! ONLY OUR ORIGIN
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'insertions_manager',
+    'insertions_api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,12 +95,17 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'insertions',
-        'CLIENT': {
-                'host': os.getenv('DATABASE_URL'),
-                'port': 27017,
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'USER': os.getenv('DATABASE_USER'),
+        # 'NAME': os.getenv('DATABASE_NAME'),
+        # 'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        # 'HOST': os.getenv('DATABASE_HOSTNAME'),
+        # 'PORT': os.getenv('DATABASE_PORT'),
+        'USER': 'efarmers',
+        'NAME':'efarmers',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -145,6 +151,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# URL used to access the media
 MEDIA_URL = '/media/'
 
+# URL used to access the media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

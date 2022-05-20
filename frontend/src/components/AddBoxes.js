@@ -85,7 +85,7 @@ function AddBoxes(props) {
        * function is paused until the request completes.
        */
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes`
+        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes/`
       );
       const data = await response.json();
 
@@ -185,7 +185,7 @@ function AddBoxes(props) {
     // If all the inputs are valid
     if (validate()) {
       await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes`,
+        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

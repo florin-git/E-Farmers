@@ -3,6 +3,8 @@ from .models import *
 from datetime import date
 
 class InsertionSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=True)
+
     """
     Check that the expiration date is not in the past
     """
@@ -15,13 +17,14 @@ class InsertionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Insertion
+    # fields = ['title', 'description', 'expiration_date', 'gathering_location', 'image', 'reported']
         fields = '__all__' # Get all fields
 
 class BoxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Box
-        fields = '__all__' # Get all fields
         # fields = ['weight', 'size', 'price', 'number_of_available_boxes']
+        fields = '__all__' # Get all fields
 
 
         
