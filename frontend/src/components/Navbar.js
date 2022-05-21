@@ -41,8 +41,20 @@ function Navbar(props) {
             </li>
 
             <li className="nav-item">
-              <Link className="btn btn-primary" to={"register/"}>
+              <Link className="btn btn-primary mx-md-2" to={"register/"}>
                 Sign Up
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="btn btn-primary" to={"login/"}>
+                Login
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="btn btn-primary" to={"logout/"}>
+                Logout
               </Link>
             </li>
 

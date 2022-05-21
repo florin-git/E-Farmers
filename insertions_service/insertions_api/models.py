@@ -16,4 +16,4 @@ class Box(models.Model):
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
     size = models.IntegerField(choices=BOX_SIZES, default=0)
     price = models.DecimalField(default=0.0, decimal_places=2, max_digits=5, validators=[MinValueValidator(0)])
-    number_of_available_boxes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    number_of_available_boxes = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])

@@ -10,6 +10,8 @@ import NotFound from "./components/NotFound";
 import SharedLayout from "./components/SharedLayout";
 import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
 import Registration from "./pages/Registration";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 
 function App(props) {
   return (
@@ -35,6 +37,8 @@ function App(props) {
 
 
             <Route path="register/" exact element={<Registration />} />
+            <Route path="login/" exact element={<Login />} />
+            <Route path="logout/" exact element={<Logout />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>
