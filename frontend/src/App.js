@@ -9,6 +9,7 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import SharedLayout from "./components/SharedLayout";
 import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
+import Registration from "./pages/Registration";
 
 function App(props) {
   return (
@@ -18,7 +19,7 @@ function App(props) {
           <Route path="/" element={<SharedLayout />}>
             {/* All the links are nested here */}
             <Route index element={<Home />} />
-            <Route path="insertions" exact element={<Insertions />} />
+            <Route path="insertions/" exact element={<Insertions />} />
             <Route path="insertions/new/" exact element={<PublishInsertion />} />
             <Route
               path="insertions/:insertion_id/"
@@ -31,6 +32,10 @@ function App(props) {
               element={<AddBoxes />}
             />
             {/* Match all the other paths */}
+
+
+            <Route path="register/" exact element={<Registration />} />
+
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
