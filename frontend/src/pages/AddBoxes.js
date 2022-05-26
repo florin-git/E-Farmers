@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosInsertions";
 
 function AddBoxes(props) {
   /**
@@ -28,9 +29,8 @@ function AddBoxes(props) {
     // number_of_available_boxes: "",
   });
 
-
   /**
-   * Variables for managing the presence of 'valid' 
+   * Variables for managing the presence of 'valid'
    * class for inputs.
    * The strings could be:
    * - 'is-invalid' when you want to show the validation msg.
@@ -80,16 +80,14 @@ function AddBoxes(props) {
    */
   useEffect(() => {
     (async () => {
-      /**
-       * Because the 'await' keyword, the asynchronous
-       * function is paused until the request completes.
-       */
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes/`
-      );
-      const data = await response.json();
-
-      setBoxes(data);
+      await axiosInstance
+        .get(`insertions/${insertion_id}/boxes/`)
+        .then((res) => {
+          setBoxes(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     })();
   }, [insertion_id]);
 
@@ -119,9 +117,9 @@ function AddBoxes(props) {
     } else {
       formValidation.weight = "";
 
-			// If previously you inserted a wrong input
-			if (formValidationClass.weight_for_class === "is-invalid")
-      	formValidationClass.weight_for_class = "is-valid";
+      // If previously you inserted a wrong input
+      if (formValidationClass.weight_for_class === "is-invalid")
+        formValidationClass.weight_for_class = "is-valid";
     }
 
     // Check price
@@ -132,8 +130,8 @@ function AddBoxes(props) {
       formValidation.price = "";
 
       // If previously you inserted a wrong input
-			if (formValidationClass.price_for_class === "is-invalid")
-      	formValidationClass.price_for_class = "is-valid";
+      if (formValidationClass.price_for_class === "is-invalid")
+        formValidationClass.price_for_class = "is-valid";
     }
 
     // Check size
@@ -144,10 +142,9 @@ function AddBoxes(props) {
       formValidation.size = "";
 
       // If previously you inserted a wrong input
-			if (formValidationClass.size_for_class === "is-invalid")
-      	formValidationClass.size_for_class = "is-valid";
+      if (formValidationClass.size_for_class === "is-invalid")
+        formValidationClass.size_for_class = "is-valid";
     }
-
 
     // Update formValidation
     setformValidation((prevFormValidation) => {
@@ -184,23 +181,30 @@ function AddBoxes(props) {
 
     // If all the inputs are valid
     if (validate()) {
-      await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            insertion: insertion_id,
-            weight: formData.weight,
-            size: formData.size,
-            price: formData.price,
-            number_of_available_boxes: formData.number_of_available_boxes,
-          }),
-        }
+      // FormData object for the new box
+      let form_data = new FormData();
+
+      form_data.append("insertion", insertion_id);
+      form_data.append("weight", formData.weight);
+      form_data.append("size", formData.size);
+      form_data.append("price", formData.price);
+      form_data.append(
+        "number_of_available_boxes",
+        formData.number_of_available_boxes
       );
 
-      // If the submission was successful
-      navigate(`/insertions/${insertion_id}`);
+      /**
+       * Create new box through API call
+       */
+      await axiosInstance
+        .post(`insertions/${insertion_id}/boxes/`, form_data)
+        .then(() => {
+          // If the submission was successful
+          navigate(`/insertions/${insertion_id}`);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     }
   };
 

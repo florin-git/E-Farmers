@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axiosInstance from "../axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosUsers";
 
 function Registration(props) {
   /**

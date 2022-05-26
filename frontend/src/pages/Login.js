@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axiosInstance from "../axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosUsers";
 
 function Login(props) {
   /**
@@ -48,7 +48,7 @@ function Login(props) {
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
 
-        // Update axiosIstance with the new tokens
+        // Update axiosInstance with the new tokens
         axiosInstance.defaults.headers["Authorization"] =
           "JWT " + localStorage.getItem("access_token");
 

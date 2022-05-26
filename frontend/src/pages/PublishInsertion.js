@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../axiosInsertions";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -137,49 +137,35 @@ function PublishInsertion(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Createa a new FormData object
-    let form_data = new FormData();
-
-    form_data.append("title", formData.title);
-    form_data.append("description", formData.description);
-    form_data.append("expiration_date", formData.expiration_date);
-    form_data.append("gathering_location", formData.gathering_location);
-    // form_data.append("image", formData.image, formData.image.name);
-    form_data.append("image", formData.image);
-    form_data.append("reported", formData.reported);
-
     // If all the inputs are valid
     if (validate()) {
-      // await fetch(`${process.env.REACT_APP_API_URL}insertions/`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "multipart/form-data" },
-      //   body: JSON.stringify({
-      //     title: formData.title,
-      //     description: formData.description,
-      //     expiration_date: formData.expiration_date,
-      //     gathering_location: formData.gathering_location,
-      //     image: formData.image.name,
-      //     reported: formData.reported,
-      //   }),
-      // });
+      // FormData object for the new insertion
+      let form_data = new FormData();
 
-      await axios({
-        method: "POST",
-        url: `${process.env.REACT_APP_API_URL}insertions/`,
-        headers: { "Content-Type": "multipart/form-data" },
-        data: form_data
-      })
-        .then((res) => { // If the submission was successful
+      form_data.append("title", formData.title);
+      form_data.append("description", formData.description);
+      form_data.append("expiration_date", formData.expiration_date);
+      form_data.append("gathering_location", formData.gathering_location);
+      form_data.append("image", formData.image);
+      form_data.append("reported", formData.reported);
+
+      /**
+       * Create new insertion through API call
+       */
+      await axiosInstance
+        .post("insertions/", form_data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(() => {
+          // If the submission was successful
           navigate("/insertions");
-          // return res;
         })
         .catch((error) => {
-          return error.response;
+          console.log(error.response);
         });
     }
   };
 
-  
   return (
     <div className="container-md">
       <div className="row">

@@ -1,7 +1,7 @@
 # E-Farmers
 
 This web app is made for people that wish to sell and delivery their own fresh home-farm products to other people in their neighborhood.
-This is a project made for the course of *Laboratory of Advanced Programming* at **La Sapienza University**
+This is a project made for the course of *Laboratory of Advanced Programming* at **La Sapienza University**.
 
 ## Authors
 
@@ -12,6 +12,7 @@ Davide Bazzana \
 Andrea Nardocci
 
 ## Functionalities
+- Registration & login
 - Publish a new insertion
 - Add boxes to insertions
 - View the index of insertions
@@ -19,10 +20,7 @@ Andrea Nardocci
 - Delete an insertion
 
 ## Usage
-- Install dependencies: `/path/to/E-Farmers/insertions_service$ pip install -r requirements.txt`
-- Set up database: see next section
-- Migrate the db: `/path/to/E-Farmers/insertions_service$ python3 manage.py migrate`
-- Start the django server: `/path/to/E-Farmers/insertions_service$ python3 manage.py runserver`
+The usage of each microservice is described in the respective microservice directory.
 
 ## Postgres database set up
 If the database is hosted locally, then the following steps must be done:
@@ -34,7 +32,7 @@ If the database is hosted locally, then the following steps must be done:
 6) Set the password of the user efarmers to "password": `ALTER ROLE efarmers PASSWORD 'password';`
 
 ## Remember 
-Add a .env files on main directory as u see :
+Add a .env file in the main directory (the same of the docker-compose file):
 
 .env 
 ```
@@ -43,4 +41,6 @@ DATABASE_HOSTNAME=db
 DATABASE_USER=efarmers
 DATABASE_NAME=efarmers
 DATABASE_PORT=5432
+REACT_APP_API_USERS=http://localhost:8080/api/
+REACT_APP_API_INSERTIONS=http://localhost:8081/api/
 ```

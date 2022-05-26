@@ -15,7 +15,8 @@ services:
       - insertions_service
       - user_service
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - REACT_APP_API_USERS=${REACT_APP_API_USERS}
+      - REACT_APP_API_INSERTIONS=${REACT_APP_API_INSERTIONS}
 
   insertions_service:
     build:

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import Box from "./Box";
+import axiosInstance from "../axiosInsertions";
+import Box from "../components/Box";
 
 // The component receives the insertion's detail from ProtectedRouteInsertion
 function InsertionDetail({ insertion }) {
@@ -26,24 +27,14 @@ function InsertionDetail({ insertion }) {
      * Retrieve the boxes of this insertion from backend
      */
     (async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/boxes/`
-      );
-      const data = await response.json();
-
-      /**
-       ** Sort boxes based on their size.
-       * In this way, "Small" boxes are shown
-       * before the others, even if in the
-       * insertion "Small" comes after.
-       */
-      data.sort((a, b) => {
-        if (a.size < b.size) return -1;
-        else if (a.size > b.size) return 1;
-        else return 0;
-      });
-
-      setBoxes(data);
+      await axiosInstance
+        .get(`insertions/${insertion_id}/boxes/`)
+        .then((res) => {
+          setBoxes(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     })();
   }, [insertion_id]);
 

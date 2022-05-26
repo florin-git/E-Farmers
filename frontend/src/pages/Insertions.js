@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
+
+import axiosInstance from "../axiosInsertions";
 
 function Insertions(props) {
   /**
@@ -28,10 +29,14 @@ function Insertions(props) {
        * Because the 'await' keyword, the asynchronous
        * function is paused until the request completes.
        */
-      const response = await fetch(`${process.env.REACT_APP_API_URL}insertions/`);
-      const data = await response.json();
-
-      setInsertions(data);
+      await axiosInstance
+        .get("insertions/")
+        .then((res) => {
+          setInsertions(res.data);
+        })
+        .catch((error) => {
+          return error.response;
+        });
     })();
   }, [idToDelete]); // Whenever you delete an insertion, the fetch is repeated
 
@@ -46,9 +51,7 @@ function Insertions(props) {
 
   // Deletion
   const handleDeletion = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}insertions/${idToDelete}/`, {
-      method: "DELETE",
-    });
+    await axiosInstance.delete(`insertions/${idToDelete}/`);
 
     setShowModal(false); // Close modal
 

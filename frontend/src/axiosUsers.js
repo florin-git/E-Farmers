@@ -1,11 +1,12 @@
 import axios from "axios";
 
-const userURL = process.env.REACT_APP_API_USER;
+const usersURL = process.env.REACT_APP_API_USERS;
 
 const axiosInstance = axios.create({
-  baseURL: userURL,
+  baseURL: usersURL,
   timeout: 5000,
   headers: {
+		//! Save tokens in the browser local storage
     Authorization: localStorage.getItem("access_token")
       ? "JWT " + localStorage.getItem("access_token")
       : null,
@@ -14,6 +15,8 @@ const axiosInstance = axios.create({
   },
 });
 
+
+// Manages the token refresh
 axiosInstance.interceptors.response.use(
 	(response) => {
 		return response;
@@ -32,7 +35,7 @@ axiosInstance.interceptors.response.use(
 
 		if (
 			error.response.status === 401 &&
-			originalRequest.url === userURL + 'token/refresh/'
+			originalRequest.url === usersURL + 'token/refresh/'
 		) {
 			window.location.href = 'login/';
 			return Promise.reject(error);

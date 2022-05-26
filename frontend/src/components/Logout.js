@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import axiosInstance from "../axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosUsers";
 
 function Logout(props) {
   // This variable is used for the redirection

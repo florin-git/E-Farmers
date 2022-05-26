@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import InsertionDetail from "./InsertionDetail";
+import InsertionDetail from "../pages/InsertionDetail";
+import axiosInstance from "../axiosInsertions";
 
 function ProtectedRouteInsertion() {
   /**
    ** VARIABLES
    */
-
   // Variable to store the insertion's details
   const [insertion, setInsertion] = useState([]);
 
@@ -26,33 +26,22 @@ function ProtectedRouteInsertion() {
 
   useEffect(() => {
     /**
-     * Retrieve insertion from backend
+     * Try to access the insertion page
      */
     (async () => {
-      /* 
-        Because the 'await' keyword, the asynchronous
-        function is paused until the request completes. 
-      */
-
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}insertions/${insertion_id}/`
-      );
-
-      // If insertion doen not exists
-      if (!response.ok) {
-        setExistsURL(false);
-
-        // Return to the home page.
-        navigate("/");
-      } else {
-        // Insertion exists
-        setExistsURL(true);
-
-        // Get the insertion's details
-        const data = await response.json();
-
-        setInsertion(data);
-      }
+      await axiosInstance
+        .get(`insertions/${insertion_id}/`)
+        .then((res) => {
+          // Insertion exists
+          setExistsURL(true);
+          setInsertion(res.data);
+        })
+        .catch((error) => {
+          // If insertion does not exists
+          console.log(error);
+          setExistsURL(false);
+          navigate("/");
+        });
     })();
   }, [insertion_id, navigate]);
 

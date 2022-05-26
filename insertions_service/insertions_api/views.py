@@ -46,9 +46,10 @@ class BoxesView(viewsets.ViewSet):
     def list_insertion_boxes(self, request, insertion_id=None): # GET /api/insertions/<int:id>/boxes
         """
         Return all the boxes related to the insertion
-        with that insertion_id
+        with that insertion_id, sorted by size
         """
-        boxes = Box.objects.filter(insertion_id=insertion_id)
+        boxes = Box.objects.filter(insertion_id=insertion_id).order_by('size')
+
         serializer = BoxSerializer(boxes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

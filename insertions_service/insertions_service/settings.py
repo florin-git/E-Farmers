@@ -94,11 +94,16 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.getenv('DATABASE_USER'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOSTNAME'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        # 'USER': os.getenv('DATABASE_USER'),
+        # 'NAME': os.getenv('DATABASE_NAME'),
+        # 'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        # 'HOST': os.getenv('DATABASE_HOSTNAME'),
+        # 'PORT': os.getenv('DATABASE_PORT'),
+        'USER': 'efarmers',
+        'NAME': 'efarmers',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

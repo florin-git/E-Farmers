@@ -101,11 +101,16 @@ WSGI_APPLICATION = 'user_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.getenv('DATABASE_USER'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOSTNAME'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        # 'USER': os.getenv('DATABASE_USER'),
+        # 'NAME': os.getenv('DATABASE_NAME'),
+        # 'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        # 'HOST': os.getenv('DATABASE_HOSTNAME'),
+        # 'PORT': os.getenv('DATABASE_PORT'),
+        'USER': 'efarmers',
+        'NAME': 'efarmers',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -152,6 +157,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users_api.User'
 
+
+# JWT stuff
 SIMPLE_JWT = {
     # Expiration time for the access token
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
