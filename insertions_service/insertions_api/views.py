@@ -3,6 +3,7 @@ from .models import *
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import *
+from django.http import HttpResponse
 
 ###
 #* Insertions
@@ -26,6 +27,23 @@ class InsertionsView(viewsets.ViewSet):
         insertion = Insertion.objects.get(id=insertion_id)
         serializer = InsertionSerializer(insertion)
         return Response(serializer.data)
+
+    def retrieve_insertion_image(self, request, insertion_id=None): # GET /api/insertions/<int:id>
+        insertion = Insertion.objects.get(id=insertion_id)
+        filename = "media/" + insertion.image.name
+        print("Result: ", filename)
+        # image = UploadedFile(file=Image.open(filename))
+        # image = Image.open(filename)
+        try:
+            with open(filename, "rb") as f:
+                return HttpResponse(f.read(), content_type="image/jpeg")
+        except IOError:
+            red = Image.new('RGBA', (1, 1), (255,0,0,0))
+            response = HttpResponse(content_type="image/jpeg")
+            red.save(response, "JPEG")
+            return response
+
+        return Response(image)
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>
         insertion = Insertion.objects.get(id=insertion_id)  

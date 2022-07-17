@@ -1,6 +1,8 @@
+from django.forms import ImageField
 from rest_framework import serializers
 from .models import *
 from datetime import date
+from django.core.files.uploadedfile import UploadedFile
 
 class InsertionSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=True)
@@ -14,7 +16,7 @@ class InsertionSerializer(serializers.ModelSerializer):
         if expiration_date < today:    
             raise serializers.ValidationError("The expiration date cannot be in the past!")
         return expiration_date
-    
+
     class Meta:
         model = Insertion
     # fields = ['title', 'description', 'expiration_date', 'gathering_location', 'image', 'reported']

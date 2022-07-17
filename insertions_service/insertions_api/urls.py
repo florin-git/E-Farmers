@@ -7,6 +7,9 @@ urlpatterns = [
         'get': 'list_insertions',
         'post': 'publish_insertion',
     })),
+    path('insertions/<int:insertion_id>/image/', InsertionsView.as_view({
+        'get': 'retrieve_insertion_image'
+    })),
     path('insertions/<int:insertion_id>/', InsertionsView.as_view({
         'get': 'retrieve_insertion',
         'put': 'update_insertion',
