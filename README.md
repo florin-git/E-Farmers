@@ -19,10 +19,10 @@ Andrea Nardocci
 - Show the details of an insertion
 - Delete an insertion
 
-## Usage
-The usage of each microservice is described in the respective microservice directory.
+## Usage in local
+The usage in **local** of each microservice is described in each respective microservice directory.
 
-## Postgres database set up
+### Postgres database set up
 If the database is hosted locally, then the following steps must be done:
 1) Install postgres on your machine: `sudo apt-get install postgresql-12`
 2) Login into postgres user: `sudo -u postgres -i`
@@ -31,7 +31,12 @@ If the database is hosted locally, then the following steps must be done:
 5) Create a new user (~role) called efarmers: `CREATE USER efarmers;` or `CREATE ROLE efarmers LOGIN;`
 6) Set the password of the user efarmers to "password": `ALTER ROLE efarmers PASSWORD 'password';`
 
-## Remember 
+## Usage Docker
+In order to start the entire application you need to execute the following command in the main directory (the same of the docker-compose file):
+`docker-compose up`
+
+
+### Remember 
 Add a .env file in the main directory (the same of the docker-compose file):
 
 .env 
