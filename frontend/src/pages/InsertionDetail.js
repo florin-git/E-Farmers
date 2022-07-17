@@ -55,7 +55,7 @@ function InsertionDetail({ insertion }) {
         <div className="row">
           <div className="col-lg-6">
             <img
-              src={insertion.image}
+              src={axiosInstance.defaults.baseURL + "insertions/" + insertion.id + "/image/"}
               alt="insertion_image"
               className="img-fluid"
             />
