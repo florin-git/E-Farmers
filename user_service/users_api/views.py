@@ -28,9 +28,9 @@ class LoginView(APIView):
 		if not user.check_password(password):
 			raise AuthenticationFailed("Incorrect Password")
 
-		return Response({
-			'message': "successful login"
-		})
+		# When the login is successful, user's info is returned
+		serializer = UserSerializer(user)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BlacklistTokenView(APIView):
 	def post(self, request):

@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+# For managing the environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,16 +98,11 @@ WSGI_APPLICATION = 'insertions_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.getenv('DATABASE_USER'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOSTNAME'),
-        'PORT': os.getenv('DATABASE_PORT'),
-        # 'USER': 'efarmers',
-        # 'NAME': 'efarmers',
-        # 'PASSWORD': 'password',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
+        'USER': env('DATABASE_USER'),
+        'NAME': env('DATABASE_NAME'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOSTNAME'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
