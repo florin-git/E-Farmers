@@ -39,7 +39,7 @@ function Registration(props) {
     event.preventDefault();
 
     axiosInstance
-      .post("register/", {
+      .post("users/", {
         email: formData.email,
         password: formData.password,
       })

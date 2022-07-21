@@ -38,7 +38,7 @@ function Login(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // First check if the credentials are correct
+        // First, check if the credentials are correct
         axiosInstance
             .post("login/", {
                 email: formData.email,
@@ -47,7 +47,7 @@ function Login(props) {
             .then((res) => {
                 console.log("Login", res.data);
 
-                // Second generate the JWT token
+                // Second, generate the JWT token
                 axiosInstance
                     .post("token/", {
                         email: formData.email,
@@ -82,7 +82,7 @@ function Login(props) {
                         console.log("Incorrect Password");
                 }
 
-                return error.response;
+                return response;
             });
     };
 

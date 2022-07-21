@@ -2,19 +2,12 @@ from .models import *
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-
-class RegisterView(APIView):
-	def post(self, request):
-		serializer = UserSerializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		return Response(serializer.data, status=status.HTTP_201_CREATED)
 		
-
 class LoginView(APIView):
 	def post(self, request):
 		email = request.data['email']
@@ -30,7 +23,45 @@ class LoginView(APIView):
 
 		# When the login is successful, user's info is returned
 		serializer = UserSerializer(user)
+
+		return Response(serializer.data["id"], status=status.HTTP_200_OK)
+
+
+class UsersView(viewsets.ViewSet):
+
+	def list_users(self, request): # GET /api/users/
+		"""
+		Return all the users.
+		"""
+		users = User.objects.all()
+		serializer = UserSerializer(users, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)
+	
+	def register_user(self, request): # POST /api/users/
+		serializer = UserSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
+	
+	
+	def user_info(self, request, user_id=None): # GET /api/users/<int:id>/
+		JWT_authenticator = JWTAuthentication()
+		# Authenticate the token in the Authorization header
+		response = JWT_authenticator.authenticate(request)
+		if response is not None:
+			user = User.objects.get(id=user_id)
+			serializer = UserSerializer(user)
+			# unpacking
+			url , token = response
+			# print("this is decoded token claims", token.payload)
+
+			if token.payload["user_id"] == user_id:
+				return Response(serializer.data, status=status.HTTP_200_OK)
+
+			else:
+				# The token is associated with another user
+				raise PermissionDenied("Denied Access!", code=403)
+
 
 class BlacklistTokenView(APIView):
 	def post(self, request):
