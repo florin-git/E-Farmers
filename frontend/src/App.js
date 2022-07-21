@@ -12,6 +12,7 @@ import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Logout from "./components/Logout";
+import SeasonsCalendar from "./components/SeasonsCalendar";
 
 function App(props) {
   return (
@@ -24,6 +25,7 @@ function App(props) {
             <Route index element={<Home />} />
             <Route path="insertions/" exact element={<Insertions />} />
             <Route path="insertions/new/" exact element={<PublishInsertion />} />
+            <Route path="calendar/" exact element={<SeasonsCalendar />} />
             <Route
               path="insertions/:insertion_id/"
               exact

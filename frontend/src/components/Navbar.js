@@ -31,6 +31,11 @@ function Navbar(props) {
                 Insertions
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"calendar/"}>
+                Calendar
+              </Link>
+            </li>
 
           </ul>
           <ul className="navbar-nav navabr-right">
