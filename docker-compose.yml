@@ -9,8 +9,6 @@ services:
     command: npm start
     ports:
       - "3000:3000"
-    #stdin_open: true
-    #tty: true
     depends_on:
       - insertions_service
       - user_service
@@ -51,7 +49,7 @@ services:
     image: user_service:v1.0
     container_name: user_service
     command: sh -c "
-      python3 wait-for-service.py -d -n efarmers -u efarmers -p password db 5432 && 
+      python3 wait-for-service.py -d -n $${DATABASE_NAME} -u $${DATABASE_USER} -p password $${DATABASE_HOSTNAME} $${DATABASE_PORT} && 
       python3 manage.py makemigrations && 
       python3 manage.py migrate && 
       python3 manage.py runserver 0.0.0.0:8080 "

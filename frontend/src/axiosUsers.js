@@ -1,9 +1,6 @@
 import axios from "axios";
 
-// only running locally and for development
-const usersURL = "http://localhost:8080/api/";
-// Final version should use env variable:
-// const usersURL = process.env.REACT_APP_API_USERS;
+const usersURL = process.env.REACT_APP_API_USERS;
 
 const axiosInstance = axios.create({
   baseURL: usersURL,

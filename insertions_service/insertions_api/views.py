@@ -28,7 +28,7 @@ class InsertionsView(viewsets.ViewSet):
         serializer = InsertionSerializer(insertion)
         return Response(serializer.data)
 
-    def retrieve_insertion_image(self, request, insertion_id=None): # GET /api/insertions/<int:id>
+    def retrieve_insertion_image(self, request, insertion_id=None): # GET /api/insertions/<int:id>/image
         insertion = Insertion.objects.get(id=insertion_id)
         filename = "media/" + insertion.image.name
         print("Result: ", filename)
@@ -42,8 +42,6 @@ class InsertionsView(viewsets.ViewSet):
             response = HttpResponse(content_type="image/jpeg")
             red.save(response, "JPEG")
             return response
-
-        return Response(image)
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>
         insertion = Insertion.objects.get(id=insertion_id)  

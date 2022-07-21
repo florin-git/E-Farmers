@@ -1,8 +1,6 @@
-from django.forms import ImageField
 from rest_framework import serializers
 from .models import *
 from datetime import date
-from django.core.files.uploadedfile import UploadedFile
 
 class InsertionSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=True)
