@@ -2,12 +2,12 @@ from .models import *
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, NotAcceptable
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-		
+
 class LoginView(APIView):
 	def post(self, request):
 		email = request.data['email']
@@ -38,10 +38,13 @@ class UsersView(viewsets.ViewSet):
 		return Response(serializer.data, status=status.HTTP_200_OK)
 	
 	def register_user(self, request): # POST /api/users/
-		serializer = UserSerializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		return Response(serializer.data, status=status.HTTP_201_CREATED)
+		try:
+			serializer = UserSerializer(data=request.data)
+			if serializer.is_valid(raise_exception=True):
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+		except Exception as e:
+			raise NotAcceptable(detail="Email already used", code=406) from e
 	
 	
 	def user_info(self, request, user_id=None): # GET /api/users/<int:id>/
