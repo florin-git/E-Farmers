@@ -1,11 +1,26 @@
 version: "3.3"
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+    image: efarmers_frontend:v1.0
+    container_name: frontend
+    command: npm start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - insertions_service
+      - user_service
+    environment:
+      - REACT_APP_API_USERS=${REACT_APP_API_USERS}
+      - REACT_APP_API_INSERTIONS=${REACT_APP_API_INSERTIONS}
+
   insertions_service:
     build:
       context: .
       dockerfile: ./insertions_service/Dockerfile
-    image: insertions_service:alpine1.0
+    image: insertions_service:v1.0
     container_name: insertions_service
     command: sh -c "
       python3 wait-for-service.py user_service 8080 &&
@@ -31,10 +46,10 @@ services:
     build:
       context: .
       dockerfile: ./user_service/Dockerfile
-    image: user_service:alpine1.0
+    image: user_service:v1.0
     container_name: user_service
     command: sh -c "
-      python3 wait-for-service.py -d -n efarmers -u efarmers -p password db 5432 && 
+      python3 wait-for-service.py -d -n $${DATABASE_NAME} -u $${DATABASE_USER} -p password $${DATABASE_HOSTNAME} $${DATABASE_PORT} && 
       python3 manage.py makemigrations && 
       python3 manage.py migrate && 
       python3 manage.py runserver 0.0.0.0:8080 "

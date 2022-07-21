@@ -1,0 +1,19 @@
+* {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.error {
+  color: red;
+}
+
+.green {
+  color: #82ae46;
+}
+
+.orange {
+  color: #f0913d;
+}
+
+.salmon {
+  color: #fa5b4f;
+}
