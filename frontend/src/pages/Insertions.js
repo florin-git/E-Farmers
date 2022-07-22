@@ -68,7 +68,12 @@ function Insertions(props) {
       <div className="col" key={insertion.id}>
         <div className="card w-75">
           <img
-            src={axiosInstance.defaults.baseURL + "insertions/" + insertion.id + "/image/"}
+            src={
+              axiosInstance.defaults.baseURL +
+              "insertions/" +
+              insertion.id +
+              "/image/"
+            }
             alt="img"
             className="card-img-top img-fluid"
           />

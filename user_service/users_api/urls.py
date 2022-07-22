@@ -18,7 +18,7 @@ urlpatterns = [
     path('users/', UsersView.as_view({
         'get': 'list_users',
         'post': 'register_user',
-    })),
+    })),    
     path('users/<int:user_id>/', UsersView.as_view({
         'get': 'user_info',
         # 'post': '',

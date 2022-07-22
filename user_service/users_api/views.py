@@ -7,74 +7,80 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-
 class LoginView(APIView):
-	def post(self, request):
-		email = request.data['email']
-		password = request.data['password']
+    def post(self, request):
+        email = request.data['email']
+        password = request.data['password']
 
-		user = User.objects.filter(email=email).first()
+        user = User.objects.filter(email=email).first()
 
-		if user is None:
-			raise AuthenticationFailed("User not found")
+        if user is None:
+            raise AuthenticationFailed("User not found")
 
-		if not user.check_password(password):
-			raise AuthenticationFailed("Incorrect Password")
+        if not user.check_password(password):
+            raise AuthenticationFailed("Incorrect Password")
 
-		# When the login is successful, user's info is returned
-		serializer = UserSerializer(user)
-
-		return Response(serializer.data["id"], status=status.HTTP_200_OK)
+        # When the login is successful, user's info is returned
+        serializer = UserSerializer(user)
+        
+		# Return user_id and type_account for frontend
+        return Response({
+            'user_id': serializer.data['id'],
+            'account_type': serializer.data['account_type']
+        },
+            status=status.HTTP_200_OK)
 
 
 class UsersView(viewsets.ViewSet):
 
-	def list_users(self, request): # GET /api/users/
-		"""
-		Return all the users.
-		"""
-		users = User.objects.all()
-		serializer = UserSerializer(users, many=True)
-		return Response(serializer.data, status=status.HTTP_200_OK)
-	
-	def register_user(self, request): # POST /api/users/
-		try:
-			serializer = UserSerializer(data=request.data)
-			if serializer.is_valid(raise_exception=True):
-				serializer.save()
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
-		except Exception as e:
-			raise NotAcceptable(detail="Email already used", code=406) from e
-	
-	
-	def user_info(self, request, user_id=None): # GET /api/users/<int:id>/
-		JWT_authenticator = JWTAuthentication()
-		# Authenticate the token in the Authorization header
-		response = JWT_authenticator.authenticate(request)
-		if response is not None:
-			user = User.objects.get(id=user_id)
-			serializer = UserSerializer(user)
-			# unpacking
-			url , token = response
-			# print("this is decoded token claims", token.payload)
+    def list_users(self, request):  # GET /api/users/
+        """
+        Return all the users.
+        """
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-			if token.payload["user_id"] == user_id:
-				return Response(serializer.data, status=status.HTTP_200_OK)
+    def register_user(self, request):  # POST /api/users/
+        try:
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            raise NotAcceptable(detail="Email already used", code=406) from e
 
-			else:
-				# The token is associated with another user
-				raise PermissionDenied("Denied Access!", code=403)
+    def user_info(self, request, user_id=None):  # GET /api/users/<int:id>/
+        JWT_authenticator = JWTAuthentication()
+        # Authenticate the token in the Authorization header
+        response = JWT_authenticator.authenticate(request)
+
+        if response is not None:
+            # Unpacking
+            user, token = response
+            serializer = UserSerializer(user)
+            # print("this is decoded token claims", token.payload)
+ 
+            if serializer.data["id"] == user_id:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            # else:
+            #     # The token is associated with another user
+            #     raise PermissionDenied("Access denied!", code=403)
+
+        # The token is associated with another user or 
+        # the token was not passed into the header request
+        raise PermissionDenied("Access denied!", code=403)
 
 
 class BlacklistTokenView(APIView):
-	def post(self, request):
-		try:
-			refresh_token = request.data['refresh_token']
-			token = RefreshToken(refresh_token)
-			token.blacklist()
-			return Response({
-				'message': "successful logout"
-			})
-		except Exception as e:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
-
+    def post(self, request):
+        try:
+            refresh_token = request.data['refresh_token']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({
+                'message': "successful logout"
+            })
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
