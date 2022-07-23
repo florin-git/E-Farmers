@@ -7,6 +7,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from rest_framework_simplejwt.views import TokenRefreshView
+
 class LoginView(APIView):
     def post(self, request):
         email = request.data['email']
@@ -64,13 +66,12 @@ class UsersView(viewsets.ViewSet):
             if serializer.data["id"] == user_id:
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
-            # else:
-            #     # The token is associated with another user
-            #     raise PermissionDenied("Access denied!", code=403)
+            else:
+                # The token is associated with another user
+                raise PermissionDenied("Access denied!", code=403)
 
-        # The token is associated with another user or 
-        # the token was not passed into the header request
-        raise PermissionDenied("Access denied!", code=403)
+        # The token was not passed into the header request
+        raise PermissionDenied("No token in the header!", code=403)
 
 
 class BlacklistTokenView(APIView):
@@ -82,5 +83,9 @@ class BlacklistTokenView(APIView):
             return Response({
                 'message': "successful logout"
             })
-        except Exception as e:
+        except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer

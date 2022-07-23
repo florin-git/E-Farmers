@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../axiosUsers";
 import useAuth from "../hooks/useAuth";
 
@@ -23,7 +23,7 @@ function Login(props) {
   // otherwise the root
   const from = location.state?.from?.pathname || "/";
 
-  // Authentication data from context storage 
+  // Get the function to update authentication data from context storage
   const { setAuth } = useAuth();
 
   /**
@@ -67,24 +67,25 @@ function Login(props) {
             password: formData.password,
           })
           .then((res) => {
-
             // If the submission was successful
             const accessToken = res.data.access;
-            const refreshToken = res.data.refresh;
 
-            // Set data from backend in the global context
-            setAuth({ userId, accountType, accessToken, refreshToken });
-
+            // Store only the refresh token in the local storage
+            localStorage.setItem("refresh_token", res.data.refresh);
 
             // Update axiosInstance with the new tokens
-            axiosInstance.defaults.headers["Authorization"] =
-              "JWT " + accessToken;
+            axiosInstance.defaults.headers[
+              "Authorization"
+            ] = `JWT ${accessToken}`;
+
+            // Set data from backend in the global context
+            setAuth({ userId, accountType, accessToken });
 
             // If no errors
             navigate(from, { replace: true });
           })
           .catch((error) => {
-            // Erro in fetching the JWT tokens
+            // Error in fetching the JWT tokens
             console.log(error.response);
             return error.response;
           });

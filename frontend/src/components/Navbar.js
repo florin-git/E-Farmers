@@ -1,12 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-
+import useLogout from "../hooks/useLogout";
 
 function Navbar(props) {
-  // Authentication data from context storage 
+  // Authentication data from context storage
   const { auth } = useAuth();
-  const isLoggedIn = auth?.userId ? true : false
+  // If the userId exixts, then true; else false
+  const isLoggedIn = auth?.userId ? true : false;
+
+  // This variable is used for the redirection
+  const navigate = useNavigate();
+  
+  const logout = useLogout();
+  const signOut = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light mb-4">
@@ -71,14 +81,17 @@ function Navbar(props) {
             {isLoggedIn && (
               <div className="d-flex">
                 <li className="nav-item">
-                  <Link className="btn btn-primary mx-md-2" to={"user/profile/"}>
+                  <Link
+                    className="btn btn-primary mx-md-2"
+                    to={"user/profile/"}
+                  >
                     Profile
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="btn btn-primary" to={"logout/"}>
+                  <button className="btn btn-primary" onClick={signOut}>
                     Logout
-                  </Link>
+                  </button>
                 </li>
               </div>
             )}

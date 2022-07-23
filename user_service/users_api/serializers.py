@@ -1,7 +1,8 @@
 from dataclasses import field
 from rest_framework import serializers
 from .models import *
-
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.state import token_backend
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,3 +24,17 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):  
+    def validate(self, attrs):
+        data = super(CustomTokenRefreshSerializer, self).validate(attrs)
+        decoded_payload = token_backend.decode(data['access'], verify=True)
+        user_id = decoded_payload['user_id']
+        
+        user = User.objects.get(id=user_id)
+        serializer = UserSerializer(user)
+
+        # Add user data besides the tokens
+        data.update(serializer.data)
+        return data

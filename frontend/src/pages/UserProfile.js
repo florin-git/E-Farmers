@@ -1,34 +1,48 @@
 import React, { useEffect } from "react";
-import axiosInstance from "../axiosUsers";
-// Redux
-// import { useSelector } from "react-redux";
-
+// import axiosInstance from "../axiosUsers";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
+
 function UserProfile(props) {
   /**
    ** VARIABLES
    */
 
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  // const userId = useSelector((state) => state.auth.userId);
+  // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
 
+  // axios function with JWT tokens
+  const axiosPrivate = useAxiosPrivate();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  /**
+   ** FUNCTIONS
+   */
+
   useEffect(() => {
     /**
-     * Retrieve the user's info
+     * Retrieve the user info
      */
     (async () => {
-      await axiosInstance
+      await axiosPrivate
         .get(`users/${userId}/`)
         .then((res) => {
           console.log(res.data);
         })
         .catch((error) => {
           console.log(error.response);
+          console.log("LOGIN AGAIN")
+          // If also the refresh token expires then you have to
+          // log in again
+          navigate("login/", { state: { from: location }, replace: true });
         });
     })();
-  }, [userId]);
+
+  }, [userId, axiosPrivate]);
 
   return (
     <div>
