@@ -49,7 +49,7 @@ class SeasonsCalendar extends React.Component {
     const seasonal_items = [];
     
     for (const item of this.state.value) {
-        seasonal_items.push(<li >{item}</li>);
+        seasonal_items.push(<li key={item}>{item}</li>);
     }
 
     return (
