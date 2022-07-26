@@ -6,4 +6,4 @@ npm i bootstrap-icons
 npm i dotenv --save
 npm install axios
 npm install @reduxjs/toolkit react-redux
-npm i redux-persist
+npm install rc-year-calendar

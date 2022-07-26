@@ -11,7 +11,7 @@ function Navbar(props) {
 
   // This variable is used for the redirection
   const navigate = useNavigate();
-  
+
   const logout = useLogout();
   const signOut = async () => {
     await logout();
@@ -45,6 +45,11 @@ function Navbar(props) {
             <li className="nav-item">
               <Link className="nav-link" to={"insertions/"}>
                 Insertions
+              </Link>
+            </li>
+            <li>
+              <Link className="nav-link" to={"calendar/"}>
+                Calendar
               </Link>
             </li>
             <li className="nav-item">

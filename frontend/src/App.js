@@ -15,6 +15,7 @@ import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
+import SeasonsCalendar from "./components/SeasonsCalendar";
 import useAuth from "./hooks/useAuth";
 
 function App(props) {
@@ -36,6 +37,7 @@ function App(props) {
             <Route element={<PersistLogin />}>
               <Route index element={<Home />} />
               {/* For Insertions service */}
+              <Route path="calendar/" exact element={<SeasonsCalendar />} />
               <Route path="insertions/" exact element={<Insertions />} />
               <Route
                 path="insertions/new/"
