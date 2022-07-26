@@ -42,7 +42,7 @@ function UserProfile(props) {
         });
     })();
 
-  }, [userId, axiosPrivate]);
+  }, [userId, axiosPrivate, location, navigate]);
 
   return (
     <div>

@@ -63,9 +63,9 @@ function Navbar(props) {
             {/* If you are NOT logged in, then the Login
               button is displayed */}
             {!isLoggedIn && (
-              <div className="d-flex">
+              <div className="d-flex mt-2 mt-md-0">
                 <li className="nav-item">
-                  <Link className="btn btn-primary mx-md-2" to={"register/"}>
+                  <Link className="btn btn-primary mx-md-2 " to={"register/"}>
                     Sign Up
                   </Link>
                 </li>
@@ -79,7 +79,7 @@ function Navbar(props) {
             {/* If you are logged in, then the Logout
               button is displayed */}
             {isLoggedIn && (
-              <div className="d-flex">
+              <div className="d-flex mt-2 mt-md-0">
                 <li className="nav-item">
                   <Link
                     className="btn btn-primary mx-md-2"

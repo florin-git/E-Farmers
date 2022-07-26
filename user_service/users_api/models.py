@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
     password = models.CharField(max_length=255)
     username = None
+    name = models.CharField(max_length=255, blank=True)
     
     # Additional Fields
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPE, default=0)

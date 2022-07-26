@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../axiosUsers";
 import useAuth from "../hooks/useAuth";
+import Alert from "react-bootstrap/Alert";
 
 function Login(props) {
   /**
@@ -13,11 +14,15 @@ function Login(props) {
     password: "",
   });
 
+  // Form
   const [formData, setFormData] = useState(initialFormData);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPsw, setValidPsw] = useState(true);
+  const emailRef = useRef();
+  const [showAlert, setShowAlert] = useState(false);
 
   // This variable is used for the redirection
   const navigate = useNavigate();
-
   const location = useLocation();
   // Where you came from when you try to access a "protected" page
   // otherwise the root
@@ -30,9 +35,22 @@ function Login(props) {
    ** FUNCTIONS
    */
 
+  // When you access the page, the focus will be on the email input
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
+
   function handleChange(event) {
     // Get name and value of the changed field
     const { name, value } = event.target;
+
+    /**
+     * If you are retyping the email,
+     * then reset the validation check on the email
+     */
+    if (name === "email") {
+      setValidEmail(true);
+    }
 
     // Update formData with the changed value
     setFormData((prevFormData) => {
@@ -94,10 +112,16 @@ function Login(props) {
         // Error with credentials
         const response = error.response;
         if (response.status === 401 && response.statusText === "Unauthorized") {
-          if (response.data.detail === "User not found")
+          if (response.data.detail === "User not found") {
             console.log("User not found");
-          else if (response.data.detail === "Incorrect Password")
+            setValidEmail(false);
+          } else if (response.data.detail === "Incorrect Password") {
             console.log("Incorrect Password");
+            setValidPsw(false);
+          }
+        } else {
+          // Handle all other errors
+          setShowAlert(true);
         }
 
         return response;
@@ -113,6 +137,18 @@ function Login(props) {
               <div className="card text-black">
                 <div className="card-body p-md-5">
                   <div className="row justify-content-center">
+                    <Alert
+                      variant="danger"
+                      show={showAlert}
+                      onClose={() => setShowAlert(false)}
+                      dismissible
+                    >
+                      <Alert.Heading>
+                        A server/network error occurred
+                      </Alert.Heading>
+                      <p>Double check the input and try again.</p>
+                    </Alert>
+
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                         Login
@@ -124,20 +160,26 @@ function Login(props) {
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
                             <label className="form-label" htmlFor="email">
-                              Your Email
+                              Email
                             </label>
                             <input
                               type="email"
-                              className="form-control"
+                              className={`form-control ${
+                                !validEmail && "is-invalid"
+                              }`}
                               id="email"
                               placeholder="Email"
                               value={formData.email}
                               name="email"
+                              ref={emailRef}
                               onChange={(event) => {
                                 handleChange(event);
                               }}
                               required
                             />
+                            <span className="invalid-feedback">
+                              No user with this email
+                            </span>
                           </div>
                         </div>
 
@@ -152,7 +194,9 @@ function Login(props) {
                             </label>
                             <input
                               type="password"
-                              className="form-control"
+                              className={`form-control ${
+                                !validPsw && "is-invalid"
+                              }`}
                               id="password"
                               placeholder="Password"
                               value={formData.password}
@@ -162,6 +206,9 @@ function Login(props) {
                               }}
                               required
                             />
+                            <span className="invalid-feedback">
+                              Incorrect Password
+                            </span>
                           </div>
                         </div>
 

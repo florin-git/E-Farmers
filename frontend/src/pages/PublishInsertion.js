@@ -1,12 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInsertions";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
 // const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,50}$/;
-// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function PublishInsertion(props) {
   /**
@@ -47,10 +46,16 @@ function PublishInsertion(props) {
 
   // This variable is used for the redirection
   const navigate = useNavigate();
+  const titleRef = useRef();
 
   /**
    ** FUNCTIONS
    */
+
+  // When you access the page, the focus will be on the title input
+  useEffect(() => {
+    titleRef.current.focus();
+  }, []);
 
   function handleChange(event) {
     // Get name and value of the changed field
@@ -168,97 +173,99 @@ function PublishInsertion(props) {
 
   return (
     <div className="container-md">
-      <div className="row">
-        <form onSubmit={handleSubmit} className="">
-          <div className="form-group mt-3">
-            <label htmlFor="title" className="form-label">
-              Title
-            </label>
+      <div className="row ">
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group mt-3">
+              <label htmlFor="title" className="form-label">
+                Title
+              </label>
 
-            <input
-              type="text"
-              className="form-control"
-              id="title"
-              placeholder="Title"
-              value={formData.title}
-              name="title"
-              onChange={(event) => {
-                handleChange(event);
-              }}
-              required
-            />
-            {/* Display error if the condition is not satisfied */}
-            {formValidation.title.length > 0 && (
-              <span className="invalid-feedback">{formValidation.title}</span>
-            )}
-          </div>
-
-          <div className="form-group mt-3">
-            <label htmlFor="description">Description</label>
-            <textarea
-              className="form-control"
-              id="description"
-              placeholder="Description"
-              value={formData.description}
-              name="description"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group mt-3">
-            <label htmlFor="gathering_location">Gathering Location</label>
-            <input
-              type="text"
-              className="form-control"
-              id="gathering_location"
-              placeholder="Gathering Location"
-              value={formData.gathering_location}
-              name="gathering_location"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="row">
-            <div className="form-group col-lg-6 mt-3">
-              <label htmlFor="expiration_date">Expiration Date</label>
               <input
-                type="date"
-                className={`form-control ${formValidationClass.expiration_date_for_class}`}
-                id="expiration_date"
-                placeholder="Expiration Date"
-                value={formData.expiration_date}
-                name="expiration_date"
-                onChange={handleChange}
+                type="text"
+                className="form-control"
+                id="title"
+                ref={titleRef}
+                placeholder="Title"
+                value={formData.title}
+                name="title"
+                onChange={(event) => {
+                  handleChange(event);
+                }}
                 required
               />
-              {formValidation.expiration_date.length > 0 && (
-                <span className="invalid-feedback">
-                  {formValidation.expiration_date}
-                </span>
+              {/* Display error if the condition is not satisfied */}
+              {formValidation.title.length > 0 && (
+                <span className="invalid-feedback">{formValidation.title}</span>
               )}
             </div>
 
-            <div className="form-group col-lg-6 mt-3">
-              <label htmlFor="image">Image</label>
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/gif"
+            <div className="form-group mt-3">
+              <label htmlFor="description">Description</label>
+              <textarea
                 className="form-control"
-                id="image"
-                placeholder="Image"
-                // value={formData.image}
-                name="image"
-                onChange={handleImageChange}
+                id="description"
+                placeholder="Description"
+                value={formData.description}
+                name="description"
+                onChange={handleChange}
                 required
               />
             </div>
-          </div>
-          <button className="mt-4 btn btn-primary" type="submit">
-            Save
-          </button>
-        </form>
+
+            <div className="form-group mt-3">
+              <label htmlFor="gathering_location">Gathering Location</label>
+              <input
+                type="text"
+                className="form-control"
+                id="gathering_location"
+                placeholder="Gathering Location"
+                value={formData.gathering_location}
+                name="gathering_location"
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="row">
+              <div className="form-group col-lg-6 mt-3">
+                <label htmlFor="expiration_date">Expiration Date</label>
+                <input
+                  type="date"
+                  className={`form-control ${formValidationClass.expiration_date_for_class}`}
+                  id="expiration_date"
+                  placeholder="Expiration Date"
+                  value={formData.expiration_date}
+                  name="expiration_date"
+                  onChange={handleChange}
+                  required
+                />
+                {formValidation.expiration_date.length > 0 && (
+                  <span className="invalid-feedback">
+                    {formValidation.expiration_date}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group col-lg-6 mt-3">
+                <label htmlFor="image">Image</label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif"
+                  className="form-control"
+                  id="image"
+                  placeholder="Image"
+                  name="image"
+                  onChange={handleImageChange}
+                  required
+                />
+              </div>
+            </div>
+            <button className="mt-4 btn btn-primary" type="submit">
+              Save
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
