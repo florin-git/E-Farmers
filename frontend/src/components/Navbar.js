@@ -1,7 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useLogout from "../hooks/useLogout";
 
 function Navbar(props) {
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  // If the userId exixts, then true; else false
+  const isLoggedIn = auth?.userId ? true : false;
+
+  // This variable is used for the redirection
+  const navigate = useNavigate();
+  
+  const logout = useLogout();
+  const signOut = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light mb-4">
       <div className="container-fluid">
@@ -31,7 +47,11 @@ function Navbar(props) {
                 Insertions
               </Link>
             </li>
-
+            <li className="nav-item">
+              <Link className="nav-link" to={"farmer/profile/"}>
+                Farmer Profile
+              </Link>
+            </li>
           </ul>
           <ul className="navbar-nav navabr-right">
             <li className="nav-item">
@@ -40,23 +60,41 @@ function Navbar(props) {
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link className="btn btn-primary mx-md-2" to={"register/"}>
-                Sign Up
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="btn btn-primary" to={"login/"}>
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="btn btn-primary" to={"logout/"}>
-                Logout
-              </Link>
-            </li>
+            {/* If you are NOT logged in, then the Login
+              button is displayed */}
+            {!isLoggedIn && (
+              <div className="d-flex mt-2 mt-md-0">
+                <li className="nav-item">
+                  <Link className="btn btn-primary mx-md-2 " to={"register/"}>
+                    Sign Up
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="btn btn-primary" to={"login/"}>
+                    Login
+                  </Link>
+                </li>
+              </div>
+            )}
+            {/* If you are logged in, then the Logout
+              button is displayed */}
+            {isLoggedIn && (
+              <div className="d-flex mt-2 mt-md-0">
+                <li className="nav-item">
+                  <Link
+                    className="btn btn-primary mx-md-2"
+                    to={"user/profile/"}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-primary" onClick={signOut}>
+                    Logout
+                  </button>
+                </li>
+              </div>
+            )}
 
             {/* <li className="nav-item dropdown">
               <a

@@ -23,17 +23,16 @@ class InsertionsView(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>
+    def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
         serializer = InsertionSerializer(insertion)
         return Response(serializer.data)
 
-    def retrieve_insertion_image(self, request, insertion_id=None): # GET /api/insertions/<int:id>/image
+    def retrieve_insertion_image(self, request, insertion_id=None): # GET /api/insertions/<int:id>/image/
         insertion = Insertion.objects.get(id=insertion_id)
         filename = "media/" + insertion.image.name
         print("Result: ", filename)
-        # image = UploadedFile(file=Image.open(filename))
-        # image = Image.open(filename)
+
         try:
             with open(filename, "rb") as f:
                 return HttpResponse(f.read(), content_type="image/jpeg")
@@ -43,14 +42,14 @@ class InsertionsView(viewsets.ViewSet):
             red.save(response, "JPEG")
             return response
 
-    def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>
+    def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)  
         serializer = InsertionSerializer(instance=insertion, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
-    def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>
+    def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
         insertion.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

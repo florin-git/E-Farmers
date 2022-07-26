@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
-
+from users_api.account_type import *
 
 class User(AbstractUser):
     # first_name = models.CharField(verbose_name="First Name", max_length=255)
@@ -9,8 +9,10 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
     password = models.CharField(max_length=255)
     username = None
+    name = models.CharField(max_length=255, blank=True)
     
     # Additional Fields
+    account_type = models.SmallIntegerField(choices=ACCOUNT_TYPE, default=0)
     # bio = models.TextField()
     # date_of_birth = models.DateField(default=datetime.date(1977, 1, 1))
     # phone = models.CharField( default= ' ' , max_length=10 )
