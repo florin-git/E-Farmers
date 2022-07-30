@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask
 from flask import request
 from threading import Timer
@@ -22,10 +23,37 @@ def register_queue():
     channel.queue_declare(queue="user_" + request.args.get('user-id'), exclusive=False, durable=True)
     connection.close()
     return "<p>New queue registered</p>"
-"""
-@app.route("/subscribe" methods=['GET'])
+
+@app.route("/register-farmer", methods=['GET'])
+def register_farmer():
+    # Create a new queue in RabbitMQ
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
+    channel = connection.channel()
+    channel.exchange_declare(exchange="farmer_" + request.args.get('farmer-id'), exchange_type='fanout')
+    connection.close()
+    return "<p>New farmer registered</p>"
+
+@app.route("/subscribe", methods=['GET'])
 def subscribe():
-"""
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+    channel.queue_bind(exchange="farmer_" + request.args.get('farmer-id'), queue="user_" + request.args.get('user-id'))
+    connection.close()
+    return "<p>New subscription registered</p>"
+
+@app.route("/publish", methods=['GET'])
+def publish():
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+    message = request.args.get('message')
+    channel.basic_publish(exchange="farmer_" + request.args.get('farmer-id'),
+                      routing_key='',
+                      body=message,
+                      properties=pika.BasicProperties(
+                        delivery_mode = pika.spec.PERSISTENT_DELIVERY_MODE))
+    print(" [x] Sent %r" % message)
+    connection.close()
+    return "<p>New message published</p>"
 
 @app.route("/retrieve-messages", methods=['GET'])
 def retrieve_messages():
