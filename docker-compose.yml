@@ -9,6 +9,8 @@ services:
     command: npm start
     ports:
       - "3000:3000"
+    networks:
+      - frontend-net
     depends_on:
       - insertions_service
       - user_service
@@ -38,6 +40,9 @@ services:
       - insertions-media:/usr/src/app/media/images
     ports:
       - "8081:8081"
+    networks:
+      - frontend-net
+      - backend-net
     depends_on:
       - db
       - user_service
@@ -62,8 +67,25 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     ports:
       - "8080:8080"
+    networks:
+      - frontend-net
+      - backend-net
     depends_on:
       - db
+
+  subscription_service:
+    build:
+      context: .
+      dockerfile: ./subscription_service/Dockerfile
+    image: subscription_service:v1.0
+    container_name: subscription_service
+    ports:
+      - "5000:5000"
+    networks:
+      - frontend-net
+      - subscription-net
+    depends_on:
+      - rabbitmq
 
   db:
     image: library/postgres
@@ -74,14 +96,33 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
+    networks:
+      - backend-net
     restart: on-failure
     stdin_open: true
     tty: true
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - subscription-net
+
 volumes:
   postgres-data:
     driver: local
   insertions-media:
     driver: local
+
+networks:
+  subscription-net:
+    driver: bridge
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
