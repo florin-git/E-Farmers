@@ -27,14 +27,15 @@ class Queue(Resource):
         # Creates a new queue in RabbitMQ
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
-        queue = channel.queue_declare(queue="user_" + request.form['user_id'], exclusive=False, durable=True)
+        print()
+        queue = channel.queue_declare(queue="user_" + request.get_json()['user_id'], exclusive=False, durable=True)
         connection.close()
         return '', 201
     def patch(self, user_id):
         # Creates a new binding between a queue and an exchange
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
-        channel.queue_bind(exchange="farmer_" + request.form['farmer_id'], queue="user_" + user_id)
+        channel.queue_bind(exchange="farmer_" + request.get_json()['farmer_id'], queue="user_" + user_id)
         connection.close()
         return '', 200
     def get(self, user_id):
@@ -65,14 +66,14 @@ class Exchange(Resource):
         # Creates a new exchange in RabbitMQ
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
-        channel.exchange_declare(exchange="farmer_" + request.form['farmer_id'], exchange_type='fanout')
+        channel.exchange_declare(exchange="farmer_" + request.get_json()['farmer_id'], exchange_type='fanout')
         connection.close()
         return '', 201
     def post(self, farmer_id):
         # Delivers a message to the exchange
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
-        message = request.form['message']
+        message = request.get_json()['message']
         channel.basic_publish(exchange="farmer_" + farmer_id,
                         routing_key='',
                         body=message,
