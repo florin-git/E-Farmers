@@ -6,25 +6,32 @@ This service implements the subscription funcionality: a customer (user) can sub
 
 ### Resource: Queue
 #### PUT
-Creates a new queue. Each customer has its own queue.
+##### Parameter: user's id
+##### JSON: `{"farmer_id":"xxx"}`
+Creates a new binding between the customer's queue and the farmer's exchange. If the queue or the exchange do not exist, they are created. Each customer has its own queue.
 
 #### PATCH
-Creates a new binding between a queue (customer) and an exchange (farmer). When the farmer will publish a new message on its exchange, the message will be delivered to all the queues that are bound to that exchange.
+##### Parameter: user's id
+##### JSON: `{"farmer_id":"xxx"}`
+Deletes a binding between a customer's queue and a farmer's exchange.
 
 #### GET
-Reads all the messages in the queue
+##### Parameter: user's id
+Reads all the messages in the queue.
 
 #### DELETE
-Deletes the queue
+##### Parameter: user's id
+Deletes the queue.
 
 ### Resource: Exchange
-#### PUT
-Creates a new exchange. Each farmer has its own exchange.
 
 #### POST
-Passes a message to the exchange. The exchange will deliver the message to all the queues it is bound to.
+##### Parameter: farmer's id
+##### JSON: `{"message":"XXX"}
+Passes a message to the exchange relative to the farmer. If the exchange does not exists, it is created. The exchange will deliver the message to all the queues it is bound to.
 
 #### DELETE
+##### Parameter: farmer's id
 Deletes the exchange.
 
 ## Usage

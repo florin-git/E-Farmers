@@ -23,19 +23,26 @@ def callback(messages, ch, method, properties, body):
     messages[0] -= 1
 
 class Queue(Resource):
-    def put(self):
-        # Creates a new queue in RabbitMQ
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
-        channel = connection.channel()
-        print()
-        queue = channel.queue_declare(queue="user_" + request.get_json()['user_id'], exclusive=False, durable=True)
-        connection.close()
-        return '', 201
-    def patch(self, user_id):
+    def put(self, user_id):
         # Creates a new binding between a queue and an exchange
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
-        channel.queue_bind(exchange="farmer_" + request.get_json()['farmer_id'], queue="user_" + user_id)
+        queue_name = "user_" + user_id
+        exchange_name = "farmer_" + request.get_json()['farmer_id']
+        channel.queue_declare(queue=queue_name, exclusive=False, durable=True)
+        channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
+        channel.queue_bind(exchange=exchange_name, queue=queue_name)
+        connection.close()
+        return '', 200
+    def patch(self, user_id):
+        # Delete a binding
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
+        channel = connection.channel()
+        queue_name = "user_" + user_id
+        exchange_name = "farmer_" + request.get_json()['farmer_id']
+        channel.queue_declare(queue=queue_name, exclusive=False, durable=True)
+        channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
+        channel.queue_unbind(exchange=exchange_name, queue=queue_name)
         connection.close()
         return '', 200
     def get(self, user_id):
@@ -62,19 +69,14 @@ class Queue(Resource):
         return '', 200
 
 class Exchange(Resource):
-    def put(self):
-        # Creates a new exchange in RabbitMQ
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
-        channel = connection.channel()
-        channel.exchange_declare(exchange="farmer_" + request.get_json()['farmer_id'], exchange_type='fanout')
-        connection.close()
-        return '', 201
     def post(self, farmer_id):
         # Delivers a message to the exchange
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
+        exchange_name = "farmer_" + farmer_id
         message = request.get_json()['message']
-        channel.basic_publish(exchange="farmer_" + farmer_id,
+        channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
+        channel.basic_publish(exchange=exchange_name,
                         routing_key='',
                         body=message,
                         properties=pika.BasicProperties(
