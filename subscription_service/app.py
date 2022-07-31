@@ -4,13 +4,13 @@ from flask import request
 from flask_restful import Resource, Api
 import pika
 import json
-import os
+import environ
+# For managing the environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Use this when containerized
-rabbitmq_service_addr = os.environ['RABBITMQ_SERVICE']
-
-# Use this when testing locally
-# rabbitmq_service_addr = 'rabbitmq'
+rabbitmq_service_addr = env('RABBITMQ_SERVICE')
 
 app = Flask(__name__)
 api = Api(app)
@@ -89,8 +89,8 @@ class Exchange(Resource):
         connection.close()
         return '', 200
 
-api.add_resource(Queue, '/customer', '/customer/<string:user_id>')
-api.add_resource(Exchange, '/farmer', '/farmer/<string:farmer_id>')
+api.add_resource(Queue, '/customer/', '/customer/<string:user_id>/')
+api.add_resource(Exchange, '/farmer/', '/farmer/<string:farmer_id>/')
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')

@@ -26,3 +26,14 @@ Passes a message to the exchange. The exchange will deliver the message to all t
 
 #### DELETE
 Deletes the exchange.
+
+## Usage
+- Install dependencies: `/path/to/E-Farmers/subscription_service$ pip install -r requirements.txt`
+- Start RabbitMQ docker container: `sudo docker run -it --rm --name rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management` 
+- Add .env file in `/path/to/E-Farmers/subscription_service` folder 
+- Start the flask server: `/path/to/E-Farmers/subscription_service$ python3 app.py`
+
+.env 
+```
+RABBITMQ_SERVICE=localhost
+```

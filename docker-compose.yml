@@ -112,11 +112,15 @@ services:
       - "15672:15672"
     networks:
       - subscription-net
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
 
 volumes:
   postgres-data:
     driver: local
   insertions-media:
+    driver: local
+  rabbitmq-data:
     driver: local
 
 networks:
