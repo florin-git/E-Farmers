@@ -5,5 +5,7 @@ COPY ./subscription_service/requirements.txt ./
 RUN python3 -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY ./subscription_service ./
+ENV FLASK_APP=subscription_api
+ENV FLASK_ENV=production
 ENV RABBITMQ_SERVICE=rabbitmq
-CMD ["python3", "app.py"]
+CMD ["sh", "-c", "flask", "restore-rabbitmq", "&", "flask", "run"]

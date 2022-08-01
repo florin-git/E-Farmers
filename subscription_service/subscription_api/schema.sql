@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS subscription;
+
+CREATE TABLE subscription (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer TEXT NOT NULL,
+  farmer TEXT NOT NULL
+);
