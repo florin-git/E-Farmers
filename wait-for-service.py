@@ -2,7 +2,6 @@ from time import sleep
 import socket
 import sys
 import getopt
-import psycopg2
 import os
 
 '''
@@ -36,6 +35,7 @@ def isUp(service_args):
         return False
 
 def isPostgresUp(db_args):
+    import psycopg2
     try:
         psycopg2.connect(database=db_args['db_name'], user=db_args['db_user'], password=db_args['db_password'], host=db_args['host'], port=db_args['port'])
         return True

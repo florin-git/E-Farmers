@@ -1,8 +1,8 @@
 # from email import message
 from flask import (
-    Flask, request, Blueprint, current_app, flash
+    request, Blueprint, flash
 )
-from flask_restful import Resource, Api
+from flask_restful import Resource
 from subscription_api.db import get_db
 import pika
 import json
@@ -169,13 +169,3 @@ class Exchange(Resource):
                     channel.queue_delete(queue=row[1])
             connection.close()
         return '', 200
-    def get(self):
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM subscription")
-        res = cursor.fetchall()
-        print(len(res))
-        for row in res:
-            print(row)
-        
-        return ''

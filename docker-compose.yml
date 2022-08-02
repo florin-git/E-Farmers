@@ -79,6 +79,13 @@ services:
       dockerfile: ./subscription_service/Dockerfile
     image: subscription_service:v1.0
     container_name: subscription_service
+    command: sh -c "
+      python3 wait-for-service.py rabbitmq 5672 &&
+      flask init-db &&
+      flask restore-rabbitmq &&
+      flask run --host=0.0.0.0"
+    volumes:
+      - subscription-data:/usr/src/app/instance
     ports:
       - "5000:5000"
     networks:
@@ -119,6 +126,8 @@ volumes:
   postgres-data:
     driver: local
   insertions-media:
+    driver: local
+  subscription-data:
     driver: local
   rabbitmq-data:
     driver: local
