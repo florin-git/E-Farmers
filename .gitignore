@@ -97,8 +97,11 @@ celerybeat-schedule.*
 *.sage.py 
 
 # Environments 
+pyvenv.cfg
 .env 
 .venv 
+share/
+bin/
 env/ 
 venv/ 
 ENV/ 
