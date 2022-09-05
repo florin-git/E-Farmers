@@ -1,0 +1,4 @@
+flask
+flask-restful
+pika
+python-environ
