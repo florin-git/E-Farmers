@@ -94,6 +94,14 @@ function Navbar(props) {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link
+                    className="btn btn-primary mx-md-2"
+                    to={"user/cart/"}
+                  >
+                    Cart
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <button className="btn btn-primary" onClick={signOut}>
                     Logout
                   </button>

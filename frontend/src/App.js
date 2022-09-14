@@ -67,6 +67,8 @@ function App(props) {
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuth />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
+                {/* Access to personal shopping cart */}
+                <Route path="user/cart/:cart_id/" exact element={<ShoppingCart />} />
               </Route>
             </Route>
 

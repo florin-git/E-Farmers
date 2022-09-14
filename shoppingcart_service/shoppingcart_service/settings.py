@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
+
+# For managing the environment variables
+env = environ.Env()
+environ.Env.read_env()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +58,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# In order to not block React when interacting with Django
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+###! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
+###! ONLY OUR ORIGIN
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'shoppingcart_service.urls'
 
@@ -75,8 +99,12 @@ WSGI_APPLICATION = 'shoppingcart_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': env('DATABASE_USER'),
+        'NAME': env('DATABASE_NAME'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOSTNAME'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
@@ -123,3 +151,9 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL used to access the media
+MEDIA_URL = '/media/'
+
+# URL used to access the media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

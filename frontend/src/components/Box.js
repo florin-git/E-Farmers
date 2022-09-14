@@ -30,7 +30,7 @@ function Box(props) {
             </strong>
           </p>
           <button type="button" className="btn btn-outline-success">
-            Buy box
+            Buy box         
           </button>
         </div>
       </div>
