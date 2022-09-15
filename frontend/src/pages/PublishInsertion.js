@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInsertions";
+import useAuth from "../hooks/useAuth";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -47,6 +48,11 @@ function PublishInsertion(props) {
   // This variable is used for the redirection
   const navigate = useNavigate();
   const titleRef = useRef();
+
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  const userId = auth.userId;
+
 
   /**
    ** FUNCTIONS
@@ -153,6 +159,7 @@ function PublishInsertion(props) {
       form_data.append("gathering_location", formData.gathering_location);
       form_data.append("image", formData.image);
       form_data.append("reported", formData.reported);
+      form_data.append("farmer", userId);
 
       /**
        * Create new insertion through API call
