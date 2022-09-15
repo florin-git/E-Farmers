@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 
 class LoginView(APIView):
+    
     def post(self, request):
         email = request.data['email']
         password = request.data['password']
@@ -54,8 +55,7 @@ class UsersView(viewsets.ViewSet):
             if serializer.errors['email'][0] == "user with this Email already exists.":
                 return Response("Email already used", status=status.HTTP_406_NOT_ACCEPTABLE)
 
-            
-
+        
     def user_info(self, request, user_id=None):  # GET /api/users/<int:id>/
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
