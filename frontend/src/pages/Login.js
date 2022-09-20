@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axiosInstance from "../axiosUsers";
+import axiosInstance from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
 import Alert from "react-bootstrap/Alert";
 

@@ -1,6 +1,6 @@
 // custom variables
 $primary: #82ae46;
-$secondary: #ffe6eb;
+// $secondary: #ffe6eb;
 // $light: #fbf5e5;
 $font-primary: "Poppins", Arial, sans-serif;
 
@@ -56,29 +56,59 @@ $font-primary: "Poppins", Arial, sans-serif;
   }
 }
 
-.card:hover {
-  box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
-  -webkit-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
-  -moz-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+.home {
+  .card:hover {
+    box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+    -webkit-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+    -moz-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+  }
 }
 
 footer {
   background-color: #f3f6fa;
 
   ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
   }
 
   p {
-	margin: 0;
+    margin: 0;
   }
 
   .fab {
-	  font-size: 2rem;
-	  cursor: pointer;
-	  padding-right: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+    padding-right: 10px;
   }
 }
 
+// Navbar
+.icon {
+  // margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+  // color: red;
+}
+
+.counter {
+  width: 13px;
+  height: 13px;
+  background-color: red;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  // color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+.notification-dropdown {
+  font-size: 12px;
+}

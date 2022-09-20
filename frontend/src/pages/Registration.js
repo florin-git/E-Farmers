@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosUsers";
+import axiosInstance from "../api/axiosUsers";
 import Alert from "react-bootstrap/Alert";
 
 function Registration(props) {
@@ -106,7 +106,7 @@ function Registration(props) {
 
   return (
     <div>
-      <div className="vh-100">
+      <div className="py-5">
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-lg-12 col-xl-11">

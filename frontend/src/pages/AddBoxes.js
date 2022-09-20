@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInsertions";
+import axiosInstance from "../api/axiosInsertions";
 
 function AddBoxes(props) {
   /**

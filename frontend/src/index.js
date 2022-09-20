@@ -4,7 +4,6 @@ import "bootstrap/dist/js/bootstrap.bundle";
 import "./my_css/style.css";
 import "./my_css/over_bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-// import "font-awesome/css/font-awesome.min.css";
 
 import React from "react";
 import ReactDOM from "react-dom";
