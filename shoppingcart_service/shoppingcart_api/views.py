@@ -16,4 +16,11 @@ class CartView(viewsets):
         Return the cart info
         """
         user = User.objects.get(id=user_id)
-        
+
+        if user is not None:
+            cart = Cart.objects.get(user=user_id)
+            
+            # if the cart doesn't exist
+            if cart is None:
+                pass
+            ## TODO: add creation of cart

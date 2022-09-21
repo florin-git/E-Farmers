@@ -11,7 +11,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=255)
     username = None
     name = models.CharField(max_length=255, blank=True)
-    insertions = ArrayField(ArrayField(models.PositiveIntegerField(default=0)), default=[])
+    insertions = ArrayField(ArrayField(models.PositiveIntegerField(default=0)), default=list)
+    carts = ArrayField(ArrayField(models.PositiveBigIntegerField(default=0)), default=list)
     
     # Additional Fields
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPE, default=0)
