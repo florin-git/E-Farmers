@@ -2,4 +2,4 @@ flask
 flask-restful
 pika
 python-environ
-flask_cors==3.0
+flask_cors

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axiosInstance from "../api/axiosInsertions";
 import Box from "../components/Box";
+
+import axiosInstance from "../api/axiosInsertions";
 
 // The component receives the insertion's detail from ProtectedRouteInsertion
 function InsertionDetail({ insertion }) {

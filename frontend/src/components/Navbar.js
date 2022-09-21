@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+
 import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
-import usePeriodicalAPICall from "../hooks/usePeriodicalAPICall";
 import useInterval from "../hooks/useInterval";
+import usePeriodicalAPICall from "../hooks/usePeriodicalAPICall";
 
 function Navbar(props) {
   // Authentication data from context storage

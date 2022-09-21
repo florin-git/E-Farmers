@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../api/axiosUsers";
 import Alert from "react-bootstrap/Alert";
+
+import axiosInstance from "../api/axiosUsers";
 
 function Registration(props) {
   /**

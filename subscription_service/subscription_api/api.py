@@ -5,7 +5,6 @@ from flask import (
 from flask_restful import Resource
 from subscription_api.db import get_db
 import pika
-import json
 import environ
 # For managing the environment variables
 env = environ.Env()

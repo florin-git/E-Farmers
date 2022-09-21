@@ -8,4 +8,5 @@ If you want to test the frontend in local, you have to add a *.env* file in the 
 ```
 REACT_APP_API_INSERTIONS=http://localhost:8081/api/
 REACT_APP_API_USERS=http://localhost:8080/api/
+REACT_APP_API_SUBSCRIPTION=http://localhost:5000/
 ```
