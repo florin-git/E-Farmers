@@ -99,7 +99,6 @@ class Queue(Resource):
                     auto_ack=True)
                 channel.start_consuming()
             connection.close()
-            # return json.dumps(messages[1:])
             return jsonify(messages[1:])
         return ''
     def delete(self, user_id):
@@ -136,7 +135,7 @@ class Exchange(Resource):
         cursor.execute(f"SELECT count(*) FROM subscription WHERE farmer LIKE '{exchange_name}'")
         res = cursor.fetchone()
 
-        if len(res) > 0:
+        if res[0] > 0:
             connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
             channel = connection.channel()
             exchange_name = "farmer_" + farmer_id
