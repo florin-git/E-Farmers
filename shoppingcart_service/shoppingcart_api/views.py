@@ -1,26 +1,41 @@
 from .models import *
-from user_service.users_api.models import User
-from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, NotAcceptable
-from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.views import TokenRefreshView
 
-class CartView(viewsets):
+## TODO: aggiungere JWT TOKEN
 
-    def cart_info(self, request, user_id=None):
-        """
-        Return the cart info
-        """
-        user = User.objects.get(id=user_id)
+class CartView(viewsets.ViewSet):
+    def create_cart(self, request, user_id=None): # POST /api/users/<int:user_id>/cart/
+        serializer = CartSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+    
+    def cart_info(self, request, user_id=None): # GET /api/users/<int:user_id>/cart/
+        
+        # Return the cart info
+        
+        user = request.data['user']
+        cart = Cart.objects.get(user=user)
 
-        if user is not None:
-            cart = Cart.objects.get(user=user_id)
-            
-            # if the cart doesn't exist
-            if cart is None:
-                pass
-            ## TODO: add creation of cart
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+    def add_boxes(self, request, user_id=None): # PUT /api/users/<int:user_id>/cart/
+        user = request.data['user']
+        cart = Cart.objects.get(user=user)
+
+        serializer = CartSerializer(instance=cart, data=request.data, partial=True)
+        
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(status=status.HTTP_200_OK)
+    
+    def delete_cart(self, request, user_id=None): # DELETE /api/users/<int:user_id>/cart/
+        user = request.data['user']
+        cart = Cart.objects.get(user=user)
+        cart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    

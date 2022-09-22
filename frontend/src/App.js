@@ -68,7 +68,7 @@ function App(props) {
               <Route element={<RequiredAuth />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 {/* Access to personal shopping cart */}
-                {/*<Route path="user/cart/:cart_id/" exact element={<ShoppingCart />} />*/}
+                <Route path="users/:user_id/cart/" exact element={<ShoppingCart />} />
               </Route>
             </Route>
 

@@ -1,3 +1,6 @@
+//import axiosInstance from "../axiosInsertions";
+import axios from 'axios'
+
   function ShoppingCart(props) {
   /**
    ** VARIABLES
@@ -22,8 +25,14 @@
      * Retrieve the user info
      */
     (async () => {
-      await axiosPrivate
-        .get(`users/${userId}/`)
+      await axios
+        .post(`http://localhost:8082/api/users/${userId}/cart/`, {
+          user:userId,
+          //creation_date:,
+          checked_out:false,
+          total_amount: 0.0,
+          //boxes:
+        })
         .then((res) => {
           console.log(res.data);
         })

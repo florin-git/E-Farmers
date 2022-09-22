@@ -12,7 +12,6 @@ class Insertion(models.Model):
     reported = models.BooleanField(default=False)
     farmer = models.IntegerField(default=-1)
 
-
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
