@@ -1,5 +1,5 @@
-import axiosInstance from "../axiosUsers";
 import { useEffect } from "react";
+import axiosInstance from "../api/axiosUsers";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 

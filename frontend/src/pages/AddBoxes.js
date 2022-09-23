@@ -2,7 +2,8 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInsertions";
+
+import axiosInstance from "../api/axiosInsertions";
 
 function AddBoxes(props) {
   /**
@@ -216,7 +217,7 @@ function AddBoxes(props) {
   };
 
   return (
-    <div className="container-md d-flex justify-content-center">
+    <div className="container-md d-flex justify-content-center py-5">
       <div className="w-25">
         <form onSubmit={handleSubmit}>
           <div className="form-group mt-3">

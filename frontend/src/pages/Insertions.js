@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
-import axiosInstance from "../axiosInsertions";
+import axiosInstance from "../api/axiosInsertions";
 
 function Insertions(props) {
   /**
@@ -89,7 +89,7 @@ function Insertions(props) {
               <div className="row">
                 <div className="col-sm">
                   <Link
-                    className="btn btn-outline-secondary"
+                    className="btn btn-outline-primary"
                     to={`${insertion.id}`}
                   >
                     View
@@ -116,7 +116,7 @@ function Insertions(props) {
   });
 
   return (
-    <div className="container-lg mt-3">
+    <div className="container-lg mt-3 py-5">
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
