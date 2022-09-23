@@ -1,9 +1,12 @@
 // custom variables
-$primary: #82AE46;
+$primary: #82ae46;
+// $secondary: #ffe6eb;
 // $light: #fbf5e5;
+$font-primary: "Poppins", Arial, sans-serif;
 
-// @import '../node_modules/bootstrap/scss/functions';
-// @import '../node_modules/bootstrap/scss/variables';
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
 
 // $custom-theme-colors: (
 //   "altlight": #f2ebfa,
@@ -12,6 +15,100 @@ $primary: #82AE46;
 
 // $theme-colors: map-merge($custom-theme-colors, $theme-colors);
 
-// import bootstrap
-// @import '../node_modules/bootstrap/scss/bootstrap';
-@import '../../node_modules/bootstrap/scss/bootstrap';
+@import "../../node_modules/bootstrap/scss/navbar";
+// @import "../../node_modules/bootstrap/scss/buttons";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+}
+
+// Main section
+.main {
+  background: url("./img/main_hero.jpg") no-repeat;
+  background-size: cover;
+  height: 100vh;
+  background-position: 50% 50%;
+  width: 100%;
+
+  .caption {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  h1 {
+    padding-top: 5rem;
+    font-size: 4rem;
+    font-weight: 700;
+  }
+
+  .btn {
+    height: 45px;
+    // width: 15%;
+    // font-weight: 700;
+  }
+}
+
+.home {
+  .card:hover {
+    box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+    -webkit-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+    -moz-box-shadow: 1px 16px 30px 0px rgba(31, 31, 31, 0.53);
+  }
+}
+
+footer {
+  background-color: #f3f6fa;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .fab {
+    font-size: 2rem;
+    cursor: pointer;
+    padding-right: 10px;
+  }
+}
+
+// Navbar
+.icon {
+  // margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+  // color: red;
+}
+
+.counter {
+  width: 13px;
+  height: 13px;
+  background-color: red;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  // color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+.notification-dropdown {
+  font-size: 12px;
+}

@@ -29,8 +29,8 @@ function Box(props) {
               {props.number_of_available_boxes}
             </strong>
           </p>
-          <button type="button" className="btn btn-outline-success">
-            Buy box         
+          <button type="button" className="btn btn-primary">
+            Buy box
           </button>
         </div>
       </div>

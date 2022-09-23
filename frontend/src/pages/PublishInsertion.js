@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInsertions";
-import useAuth from "../hooks/useAuth";
+
+import axiosInstance from "../api/axiosInsertions";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -179,7 +179,7 @@ function PublishInsertion(props) {
   };
 
   return (
-    <div className="container-md">
+    <div className="container-md py-5">
       <div className="row ">
         <div className="d-flex justify-content-center align-items-center h-100">
           <form onSubmit={handleSubmit}>

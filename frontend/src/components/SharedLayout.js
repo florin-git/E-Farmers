@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Footer from './Footer';
 import Navbar from './Navbar';
 
 function SharedLayout(props) {
@@ -7,7 +8,7 @@ function SharedLayout(props) {
     <div>
       <Navbar />
       <Outlet />
-      {/* Footer */}
+      <Footer />
     </div>
   );
 }

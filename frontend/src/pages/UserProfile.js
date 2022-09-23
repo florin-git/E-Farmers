@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-// import axiosInstance from "../axiosUsers";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
 
 function UserProfile(props) {
   /**
