@@ -13,6 +13,7 @@ import Registration from "./pages/Registration";
 import FarmerProfile from "./pages/FarmerProfile";
 import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
+import ShoppingCart from "./pages/ShoppingCart";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import SeasonsCalendar from "./components/SeasonsCalendar";
@@ -68,7 +69,7 @@ function App(props) {
               <Route element={<RequiredAuth />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 {/* Access to personal shopping cart */}
-                <Route path="users/:user_id/cart/" exact element={<ShoppingCart />} />
+                <Route path="cart/" exact element={<ShoppingCart />} />
               </Route>
             </Route>
 

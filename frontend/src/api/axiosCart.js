@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const cartURL = process.env.REACT_APP_API_INSERTIONS;
+const cartURL = process.env.REACT_APP_API_CART;
 
 const axiosInstance = axios.create({
-  baseURL: insertionsURL,
+  baseURL: cartURL,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

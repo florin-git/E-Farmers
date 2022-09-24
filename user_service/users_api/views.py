@@ -78,6 +78,29 @@ class UsersView(viewsets.ViewSet):
         raise PermissionDenied("No token in the header!", code=403)
 
 
+class CustomTokenVerifyView(APIView):
+    def post(self, request): # POST /api/token/verify/
+        JWT_authenticator = JWTAuthentication()
+        # Authenticate the token in the Authorization header
+        response = JWT_authenticator.authenticate(request)
+
+        if response is not None:
+            # Unpacking
+            user, token = response
+            serializer = UserSerializer(user)
+            # print("this is decoded token claims", token.payload)
+
+            if serializer.data["id"] == request.data['user_id']:
+                return Response(status=status.HTTP_200_OK)
+
+            else:
+                # The token is associated with another user
+                raise PermissionDenied("Access denied!", code=403)
+
+        # The token was not passed into the header request
+        raise PermissionDenied("No token in the header!", code=403)
+
+
 class BlacklistTokenView(APIView):
     def post(self, request):
         try:
