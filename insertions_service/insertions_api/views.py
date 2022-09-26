@@ -11,9 +11,54 @@ from django.http import HttpResponse
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
         """
-        Return all the insertions.
+        # QUERY:
+        #
+        # WITH search_query AS (
+        #
+        #   SELECT *
+        #   FROM games
+        #   WHERE title LIKE '%#{word_000}%' AND category = '#{search[:category]}'
+        #
+        #   UNION
+        #
+        #   SELECT *
+        #   FROM games
+        #   WHERE title LIKE '%#{word_001}%' AND category = '#{search[:category]}'
+        #
+        #   UNION
+        #
+        #   ad libitum... (the number of unions will depend on the number of words in the name searched)
+        #
+        # )
+        #
+        # SELECT *
+        # FROM search_query
+        # ORDER BY ... (sorting criteria)
         """
-        insertions = Insertion.objects.all()
+        query = "WITH search_query AS ("
+        select_statement = "SELECT * FROM insertions_api_insertion WHERE title LIKE "
+        search_params = request.GET.get('search', '')
+        if search_params == "":
+            insertions = Insertion.objects.all()
+        else:
+            """
+            first_statement = True
+            for param in search_params.split():
+                if not first_statement:
+                    query += "UNION "
+                else:
+                    first_statement = False
+                query += (select_statement + "'" + param + "' ")
+            query += ") SELECT * FROM search_query"
+            print(query)
+            """
+            is_first_word = True
+            for param in search_params.split():
+                if is_first_word:
+                    insertions = Insertion.objects.filter(title__icontains=param)
+                    is_first_word = False
+                else:
+                    insertions = (insertions | Insertion.objects.filter(title__icontains=param))
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
