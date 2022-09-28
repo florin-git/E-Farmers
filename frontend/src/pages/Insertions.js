@@ -63,49 +63,95 @@ function Insertions(props) {
     setIdToDelete(-1); // Update again the variable for the reloading
   };
 
+  // On submit
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // If all the inputs are valid
+    if (validate()) {
+      // FormData object for the new insertion
+      let form_data = new FormData();
+
+      form_data.append("search", formData.search);
+
+      /**
+       * Create new insertion through API call
+       */
+      axiosInstance
+        .get("insertions/", form_data)
+        .then(() => {
+          // If the submission was successful
+          navigate("/insertions");
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+  };
+
   const insertions_array = insertions.map((insertion) => {
     return (
-      <div className="col" key={insertion.id}>
-        <div className="card w-75">
-          <img
-            src={
-              axiosInstance.defaults.baseURL +
-              "insertions/" +
-              insertion.id +
-              "/image/"
-            }
-            alt="img"
-            className="card-img-top img-fluid"
-          />
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+                  type="text"
+                  className="form-control"
+                  id="searchbar"
+                  ref={titleRef}
+                  placeholder="search..."
+                  value={formData.search}
+                  name="searchbar"
+                  onChange={(event) => {
+                    handleChange(event);
+                  }}
+                  required
+                />
+          <button className="mt-4 btn btn-primary" type="submit">
+            Save
+          </button>
+        </form>
+        <div className="col" key={insertion.id}>
+          <div className="card w-75">
+            <img
+              src={
+                axiosInstance.defaults.baseURL +
+                "insertions/" +
+                insertion.id +
+                "/image/"
+              }
+              alt="img"
+              className="card-img-top img-fluid"
+            />
 
-          <div className="card-body">
-            <h5 className="card-title">{insertion.title}</h5>
+            <div className="card-body">
+              <h5 className="card-title">{insertion.title}</h5>
 
-            <p className="card-text">
-              Expiration date: {insertion.expiration_date}
-            </p>
+              <p className="card-text">
+                Expiration date: {insertion.expiration_date}
+              </p>
 
-            <div className="container">
-              <div className="row">
-                <div className="col-sm">
-                  <Link
-                    className="btn btn-outline-primary"
-                    to={`${insertion.id}`}
-                  >
-                    View
-                  </Link>
-                </div>
+              <div className="container">
+                <div className="row">
+                  <div className="col-sm">
+                    <Link
+                      className="btn btn-outline-primary"
+                      to={`${insertion.id}`}
+                    >
+                      View
+                    </Link>
+                  </div>
 
-                <div className="col-sm">
-                  <button
-                    type="button"
-                    id={insertion.id}
-                    name="delete"
-                    onClick={(event) => handleShowModal(event)}
-                    className="btn btn-outline-danger"
-                  >
-                    Delete
-                  </button>
+                  <div className="col-sm">
+                    <button
+                      type="button"
+                      id={insertion.id}
+                      name="delete"
+                      onClick={(event) => handleShowModal(event)}
+                      className="btn btn-outline-danger"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
