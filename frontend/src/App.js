@@ -38,7 +38,7 @@ function App(props) {
               <Route index element={<Home />} />
               {/* For Insertions service */}
               <Route path="calendar/" exact element={<SeasonsCalendar />} />
-              <Route path="insertions/" exact element={<Insertions />} />
+              <Route path="insertions/" element={<Insertions />} />
               <Route
                 path="insertions/new/"
                 exact

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
@@ -19,7 +19,10 @@ function Insertions(props) {
   // It will contain the id of the deleted insertion
   const [idToDelete, setIdToDelete] = useState(-1);
 
-  const [searchString, setSearchString] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const [searchString, setSearchString] = useState(searchParams.get("search"));
 
   /**
    ** FUNCTIONS
