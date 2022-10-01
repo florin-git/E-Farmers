@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
 import axiosInstance from "../api/axiosInsertions";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 
 function Insertions(props) {
   /**
@@ -15,6 +18,8 @@ function Insertions(props) {
 
   // It will contain the id of the deleted insertion
   const [idToDelete, setIdToDelete] = useState(-1);
+
+  const [searchString, setSearchString] = useState("");
 
   /**
    ** FUNCTIONS
@@ -30,7 +35,9 @@ function Insertions(props) {
        * function is paused until the request completes.
        */
       await axiosInstance
-        .get("insertions/")
+        .get("insertions/", {
+          params: { "search": searchString }
+        })
         .then((res) => {
           setInsertions(res.data);
         })
@@ -38,8 +45,8 @@ function Insertions(props) {
           return error.response;
         });
     })();
-  }, [idToDelete]); // Whenever you delete an insertion, the fetch is repeated
-
+  }, [idToDelete, searchString]); // Whenever you delete an insertion, the fetch is repeated
+  
   // Manage Modal
   const handleCloseModal = () => setShowModal(false);
 
@@ -63,53 +70,14 @@ function Insertions(props) {
     setIdToDelete(-1); // Update again the variable for the reloading
   };
 
-  // On submit
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // If all the inputs are valid
-    if (validate()) {
-      // FormData object for the new insertion
-      let form_data = new FormData();
-
-      form_data.append("search", formData.search);
-
-      /**
-       * Create new insertion through API call
-       */
-      axiosInstance
-        .get("insertions/", form_data)
-        .then(() => {
-          // If the submission was successful
-          navigate("/insertions");
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-    }
-  };
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    setSearchString(document.getElementById("search").value)
+  }
 
   const insertions_array = insertions.map((insertion) => {
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          <input
-                  type="text"
-                  className="form-control"
-                  id="searchbar"
-                  ref={titleRef}
-                  placeholder="search..."
-                  value={formData.search}
-                  name="searchbar"
-                  onChange={(event) => {
-                    handleChange(event);
-                  }}
-                  required
-                />
-          <button className="mt-4 btn btn-primary" type="submit">
-            Save
-          </button>
-        </form>
         <div className="col" key={insertion.id}>
           <div className="card w-75">
             <img
@@ -162,7 +130,20 @@ function Insertions(props) {
   });
 
   return (
-    <div className="container-lg mt-3 py-5">
+    <div className="container-lg py-5">
+      <form className="mb-5 d-flex justify-content-center" onSubmit={handleSearchSubmit}>
+        <div className="form-group d-flex w-50">
+          <input
+              className="form-control"
+              type="text"
+              id="search"
+              name="search"
+          />
+          <button className="btn btn-primary" type="submit">
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      </form>
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
