@@ -1,11 +1,10 @@
 # from email import message
 from flask import (
-    request, Blueprint, flash
+    request, Blueprint, flash, jsonify
 )
 from flask_restful import Resource
 from subscription_api.db import get_db
 import pika
-import json
 import environ
 # For managing the environment variables
 env = environ.Env()
@@ -49,8 +48,10 @@ class Queue(Resource):
                 db.commit()
             except db.IntegrityError:
                 error = f"Integrity error: provide customer and farmer ids"
-        flash(error)
-        return '', 200
+            flash(error)
+            return '', 200
+        else:
+            return 'This binding already exists in the DB', 200
     def patch(self, user_id):
         # Delete a binding
         db = get_db()
@@ -98,7 +99,7 @@ class Queue(Resource):
                     auto_ack=True)
                 channel.start_consuming()
             connection.close()
-            return json.dumps(messages[1:])
+            return jsonify(messages[1:])
         return ''
     def delete(self, user_id):
         # Deletes the queue
@@ -133,6 +134,7 @@ class Exchange(Resource):
         cursor = db.cursor()
         cursor.execute(f"SELECT count(*) FROM subscription WHERE farmer LIKE '{exchange_name}'")
         res = cursor.fetchone()
+
         if res[0] > 0:
             connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
             channel = connection.channel()

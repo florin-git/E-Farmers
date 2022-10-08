@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+
 import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
+
+import useInterval from "../hooks/useInterval";
+import usePeriodicalAPICall from "../hooks/usePeriodicalAPICall";
 
 function Navbar(props) {
   // Authentication data from context storage
@@ -18,8 +24,31 @@ function Navbar(props) {
     navigate("/");
   };
 
+  // Manage notifications
+  const [notifications, setNotifications] = useState([]);
+  const delay = 10000 // 10s
+    
+  /**
+   * The 'usePeriodicalAPICall' hook check new publishing notification
+   * from the farmers the user is subscribed to 
+   */
+  const getNotifications = usePeriodicalAPICall();
+
+  // This function is called every 'delay' interval if the user is logged in
+  useInterval(async () => {
+    await getNotifications();
+    const currentNotification = sessionStorage.getItem("msg");
+    if (currentNotification?.length > 0)
+      setNotifications(currentNotification.split(","));
+  }, isLoggedIn ? delay : null);
+
+  const deleteNotifications = async () => {
+    setNotifications([]);
+    sessionStorage.setItem("msg", "");
+  };
+
   return (
-    <nav className="navbar navbar-expand-md navbar-light bg-light mb-4">
+    <nav className="navbar navbar-expand-md navbar-light bg-light">
       <div className="container-fluid">
         <Link className="navbar-brand" to={"/"}>
           E-Farmers
@@ -53,14 +82,14 @@ function Navbar(props) {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={"farmer/profile/"}>
-                Farmer Profile
+              <Link className="nav-link" to={"orders/"}>
+                Orders
               </Link>
             </li>
           </ul>
           <ul className="navbar-nav navabr-right">
             <li className="nav-item">
-              <Link className="btn btn-primary" to={"insertions/new/"}>
+              <Link className="btn btn-primary mx-md-2" to={"insertions/new/"}>
                 Publish an Insertion
               </Link>
             </li>
@@ -70,7 +99,7 @@ function Navbar(props) {
             {!isLoggedIn && (
               <div className="d-flex mt-2 mt-md-0">
                 <li className="nav-item">
-                  <Link className="btn btn-primary mx-md-2 " to={"register/"}>
+                  <Link className="btn btn-primary mx-md-2" to={"register/"}>
                     Sign Up
                   </Link>
                 </li>
@@ -85,6 +114,45 @@ function Navbar(props) {
               button is displayed */}
             {isLoggedIn && (
               <div className="d-flex mt-2 mt-md-0">
+                <li className="nav-item dropdown">
+                  <div
+                    className="icon dropdown mx-md-2"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onClick={() => {}}
+                  >
+                    <FontAwesomeIcon icon={faBell} />
+                    {notifications?.length > 0 && (
+                      <div className="counter">{notifications.length}</div>
+                    )}
+                  </div>
+                  <ul
+                    className="dropdown-menu notification-dropdown"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        Ciccio publishes a new box
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        Another action
+                      </a>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={deleteNotifications}
+                      >
+                        Mark as read
+                      </button>
+                    </li>
+                  </ul>
+                </li>
                 <li className="nav-item">
                   <Link
                     className="btn btn-primary mx-md-2"
@@ -94,45 +162,20 @@ function Navbar(props) {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link
+                    className="btn btn-primary mx-md-2"
+                    to={"cart/"}
+                  >
+                    Cart
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <button className="btn btn-primary" onClick={signOut}>
                     Logout
                   </button>
                 </li>
               </div>
             )}
-
-            {/* <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </li> */}
           </ul>
         </div>
       </div>
@@ -141,3 +184,15 @@ function Navbar(props) {
 }
 
 export default Navbar;
+
+
+
+
+<div className="card mb-3">
+  <div className="row g-0">
+    <div className="col-md-8">
+      <div className="card-body p-4">
+      </div>
+    </div>
+  </div>
+</div>

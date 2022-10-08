@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axiosInstance from "../axiosUsers";
-import useAuth from "../hooks/useAuth";
 import Alert from "react-bootstrap/Alert";
+
+import axiosInstance from "../api/axiosUsers";
+import useAuth from "../hooks/useAuth";
 
 function Login(props) {
   /**
@@ -72,7 +73,7 @@ function Login(props) {
         password: formData.password,
       })
       .then((res) => {
-        console.log("Login", res.data.user_id);
+        //console.log("Login", res.data.user_id);
         const userId = res.data.user_id;
         const accountType = res.data.account_type;
 

@@ -1,8 +1,23 @@
 import React, { useEffect } from "react";
-// import axiosInstance from "../axiosUsers";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+import ReactDOM from "react-dom"
+
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
+
+// Account information to hold for rappresentation
+let type;
+let element;
+
+
+function modify_button(type) {
+  if ( type == 1 ) 
+    document.getElementById("farmer").style.pointerEvents = "none";
+  else if ( type == 2 )
+    document.getElementById("rider").style.pointerEvents = "none";
+}
 
 function UserProfile(props) {
   /**
@@ -12,33 +27,89 @@ function UserProfile(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
-
   // axios function with JWT tokens
   const axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
   const location = useLocation();
-
   /**
    ** FUNCTIONS
    */
+
+  function extra_get_call(type){
+    console.log("EXTRA_GET_CALL")
+    axiosPrivate
+      .get(`users/${userId}/${type}/`)      //GET per prendere le informazioni extra
+      .then((res) => {
+        console.log(res.data)
+        //const containerInfo = ReactDOM.createRoot(document.getElementById('extrainfo'))
+        //console.log(containerInfo)
+        if(type == 1){
+          document.getElementById('specialInfo').innerHTML = "Farmer Details";
+          element = (
+            <div>
+              <div className="col-6 mb-3">
+                <h6>Bio</h6>
+                <p className="text-muted" id="bio"> { res.data.bio } </p>
+              </div>
+              <div className="col-6 mb-3">
+                <h6>Farm Location</h6>
+                <p className="text-muted" id="FarmLocation"> { res.data.farm_location } </p>
+              </div>
+            </div>
+          )
+          //document.getElementById('bio').innerHTML = res.data.bio
+          //document.getElementById('farmlocation').innerHTML = res.data.farmlocation
+          //ReactDOM.render(element, document.getElementById('extra_info'));
+        }
+        else if(type == 2) {
+          document.getElementById('specialInfo').innerHTML = "Rider Details";
+          element = (
+            <div>
+              <div className="col-6 mb-3">
+                <h6>Bio</h6>
+                <p className="text-muted" id="bio"> { res.data.bio } </p>
+              </div>
+              <div className="col-6 mb-3">
+                <h6>Avalaible</h6>
+                <p className="text-muted" id="Avalaible"> { res.data.avalaible } </p>
+              </div>
+            </div>
+          )
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  };
 
   useEffect(() => {
     /**
      * Retrieve the user info
      */
     (async () => {
-      await axiosPrivate
+      axiosPrivate
         .get(`users/${userId}/`)
         .then((res) => {
-          console.log(res.data);
+          //console.log(res.data);
+          document.getElementById('name').innerHTML = res.data.name;
+          document.getElementById('email').innerHTML = res.data.email;
+          document.getElementById('phone').innerHTML = res.data.phone;
+          document.getElementById('saddress').innerHTML = res.data.saddress;
+          document.getElementById('baddress').innerHTML = res.data.baddress;
+          /*
+            LEGENDA =   [ 0 : USER -- 1 : FARMER -- 2 : RIDER ]
+          */
+          type = res.data.account_type ;
+          if(type == 1 || type == 2){
+            console.log("User speciale ongoing new actions.")
+            modify_button(type);
+            extra_get_call(type);
+          }
+          document.getElementById('account_type').innerHTML = type;
         })
         .catch((error) => {
           console.log(error.response);
-          console.log("LOGIN AGAIN")
-          // If also the refresh token expires then you have to
-          // log in again
-          navigate("login/", { state: { from: location }, replace: true });
         });
     })();
 
@@ -62,35 +133,64 @@ function UserProfile(props) {
                       className="img-fluid my-5"
                       width="80px;"
                     />
-                    <h5>Marie Horwitz</h5>
-                    <p>Web Designer</p>
-                    <i className="far fa-edit mb-5"></i>
+
                   </div>
                   <div className="col-md-8">
                     <div className="card-body p-4">
                       <h6>Information</h6>
-                      {/* <hr className="mt-0 mb-4"> */}
+                        <div className="row pt-1">
+                          <div className="col-6 mb-3">
+                            <h6>Name</h6>
+                            <p className="text-muted" id="name"></p>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <h6>Email</h6>
+                            <p className="text-muted" id="email"></p>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <h6>Phone</h6>
+                            <p className="text-muted" id="phone"></p>
+                          </div>
+                        </div>
+                      <h6>Other Information</h6>
+                        <div className="row pt-1">
+                          <div className="col-6 mb-3">
+                            <h6>ShippingAddress</h6>
+                            <p className="text-muted" id="saddress"></p>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <h6>BillingAddress</h6>
+                            <p className="text-muted" id="baddress"></p>
+                          </div>
+                        </div>
+                      <h6>Advanced</h6>
+                        <div className="row pt-1">
+                          <div className="col-6 mb-3">
+                            <h6>AccountType</h6>
+                            <p className="text-muted" id="account_type"></p>
+                          </div>
+                        </div>
+                      <h6> Upgrade </h6>
                       <div className="row pt-1">
-                        <div className="col-6 mb-3">
-                          <h6>Email</h6>
-                          <p className="text-muted">info@example.com</p>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <h6>Phone</h6>
-                          <p className="text-muted">123 456 789</p>
-                        </div>
-                      </div>
-                      <h6>Projects</h6>
-                      {/* <hr className="mt-0 mb-4"> */}
-                      <div className="row pt-1">
-                        <div className="col-6 mb-3">
-                          <h6>Recent</h6>
-                          <p className="text-muted">Lorem ipsum</p>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <h6>Most Viewed</h6>
-                          <p className="text-muted">Dolor sit amet</p>
-                        </div>
+                          <div className="col-6 mb-3">
+                            <div> 
+                              <Link className="btn btn-primary" to={"farmer_update/"} id = "farmer" >
+                                            Become a Farmer!
+                              </Link>
+                            </div>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <div>
+                              <Link className="btn btn-primary" to={"rider_update/"} id = "rider" >
+                                            Become a Rider!
+                              </Link>
+                            </div>
+                          </div>
+                      </div> 
+
+                      <div className = "row pt-1" id = "extrainfo">
+                        <h6 id="specialInfo">  </h6>
+                        {element} 
                       </div>
                     </div>
                   </div>
@@ -100,8 +200,30 @@ function UserProfile(props) {
           </div>
         </div>
       </section>
-    </div>
+  </div>
   );
 }
 
 export default UserProfile;
+/*
+{accountUp && (          
+  <div className="row pt-1" id="root">
+  <h6>Special Information</h6>
+    <div className="col-6 mb-3">
+      <h6>Bio</h6>
+      <p className="text-muted" id="bio"></p>
+    </div>
+    {type = 1 && (
+      <div className="col-6 mb-3">
+        <h6>Farm Location</h6>
+        <p className="text-muted" id="FarmLocation"></p>
+      </div>
+    )}
+    {type = 2 && (
+    <div className="col-6 mb-3">
+      <h6>Avalaible</h6>
+      <p className="text-muted" id="Avalaible"></p>
+    </div>
+    )}
+  </div>
+)}      */

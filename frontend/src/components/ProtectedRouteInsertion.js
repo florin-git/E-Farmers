@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import InsertionDetail from "../pages/InsertionDetail";
-import axiosInstance from "../axiosInsertions";
+import axiosInstance from "../api/axiosInsertions";
 
 function ProtectedRouteInsertion() {
   /**
