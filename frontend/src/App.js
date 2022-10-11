@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
+import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -43,6 +44,11 @@ function App(props) {
                 path="insertions/new/"
                 exact
                 element={<PublishInsertion />}
+              />
+              <Route
+                path="insertions/:insertion_id/edit/"
+                exact
+                element={<EditInsertion />}
               />
               <Route
                 path="insertions/:insertion_id/"

@@ -120,6 +120,11 @@ function InsertionDetail({ insertion }) {
               </Link>
             </div>
           )}
+          <div className="my-2">
+            <Link to={`${process.env.PUBLIC_URL}/insertions/${insertion_id}/edit/`} className="btn btn-warning btn-lg">
+              Modify Insertion
+            </Link>
+          </div>
         </div>
       </div>
     </section>
