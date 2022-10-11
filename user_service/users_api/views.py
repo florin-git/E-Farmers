@@ -65,15 +65,28 @@ class UsersView(viewsets.ViewSet):
         if response is not None:
             # Unpacking
             user, token = response
-            serializer = UserSerializer(user)
-            # print("this is decoded token claims", token.payload)
+            user_serializer = UserSerializer(user)
 
-            if serializer.data["id"] == user_id:
-                return Response(serializer.data, status=status.HTTP_200_OK)
-
-            else:
+            if user_serializer.data["id"] != user_id:
                 # The token is associated with another user
                 raise PermissionDenied("Access denied!", code=403)
+
+            serializers = [user_serializer.data]
+            account_type = user_serializer.data["account_type"]
+
+            if account_type == 1:
+                farmer = Farmer.objects.get(ext_user = user_id)
+                farmer_serializer = FarmerSerializer(farmer)
+
+                serializers.append(farmer_serializer.data)
+
+            elif account_type == 2:
+                rider = Rider.objects.get(ext_user = user_id)
+                rider_serializer = RiderSerializer(rider)
+
+                serializers.append(rider_serializer.data)
+
+            return Response(serializers, status=status.HTTP_200_OK)
 
         # The token was not passed into the header request
         raise PermissionDenied("No token in the header!", code=403)
@@ -99,24 +112,6 @@ class UsersView(viewsets.ViewSet):
                 serializer.save(ext_user = user)
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         
-            
-    
-    def get_extra_info(self, request, user_id = None, type = None):  # GET /api/users/<int:id>/<int:type>/
-        JWT_authenticator = JWTAuthentication()
-        # Authenticate the token in the Authorization header
-        JWT_authenticator.authenticate(request)
-        if( type == 1):
-            print("Sono nel farmer per la get")
-            farmer = Farmer.objects.get(ext_user = user_id)
-            serializer = FarmerSerializer(farmer)
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        else :
-            print("Sono nel rider per la get")
-            rider = Rider.objects.get(ext_user = user_id)
-            serializer = RiderSerializer(rider)
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        
-
     def account_change(self, request, user_id = None): # PATCH /api/users/<int:id>/          
         user = User.objects.get(id = user_id)
         serializer = UserSerializer(instance = user, data = request.data, partial = True)

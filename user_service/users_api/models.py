@@ -33,7 +33,7 @@ class Rider(models.Model):
     # Rider Properties 
     avalaible = models.BooleanField(default = FALSE)  
     bio = models.CharField(max_length = 255)
-    ext_user = models.ForeignKey(
+    ext_user = models.OneToOneField (
         User,
         related_name="external_user_r",
         on_delete=models.CASCADE,
@@ -47,7 +47,7 @@ class Farmer(models.Model):
     # Farmer Properties
     farm_location = models.CharField(max_length=255)
     bio = models.CharField(max_length = 255)
-    ext_user = models.ForeignKey(
+    ext_user = models.OneToOneField (
         User,
         related_name="external_user_f",
         on_delete=models.CASCADE,
