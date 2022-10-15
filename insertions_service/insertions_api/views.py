@@ -52,12 +52,13 @@ class InsertionsView(viewsets.ViewSet):
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
         request.data['reported'] = insertion.reported
+        request.data['expiration_date'] = insertion.expiration_date
         serializer = InsertionSerializer(instance=insertion, data=request.data)
         try:
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                insertion.image = request.FILES["image"]
-                insertion.save()
+                #insertion.image = request.FILES["image"]
+                #insertion.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except Exception as e:
             print(e)

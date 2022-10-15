@@ -198,12 +198,14 @@ function EditInsertion() {
     }
   };
 
+  var date = new Date();
+  // `/image/?${date.getMinutes()}` in order to avoid caching of the images
   return (
     <div className="container-md py-5">
       <div className="row ">
         <div className="col-lg-6">
           <img
-            src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + "/image/"}
+            src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + `/image/?${date.getMinutes()}`}
             alt="insertion_image"
             className="img-fluid"
           />
@@ -262,39 +264,19 @@ function EditInsertion() {
                 />
               </div>
 
-              <div className="row">
-                <div className="form-group col-lg-6 mt-3">
-                  <label htmlFor="expiration_date">Expiration Date</label>
-                  <input
-                    type="date"
-                    className={`form-control ${formValidationClass.expiration_date_for_class}`}
-                    id="expiration_date"
-                    placeholder="Expiration Date"
-                    value={formData.expiration_date}
-                    name="expiration_date"
-                    onChange={handleChange}
-                    required
-                  />
-                  {formValidation.expiration_date.length > 0 && (
-                    <span className="invalid-feedback">
-                      {formValidation.expiration_date}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group col-lg-6 mt-3">
-                  <label htmlFor="image">Image</label>
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/gif"
-                    className="form-control"
-                    id="image"
-                    placeholder="Image"
-                    name="image"
-                    onChange={handleImageChange}
-                  />
-                </div>
+              <div className="form-group mt-3">
+                <label htmlFor="image">Image</label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif"
+                  className="form-control"
+                  id="image"
+                  placeholder="Image"
+                  name="image"
+                  onChange={handleImageChange}
+                />
               </div>
+              
               <button className="mt-4 btn btn-primary" type="submit">
                 Save
               </button>
