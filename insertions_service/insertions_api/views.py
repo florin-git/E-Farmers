@@ -50,11 +50,17 @@ class InsertionsView(viewsets.ViewSet):
             return response
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
-        insertion = Insertion.objects.get(id=insertion_id)  
+        insertion = Insertion.objects.get(id=insertion_id)
+        request.data['reported'] = insertion.reported
         serializer = InsertionSerializer(instance=insertion, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                insertion.image = request.FILES["image"]
+                insertion.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except Exception as e:
+            print(e)
 
     def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)

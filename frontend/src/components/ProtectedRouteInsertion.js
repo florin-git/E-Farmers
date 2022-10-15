@@ -47,7 +47,9 @@ function ProtectedRouteInsertion() {
 
   return (
     // If the insertion exists go to the insertion page
-    <div>{existsURL === true && <InsertionDetail insertion={insertion} />}</div>
+    <div>
+      <div>{existsURL === true && <InsertionDetail insertion={insertion} />}</div>
+    </div>
   );
 }
 

@@ -8,18 +8,10 @@ import axiosInstance from "../api/axiosInsertions";
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
 // const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,50}$/;
 
-function PublishInsertion(props) {
+function EditInsertion() {
   /**
    ** VARIABLES
    */
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    expiration_date: "",
-    gathering_location: "",
-    image: "",
-    reported: false,
-  });
 
   /**
    * Variables for managing the input checks.
@@ -45,6 +37,21 @@ function PublishInsertion(props) {
     expiration_date_for_class: "",
   });
 
+  // Variable to store the insertion's details
+  const [insertion, setInsertion] = useState([]);
+
+  const [formData, setFormData] = useState({
+    title: insertion.title,
+    description: insertion.description,
+    expiration_date: insertion.expiration_date,
+    gathering_location: insertion.gathering_location,
+    image: insertion.image,
+    reported: insertion.reported,
+  });
+
+  // True If the URL is associated with an existing insertion
+  const [existsURL, setExistsURL] = useState(false);
+
   // This variable is used for the redirection
   const navigate = useNavigate();
   const titleRef = useRef();
@@ -59,7 +66,23 @@ function PublishInsertion(props) {
   // When you access the page, the focus will be on the title input
   useEffect(() => {
     titleRef.current.focus();
-  }, []);
+
+    (async () => {
+      await axiosInstance
+        .get(`insertions/${insertion_id}/`)
+        .then((res) => {
+          // Insertion exists
+          setExistsURL(true);
+          setInsertion(res.data);
+        })
+        .catch((error) => {
+          // If insertion does not exists
+          console.log(error);
+          setExistsURL(false);
+          navigate("/");
+        });
+    })();
+  }, [insertion_id, navigate]);
 
   function handleChange(event) {
     // Get name and value of the changed field
@@ -178,101 +201,109 @@ function PublishInsertion(props) {
   return (
     <div className="container-md py-5">
       <div className="row ">
-        <div className="d-flex justify-content-center align-items-center h-100">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group mt-3">
-              <label htmlFor="title" className="form-label">
-                Title
-              </label>
+        <div className="col-lg-6">
+          <img
+            src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + "/image/"}
+            alt="insertion_image"
+            className="img-fluid"
+          />
+        </div>
+        <div className="col-lg-6 mt-4 mt-lg-0">
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group mt-3">
+                <label htmlFor="title" className="form-label">
+                  Title
+                </label>
 
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                ref={titleRef}
-                placeholder="Title"
-                value={formData.title}
-                name="title"
-                onChange={(event) => {
-                  handleChange(event);
-                }}
-                required
-              />
-              {/* Display error if the condition is not satisfied */}
-              {formValidation.title.length > 0 && (
-                <span className="invalid-feedback">{formValidation.title}</span>
-              )}
-            </div>
-
-            <div className="form-group mt-3">
-              <label htmlFor="description">Description</label>
-              <textarea
-                className="form-control"
-                id="description"
-                placeholder="Description"
-                value={formData.description}
-                name="description"
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group mt-3">
-              <label htmlFor="gathering_location">Gathering Location</label>
-              <input
-                type="text"
-                className="form-control"
-                id="gathering_location"
-                placeholder="Gathering Location"
-                value={formData.gathering_location}
-                name="gathering_location"
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="row">
-              <div className="form-group col-lg-6 mt-3">
-                <label htmlFor="expiration_date">Expiration Date</label>
                 <input
-                  type="date"
-                  className={`form-control ${formValidationClass.expiration_date_for_class}`}
-                  id="expiration_date"
-                  placeholder="Expiration Date"
-                  value={formData.expiration_date}
-                  name="expiration_date"
-                  onChange={handleChange}
+                  type="text"
+                  className="form-control"
+                  id="title"
+                  ref={titleRef}
+                  placeholder="Title"
+                  value={formData.title}
+                  name="title"
+                  onChange={(event) => {
+                    handleChange(event);
+                  }}
                   required
                 />
-                {formValidation.expiration_date.length > 0 && (
-                  <span className="invalid-feedback">
-                    {formValidation.expiration_date}
-                  </span>
+                {/* Display error if the condition is not satisfied */}
+                {formValidation.title.length > 0 && (
+                  <span className="invalid-feedback">{formValidation.title}</span>
                 )}
               </div>
 
-              <div className="form-group col-lg-6 mt-3">
-                <label htmlFor="image">Image</label>
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/gif"
+              <div className="form-group mt-3">
+                <label htmlFor="description">Description</label>
+                <textarea
                   className="form-control"
-                  id="image"
-                  placeholder="Image"
-                  name="image"
-                  onChange={handleImageChange}
+                  id="description"
+                  placeholder="Description"
+                  value={formData.description}
+                  name="description"
+                  onChange={handleChange}
                   required
                 />
               </div>
-            </div>
-            <button className="mt-4 btn btn-primary" type="submit">
-              Save
-            </button>
-          </form>
+
+              <div className="form-group mt-3">
+                <label htmlFor="gathering_location">Gathering Location</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="gathering_location"
+                  placeholder="Gathering Location"
+                  value={formData.gathering_location}
+                  name="gathering_location"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="row">
+                <div className="form-group col-lg-6 mt-3">
+                  <label htmlFor="expiration_date">Expiration Date</label>
+                  <input
+                    type="date"
+                    className={`form-control ${formValidationClass.expiration_date_for_class}`}
+                    id="expiration_date"
+                    placeholder="Expiration Date"
+                    value={formData.expiration_date}
+                    name="expiration_date"
+                    onChange={handleChange}
+                    required
+                  />
+                  {formValidation.expiration_date.length > 0 && (
+                    <span className="invalid-feedback">
+                      {formValidation.expiration_date}
+                    </span>
+                  )}
+                </div>
+
+                <div className="form-group col-lg-6 mt-3">
+                  <label htmlFor="image">Image</label>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif"
+                    className="form-control"
+                    id="image"
+                    placeholder="Image"
+                    name="image"
+                    onChange={handleImageChange}
+                  />
+                </div>
+              </div>
+              <button className="mt-4 btn btn-primary" type="submit">
+                Save
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default PublishInsertion;
+export default EditInsertion;
