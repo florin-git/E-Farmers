@@ -1,27 +1,67 @@
-from errno import ESTALE
-from .models import *
-from rest_framework.views import APIView
-from rest_framework import viewsets, status
+from operator import truediv
+import stripe
+import json
+from django.http import JsonResponse
+from django.conf import settings
+from rest_framework import viewsets,status
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, NotAcceptable
-from rest_framework_simplejwt.tokens import RefreshToken
+from .models import *
 from .serializers import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from rest_framework_simplejwt.views import TokenRefreshView
 
-class OrdersView(viewsets.ViewSet):
-    def save_order(self, request,id = None):  # POST /api/orders/<int:id>/
-                print("PORCO IL DIO")
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+class NewView(viewsets.ViewSet):
+    def test_payment(self,request):  #POST
+        test_payment_intent = stripe.PaymentIntent.create(
+            amount=1000, currency='usd', 
+            payment_method_types=['card'],
+            receipt_email='test@example.com'
+        )
+
+        return Response(status=status.HTTP_200_OK, data=test_payment_intent)
+
+    def save_stripe_info(self,request): #POST
+        print(request.data)
+        data = request.data
+        email = data['email']
+        payment_method_id = data['payment_method_id']
+        extra_msg = ''
+        customer_data = stripe.Customer.list(email=email).data
+        # Check if customer already exists
+        if len(customer_data) == 0:
+            # creating customer
+            customer = stripe.Customer.create(
+            email=email, payment_method=payment_method_id)
+        else:
+            customer = customer_data[0]
+            extra_msg = "Customer already exist."
+            stripe.PaymentIntent.create(
+                customer=customer, 
+                payment_method=payment_method_id,  
+                currency='usd', # you can provide any currency you want
+                amount=999,
+                confirm = True
+            )     
+            try:
                 
-                """order_serializer = OrderSerializer( data = { "external_key_user": user_id} )
-                if order_serializer.is_valid(raise_exception=True):
-                    
-                    order_serializer.save(ext_user = user)
+                serializer = OrdersSerializer(data = request.data)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data,status=status.HTTP_201_CREATED)
+            except Exception:
+                return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
 
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)   
-                """
-                order_serializer = OrderSerializer(data = request.data)
-                if order_serializer.is_valid(raise_exception=True):
-                    order_serializer.save()
-                    return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK, 
+            data={
+                'message': 'Success', 
+                'data': {'customer_id': customer.id},
+                'extra_msg': extra_msg  
+            }
+        )
+
+    def getOrders(self, request, email=None):
+        orders = Orders.objects.filter(email = email)
+        serializer = OrdersSerializer(orders, many = True)
+        return Response(serializer.data, status.HTTP_200_OK)

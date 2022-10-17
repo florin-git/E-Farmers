@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInstance from "../api/axiosUsers";
-import axios from 'axios';
 
 
 function FarmerUpdate(props) {
@@ -25,7 +24,7 @@ function FarmerUpdate(props) {
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 1
-  let email, password;
+  let email;
   const navigate = useNavigate();
 
   /**

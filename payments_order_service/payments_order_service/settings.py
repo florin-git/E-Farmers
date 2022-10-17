@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from datetime import timedelta
+import os
 import environ
 # For managing the environment variables
 env = environ.Env()
@@ -30,11 +30,10 @@ SECRET_KEY = 'django-insecure-jws*2)m#v72hh&-xwws$i91hz^8^)8)=3c(d3gt$^g7agyovl$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#OPTION A 
+
+#ONLY OUR ORIGIN
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
-
-
 
 # Application definition
 
@@ -96,7 +95,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -139,3 +137,9 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Key for API_STRIPE testing mode.
+STRIPE_PUBLIC_KEY = "pk_test_51LeK0EKut8s98N77mKeii9wLpQV1aG6HoNfQr2x8qjMu9bg3B5igb2ADSklcApQe5GU5tvuBaeeeuFX7bw4MdIA500A3nhBadE"
+STRIPE_SECRET_KEY = "sk_test_51LeK0EKut8s98N77mJLEb17cKSjHIucwFNPe5SLaKzr8IkL2wECLX8HyOlfYDGJz6iBkSNwEhMtDHh7EUYEzk3vH00PcSal7h5"
+STRIPE_WEBHOOK_SECRET = "whsec_31c8186d260668ea57ba4e6d988a0db9bc8767b4179a3da7aad46553cc6ce61e"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

@@ -8,6 +8,7 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'payments_order_service.settings')
+    
     runserver.default_port = "8083"
     runserver.default_addr = "0.0.0.0"
     try:

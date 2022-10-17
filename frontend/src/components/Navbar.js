@@ -82,8 +82,8 @@ function Navbar(props) {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={"orders/"}>
-                Orders
+              <Link className="nav-link" to={"farmer/profile/"}>
+                Farmer Profile
               </Link>
             </li>
           </ul>

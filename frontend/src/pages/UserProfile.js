@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import ReactDOM from "react-dom"
-
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
@@ -117,7 +115,7 @@ function UserProfile(props) {
 
   return (
     <div>
-      <section className="vh-100">
+      <section>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col col-lg-6 mb-4 mb-lg-0">
@@ -133,7 +131,23 @@ function UserProfile(props) {
                       className="img-fluid my-5"
                       width="80px;"
                     />
-
+                  <div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                      <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
+                        Orders
+                      </Link>
+                    </div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                      <Link className="btn btn-primary m-1 " to={"/"} >
+                        Cards
+                        </Link>   
+                    </div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                    <Link className="btn btn-primary m-1 " to={"/"} >
+                        Utils
+                      </Link>
+                    </div>                                    
+                  </div>
                   </div>
                   <div className="col-md-8">
                     <div className="card-body p-4">
@@ -174,15 +188,23 @@ function UserProfile(props) {
                       <div className="row pt-1">
                           <div className="col-6 mb-3">
                             <div> 
-                              <Link className="btn btn-primary" to={"farmer_update/"} id = "farmer" >
+                              <Link className="btn btn-warning" to={"farmer_update/"} id = "farmer" >
                                             Become a Farmer!
                               </Link>
                             </div>
                           </div>
                           <div className="col-6 mb-3">
                             <div>
-                              <Link className="btn btn-primary" to={"rider_update/"} id = "rider" >
+                              <Link className="btn btn-warning" to={"rider_update/"} id = "rider" >
                                             Become a Rider!
+                              </Link>
+                            </div>
+                          </div>
+
+                          <div className="col-6 mb-3">
+                            <div> 
+                              <Link className="btn btn-warning" to={"payments/"} id = "payments" >
+                                            Payments Page!
                               </Link>
                             </div>
                           </div>

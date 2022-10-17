@@ -36,10 +36,10 @@ In order to start the entire application you need to execute the following comma
 `docker-compose up`
 
 
-### Remember
+### Remember 
 Add a .env file in the main directory (the same of the docker-compose file):
 
-.env
+.env 
 ```
 DATABASE_PASSWORD=password
 DATABASE_HOSTNAME=db
@@ -49,5 +49,4 @@ DATABASE_PORT=5432
 REACT_APP_API_USERS=http://localhost:8080/api/
 REACT_APP_API_INSERTIONS=http://localhost:8081/api/
 REACT_APP_API_SUBSCRIPTION=http://localhost:5000/
-REACT_APP_API_ORDERS=http://localhost:8083/api/
 ```

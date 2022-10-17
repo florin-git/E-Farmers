@@ -7,4 +7,4 @@ npm i dotenv --save
 npm install axios
 npm install @reduxjs/toolkit react-redux
 npm install rc-year-calendar
-npm install @mui/material @emotion/react @emotion/styled
+npm install @stripe/react-stripe-js @stripe/stripe-js
