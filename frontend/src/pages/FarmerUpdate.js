@@ -69,7 +69,7 @@ function FarmerUpdate(props) {
                       account_type: type
                     })
                     .then((res) => {
-                      navigate("/")
+                      navigate("/user/profile/")
                     })
                     .catch((error)=> {
                       console.log(error.response);

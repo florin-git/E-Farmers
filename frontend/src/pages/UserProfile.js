@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+<<<<<<< HEAD
+=======
+import ReactDOM from "react-dom";
+
+>>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
@@ -9,11 +14,10 @@ import useAuth from "../hooks/useAuth";
 let type;
 let element;
 
-
 function modify_button(type) {
-  if ( type == 1 ) 
+  if (type == 1) {
     document.getElementById("farmer").style.pointerEvents = "none";
-  else if ( type == 2 )
+  } else if (type == 2)
     document.getElementById("rider").style.pointerEvents = "none";
 }
 
@@ -30,87 +34,72 @@ function UserProfile(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [userInfo, setUserInfo] = useState([]);
+  const [extraInfo, setExtraInfo] = useState([]);
+
+  let accountType = "Customer";
+
+  if (userInfo?.account_type === 0) {
+    accountType = "Customer";
+  } else if (userInfo?.account_type === 1) {
+    accountType = "Farmer";
+  } else if (userInfo?.account_type === 2) {
+    accountType = "Rider";
+  }
+
   /**
    ** FUNCTIONS
    */
 
-  function extra_get_call(type){
-    console.log("EXTRA_GET_CALL")
-    axiosPrivate
-      .get(`users/${userId}/${type}/`)      //GET per prendere le informazioni extra
-      .then((res) => {
-        console.log(res.data)
-        //const containerInfo = ReactDOM.createRoot(document.getElementById('extrainfo'))
-        //console.log(containerInfo)
-        if(type == 1){
-          document.getElementById('specialInfo').innerHTML = "Farmer Details";
-          element = (
-            <div>
-              <div className="col-6 mb-3">
-                <h6>Bio</h6>
-                <p className="text-muted" id="bio"> { res.data.bio } </p>
-              </div>
-              <div className="col-6 mb-3">
-                <h6>Farm Location</h6>
-                <p className="text-muted" id="FarmLocation"> { res.data.farm_location } </p>
-              </div>
-            </div>
-          )
-          //document.getElementById('bio').innerHTML = res.data.bio
-          //document.getElementById('farmlocation').innerHTML = res.data.farmlocation
-          //ReactDOM.render(element, document.getElementById('extra_info'));
-        }
-        else if(type == 2) {
-          document.getElementById('specialInfo').innerHTML = "Rider Details";
-          element = (
-            <div>
-              <div className="col-6 mb-3">
-                <h6>Bio</h6>
-                <p className="text-muted" id="bio"> { res.data.bio } </p>
-              </div>
-              <div className="col-6 mb-3">
-                <h6>Avalaible</h6>
-                <p className="text-muted" id="Avalaible"> { res.data.avalaible } </p>
-              </div>
-            </div>
-          )
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  };
+  // LEGENDA =   [ 0 : USER -- 1 : FARMER -- 2 : RIDER ]
+        
+  const farmerInfo = userInfo.account_type == 1 && (
+    <div className="col-6 mb-3">
+      <h6>Farm Location</h6>
+      <p className="text-muted" id="FarmLocation">
+        {" "}
+        {extraInfo.farm_location}{" "}
+      </p>
+    </div>
+  );
+
+  const riderInfo = userInfo.account_type == 2 && (
+    <div className="col-6 mb-3">
+      <h6>Avalaible</h6>
+      <p className="text-muted" id="Avalaible">
+        {" "}
+        {extraInfo.avalaible}{" "}
+      </p>
+    </div>
+  );
 
   useEffect(() => {
     /**
      * Retrieve the user info
      */
     (async () => {
-      axiosPrivate
+      await axiosPrivate
         .get(`users/${userId}/`)
         .then((res) => {
-          //console.log(res.data);
-          document.getElementById('name').innerHTML = res.data.name;
-          document.getElementById('email').innerHTML = res.data.email;
-          document.getElementById('phone').innerHTML = res.data.phone;
-          document.getElementById('saddress').innerHTML = res.data.saddress;
-          document.getElementById('baddress').innerHTML = res.data.baddress;
-          /*
-            LEGENDA =   [ 0 : USER -- 1 : FARMER -- 2 : RIDER ]
-          */
-          type = res.data.account_type ;
-          if(type == 1 || type == 2){
-            console.log("User speciale ongoing new actions.")
+          /**
+           * The result is a list:
+           *  the first JSON record contains user's info
+           *  the second, IF EXISTS, contains extra info about rider/farmer
+           */
+          setUserInfo(res.data[0]);
+
+          type = res.data[0].account_type;
+          if (type == 1 || type == 2) {
+            setExtraInfo(res.data[1]);
+            console.log("User speciale ongoing new actions.");
             modify_button(type);
-            extra_get_call(type);
           }
-          document.getElementById('account_type').innerHTML = type;
         })
         .catch((error) => {
           console.log(error.response);
         });
     })();
-
   }, [userId, axiosPrivate, location, navigate]);
 
   return (
@@ -131,6 +120,7 @@ function UserProfile(props) {
                       className="img-fluid my-5"
                       width="80px;"
                     />
+<<<<<<< HEAD
                   <div>
                     <div className="row d-flex justify-content-center align-items-center"> 
                       <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
@@ -148,44 +138,59 @@ function UserProfile(props) {
                       </Link>
                     </div>                                    
                   </div>
+=======
+>>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
                   </div>
                   <div className="col-md-8">
                     <div className="card-body p-4">
                       <h6>Information</h6>
-                        <div className="row pt-1">
-                          <div className="col-6 mb-3">
-                            <h6>Name</h6>
-                            <p className="text-muted" id="name"></p>
-                          </div>
-                          <div className="col-6 mb-3">
-                            <h6>Email</h6>
-                            <p className="text-muted" id="email"></p>
-                          </div>
-                          <div className="col-6 mb-3">
-                            <h6>Phone</h6>
-                            <p className="text-muted" id="phone"></p>
-                          </div>
+                      <div className="row pt-1">
+                        <div className="col-6 mb-3">
+                          <h6>Name</h6>
+                          <p className="text-muted" id="name">
+                            {userInfo.name}
+                          </p>
                         </div>
+                        <div className="col-6 mb-3">
+                          <h6>Email</h6>
+                          <p className="text-muted" id="email">
+                            {userInfo.email}
+                          </p>
+                        </div>
+                        <div className="col-6 mb-3">
+                          <h6>Phone</h6>
+                          <p className="text-muted" id="phone">
+                            {userInfo.phone}
+                          </p>
+                        </div>
+                      </div>
                       <h6>Other Information</h6>
-                        <div className="row pt-1">
-                          <div className="col-6 mb-3">
-                            <h6>ShippingAddress</h6>
-                            <p className="text-muted" id="saddress"></p>
-                          </div>
-                          <div className="col-6 mb-3">
-                            <h6>BillingAddress</h6>
-                            <p className="text-muted" id="baddress"></p>
-                          </div>
+                      <div className="row pt-1">
+                        <div className="col-6 mb-3">
+                          <h6>ShippingAddress</h6>
+                          <p className="text-muted" id="saddress">
+                            {userInfo.saddress}
+                          </p>
                         </div>
+                        <div className="col-6 mb-3">
+                          <h6>BillingAddress</h6>
+                          <p className="text-muted" id="baddress">
+                            {userInfo.baddress}
+                          </p>
+                        </div>
+                      </div>
                       <h6>Advanced</h6>
-                        <div className="row pt-1">
-                          <div className="col-6 mb-3">
-                            <h6>AccountType</h6>
-                            <p className="text-muted" id="account_type"></p>
-                          </div>
+                      <div className="row pt-1">
+                        <div className="col-6 mb-3">
+                          <h6>AccountType</h6>
+                          <p className="text-muted" id="account_type">
+                            {accountType}
+                          </p>
                         </div>
+                      </div>
                       <h6> Upgrade </h6>
                       <div className="row pt-1">
+<<<<<<< HEAD
                           <div className="col-6 mb-3">
                             <div> 
                               <Link className="btn btn-warning" to={"farmer_update/"} id = "farmer" >
@@ -213,7 +218,46 @@ function UserProfile(props) {
                       <div className = "row pt-1" id = "extrainfo">
                         <h6 id="specialInfo">  </h6>
                         {element} 
+=======
+                        <div className="col-6 mb-3">
+                          <div>
+                            <Link
+                              className="btn btn-primary"
+                              to={"farmer_update/"}
+                              id="farmer"
+                            >
+                              Become a Farmer!
+                            </Link>
+                          </div>
+                        </div>
+                        <div className="col-6 mb-3">
+                          <div>
+                            <Link
+                              className="btn btn-primary"
+                              to={"rider_update/"}
+                              id="rider"
+                            >
+                              Become a Rider!
+                            </Link>
+                          </div>
+                        </div>
+>>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
                       </div>
+                      {userInfo.account_type != 0 && (
+                        <div className="row pt-1" id="extrainfo">
+                          <div>
+                            <div className="col-6 mb-3">
+                              <h6>Bio</h6>
+                              <p className="text-muted" id="bio">
+                                {" "}
+                                {extraInfo.bio}{" "}
+                              </p>
+                            </div>
+                            {farmerInfo}
+                            {riderInfo}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -222,7 +266,7 @@ function UserProfile(props) {
           </div>
         </div>
       </section>
-  </div>
+    </div>
   );
 }
 

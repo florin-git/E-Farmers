@@ -25,6 +25,5 @@ urlpatterns = [
     })),
     path('users/<int:user_id>/<int:type>/' , UsersView.as_view({
         'post' : 'user_update',
-        'get' : 'get_extra_info',
     }))
 ]

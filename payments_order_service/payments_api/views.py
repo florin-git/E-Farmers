@@ -9,6 +9,7 @@ from .models import *
 from .serializers import *
 
 
+<<<<<<< HEAD
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -65,3 +66,12 @@ class NewView(viewsets.ViewSet):
         orders = Orders.objects.filter(email = email)
         serializer = OrdersSerializer(orders, many = True)
         return Response(serializer.data, status.HTTP_200_OK)
+=======
+
+class OrdersView(viewsets.ViewSet):
+    def save_order(self, request, id=None):  # POST /api/orders/<int:id>/
+        order_serializer = OrderSerializer(data=request.data)
+        if order_serializer.is_valid(raise_exception=True):
+            order_serializer.save()
+            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+>>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
