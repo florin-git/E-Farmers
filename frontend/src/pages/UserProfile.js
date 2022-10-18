@@ -2,11 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-<<<<<<< HEAD
-=======
-import ReactDOM from "react-dom";
-
->>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
@@ -120,7 +115,6 @@ function UserProfile(props) {
                       className="img-fluid my-5"
                       width="80px;"
                     />
-<<<<<<< HEAD
                   <div>
                     <div className="row d-flex justify-content-center align-items-center"> 
                       <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
@@ -138,8 +132,6 @@ function UserProfile(props) {
                       </Link>
                     </div>                                    
                   </div>
-=======
->>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
                   </div>
                   <div className="col-md-8">
                     <div className="card-body p-4">
@@ -190,7 +182,6 @@ function UserProfile(props) {
                       </div>
                       <h6> Upgrade </h6>
                       <div className="row pt-1">
-<<<<<<< HEAD
                           <div className="col-6 mb-3">
                             <div> 
                               <Link className="btn btn-warning" to={"farmer_update/"} id = "farmer" >
@@ -218,30 +209,6 @@ function UserProfile(props) {
                       <div className = "row pt-1" id = "extrainfo">
                         <h6 id="specialInfo">  </h6>
                         {element} 
-=======
-                        <div className="col-6 mb-3">
-                          <div>
-                            <Link
-                              className="btn btn-primary"
-                              to={"farmer_update/"}
-                              id="farmer"
-                            >
-                              Become a Farmer!
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <div>
-                            <Link
-                              className="btn btn-primary"
-                              to={"rider_update/"}
-                              id="rider"
-                            >
-                              Become a Rider!
-                            </Link>
-                          </div>
-                        </div>
->>>>>>> 19d121fcb72babef99716902a301568a7fc4cee7
                       </div>
                       {userInfo.account_type != 0 && (
                         <div className="row pt-1" id="extrainfo">
