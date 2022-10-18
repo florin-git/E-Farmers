@@ -75,7 +75,7 @@ function App(props) {
               <Route path="user/profile/payments" exact element = {<TempPayPage />} />
 
               {/* You can access these components only if you are logged in */}
-              <Route element={<RequiredAuth />}>
+              <Route element={<RequiredAuth allowRoles={[0]} />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
                 <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />
