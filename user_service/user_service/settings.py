@@ -31,9 +31,7 @@ SECRET_KEY = 'django-insecure-jvlx8csi!r_y8hms_0amd5_96+!7e2+tg08k+kj&e47oc^%$i(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
-# ! ONLY OUR ORIGIN
-ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -52,14 +50,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 # In order to not block React when interacting with Django
@@ -75,7 +74,12 @@ REST_FRAMEWORK = {
 
 # ! THIS OPTION MUST BE CHANGED IN THE FUTURE TO ALLOW
 # ! ONLY OUR ORIGIN
+#OPTION A 
+ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
+
+#CORS_ALLOW_CREDENTIALS = False
+
 
 
 ROOT_URLCONF = 'user_service.urls'

@@ -10,17 +10,10 @@ from django.http import HttpResponse
 ###
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
-        search_params = request.GET.get('search', '')
-        if search_params == "":
-            insertions = Insertion.objects.all()
-        else:
-            is_first_word = True
-            for param in search_params.split():
-                if is_first_word:
-                    insertions = Insertion.objects.filter(title__icontains=param)
-                    is_first_word = False
-                else:
-                    insertions = (insertions | Insertion.objects.filter(title__icontains=param))
+        """
+        Return all the insertions.
+        """
+        insertions = Insertion.objects.all()
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -28,7 +21,13 @@ class InsertionsView(viewsets.ViewSet):
         serializer = InsertionSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response({
+                    'insertion_id': serializer.data['id'],
+                },
+                status=status.HTTP_201_CREATED
+            )
+
 
     def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)

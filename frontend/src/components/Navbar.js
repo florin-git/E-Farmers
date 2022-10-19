@@ -26,7 +26,7 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = 10000 // 10s
+  const delay = 100000 // 100s
     
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification
@@ -81,18 +81,14 @@ function Navbar(props) {
                 Calendar
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={"farmer/profile/"}>
-                Farmer Profile
-              </Link>
-            </li>
           </ul>
           <ul className="navbar-nav navabr-right">
+            {/*
             <li className="nav-item">
               <Link className="btn btn-primary mx-md-2" to={"insertions/new/"}>
                 Publish an Insertion
               </Link>
-            </li>
+            </li>*/}
 
             {/* If you are NOT logged in, then the Login
               button is displayed */}
@@ -162,6 +158,14 @@ function Navbar(props) {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link
+                    className="btn btn-primary mx-md-2"
+                    to={"cart/"}
+                  >
+                    Cart
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <button className="btn btn-primary" onClick={signOut}>
                     Logout
                   </button>
@@ -176,3 +180,15 @@ function Navbar(props) {
 }
 
 export default Navbar;
+
+
+
+
+<div className="card mb-3">
+  <div className="row g-0">
+    <div className="col-md-8">
+      <div className="card-body p-4">
+      </div>
+    </div>
+  </div>
+</div>

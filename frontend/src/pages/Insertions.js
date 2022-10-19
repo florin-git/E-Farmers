@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
 import axiosInstance from "../api/axiosInsertions";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 
 function Insertions(props) {
   /**
@@ -18,11 +15,6 @@ function Insertions(props) {
 
   // It will contain the id of the deleted insertion
   const [idToDelete, setIdToDelete] = useState(-1);
-
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  
-  const [searchString, setSearchString] = useState(searchParams.get("search"));
 
   /**
    ** FUNCTIONS
@@ -38,9 +30,7 @@ function Insertions(props) {
        * function is paused until the request completes.
        */
       await axiosInstance
-        .get("insertions/", {
-          params: { "search": searchString }
-        })
+        .get("insertions/")
         .then((res) => {
           setInsertions(res.data);
         })
@@ -48,8 +38,8 @@ function Insertions(props) {
           return error.response;
         });
     })();
-  }, [idToDelete, searchString]); // Whenever you delete an insertion, the fetch is repeated
-  
+  }, [idToDelete]); // Whenever you delete an insertion, the fetch is repeated
+
   // Manage Modal
   const handleCloseModal = () => setShowModal(false);
 
@@ -73,56 +63,49 @@ function Insertions(props) {
     setIdToDelete(-1); // Update again the variable for the reloading
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault()
-    setSearchString(document.getElementById("search").value)
-  }
-
   const insertions_array = insertions.map((insertion) => {
     return (
-      <div>
-        <div className="col" key={insertion.id}>
-          <div className="card w-75">
-            <img
-              src={
-                axiosInstance.defaults.baseURL +
-                "insertions/" +
-                insertion.id +
-                "/image/"
-              }
-              alt="img"
-              className="card-img-top img-fluid"
-            />
+      <div className="col" key={insertion.id}>
+        <div className="card w-75">
+          <img
+            src={
+              axiosInstance.defaults.baseURL +
+              "insertions/" +
+              insertion.id +
+              "/image/"
+            }
+            alt="img"
+            className="card-img-top img-fluid"
+          />
 
-            <div className="card-body">
-              <h5 className="card-title">{insertion.title}</h5>
+          <div className="card-body">
+            <h5 className="card-title">{insertion.title}</h5>
 
-              <p className="card-text">
-                Expiration date: {insertion.expiration_date}
-              </p>
+            <p className="card-text">
+              Expiration date: {insertion.expiration_date}
+            </p>
 
-              <div className="container">
-                <div className="row">
-                  <div className="col-sm">
-                    <Link
-                      className="btn btn-outline-primary"
-                      to={`${insertion.id}`}
-                    >
-                      View
-                    </Link>
-                  </div>
+            <div className="container">
+              <div className="row">
+                <div className="col-sm">
+                  <Link
+                    className="btn btn-outline-primary"
+                    to={`${insertion.id}`}
+                  >
+                    View
+                  </Link>
+                </div>
 
-                  <div className="col-sm">
-                    <button
-                      type="button"
-                      id={insertion.id}
-                      name="delete"
-                      onClick={(event) => handleShowModal(event)}
-                      className="btn btn-outline-danger"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                <div className="col-sm">
+                  <button
+                    type="button"
+                    id={insertion.id}
+                    name="delete"
+                    onClick={(event) => handleShowModal(event)}
+                    className="btn btn-outline-danger"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -133,20 +116,7 @@ function Insertions(props) {
   });
 
   return (
-    <div className="container-lg py-5">
-      <form className="mb-5 d-flex justify-content-center" onSubmit={handleSearchSubmit}>
-        <div className="form-group d-flex w-50">
-          <input
-              className="form-control"
-              type="text"
-              id="search"
-              name="search"
-          />
-          <button className="btn btn-primary" type="submit">
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </div>
-      </form>
+    <div className="container-lg mt-3 py-5">
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
