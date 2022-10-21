@@ -11,7 +11,12 @@ from django.http import HttpResponse
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
         search_params = request.GET.get('search', '')
-        if search_params == "":
+        expiring_search = request.GET.get('expiring', '')
+        if expiring_search != "":
+            print(int(expiring_search))
+            today = date.today()
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+        elif search_params == "":
             insertions = Insertion.objects.all()
         else:
             is_first_word = True
