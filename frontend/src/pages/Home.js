@@ -18,7 +18,7 @@ function Home(props) {
        */
       await axiosInstance
         .get("insertions/", {
-          params: { "expiring": "3" }
+          params: { "expiring": "5" }
         })
         .then((res) => {
           setInsertions(res.data);
@@ -32,7 +32,7 @@ function Home(props) {
   const insertions_array = insertions.map((insertion) => {
     // `/image/?${date.getMinutes()}` in order to avoid caching of the images
     return (
-      <div className="col" key={insertion.id}>
+      <div className="col-lg-3 text-center" key={insertion.id}>
         <div className="card w-75">
           <img
             src={
@@ -69,6 +69,11 @@ function Home(props) {
       </div>
     );
   });
+
+
+  function redirectToInsertions(event) {
+    window.location.replace(`../insertions/?search=expiring_products`);
+  }
 
   return (
     <main className="home">
@@ -154,7 +159,7 @@ function Home(props) {
 
           <div className="row">
             <div className="col-lg-6 text-center m-auto">
-              <button className="btn btn-primary fw-bold">
+              <button className="btn btn-primary fw-bold" onClick={redirectToInsertions}>
                 See Other Products
               </button>
             </div>

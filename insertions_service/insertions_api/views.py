@@ -13,11 +13,14 @@ class InsertionsView(viewsets.ViewSet):
         search_params = request.GET.get('search', '')
         expiring_search = request.GET.get('expiring', '')
         if expiring_search != "":
-            print(int(expiring_search))
             today = date.today()
             insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = insertions[:int(expiring_search)]
         elif search_params == "":
             insertions = Insertion.objects.all()
+        elif search_params == "expiring_products":
+            today = date.today()
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
         else:
             is_first_word = True
             for param in search_params.split():
