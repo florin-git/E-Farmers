@@ -26,8 +26,8 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = 10000 // 10s
-    
+  //const delay = 10000 // 10s
+  const delay = null
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification
    * from the farmers the user is subscribed to 
@@ -164,7 +164,7 @@ function Navbar(props) {
                 <li className="nav-item">
                   <Link
                     className="btn btn-primary mx-md-2"
-                    to={"cart/"}
+                    to={"user/cart/"}
                   >
                     Cart
                   </Link>

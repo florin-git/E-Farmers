@@ -13,11 +13,11 @@ import Registration from "./pages/Registration";
 import FarmerProfile from "./pages/FarmerProfile";
 import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
-import ShoppingCart from "./pages/ShoppingCart";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import SeasonsCalendar from "./components/SeasonsCalendar";
 import useAuth from "./hooks/useAuth";
+import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
 function App(props) {
   // Authentication data from context storage
@@ -55,7 +55,11 @@ function App(props) {
                 exact
                 element={<AddBoxes />}
               />
-              <Route path="farmer/profile/" exact element={<FarmerProfile />} />
+              <Route 
+                path="farmer/profile/" 
+                exact
+                element={<FarmerProfile />} 
+              />
 
               {/* For Users service */}
               {!isLoggedIn && (
@@ -68,8 +72,11 @@ function App(props) {
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuth />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
-                {/* Access to personal shopping cart */}
-                <Route path="cart/" exact element={<ShoppingCart />} />
+                <Route
+                  path="user/cart/"
+                  exact
+                  element={<ProtectedRouteCart />}
+                />
               </Route>
             </Route>
 
