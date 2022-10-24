@@ -59,7 +59,7 @@ function Home(props) {
                 <div className="col-sm">
                   <Link
                     className="btn btn-outline-primary"
-                    to={`${insertion.id}`}
+                    to={`insertions/${insertion.id}`}
                   >
                     View
                   </Link>
@@ -71,10 +71,6 @@ function Home(props) {
       </div>
     );
   });
-
-  function redirectToInsertions(event) {
-    window.location.replace(`../insertions/?search=expiring_products`);
-  }
 
   return (
     <main className="home">
@@ -159,12 +155,12 @@ function Home(props) {
 
             <div className="row">
               <div className="col-lg-6 text-center m-auto">
-                <button
+                <Link
                   className="btn btn-primary fw-bold"
-                  onClick={redirectToInsertions}
+                  to={`../insertions/?search=expiring_products`}
                 >
                   See Other Products
-                </button>
+                </Link>
               </div>
             </div>
           </div>
