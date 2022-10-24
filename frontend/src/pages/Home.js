@@ -18,7 +18,7 @@ function Home(props) {
        */
       await axiosInstance
         .get("insertions/", {
-          params: { "expiring": "5" }
+          params: { expiring: "5" },
         })
         .then((res) => {
           setInsertions(res.data);
@@ -28,6 +28,8 @@ function Home(props) {
         });
     })();
   }, []); // Whenever you delete an insertion, the fetch is repeated
+
+  console.log(insertions);
 
   const insertions_array = insertions.map((insertion) => {
     // `/image/?${date.getMinutes()}` in order to avoid caching of the images
@@ -69,7 +71,6 @@ function Home(props) {
       </div>
     );
   });
-
 
   function redirectToInsertions(event) {
     window.location.replace(`../insertions/?search=expiring_products`);
@@ -146,26 +147,29 @@ function Home(props) {
       {/* // ========================================================== */}
       {/* Expiring Boxes */}
 
-      <section className="expiring-products">
-        <div className="container py-5">
-          <div className="row py-5">
-            <div className="col-lg-5 m-auto text-center">
-              <h1 className="fw-bold">Expiring Boxes</h1>
+      {insertions.length > 0 && (
+        <section className="expiring-products">
+          <div className="container py-5">
+            <div className="row py-5">
+              <div className="col-lg-5 m-auto text-center">
+                <h1 className="fw-bold">Expiring Boxes</h1>
+              </div>
             </div>
-          </div>
-          <div className="row">
-            {insertions_array}
-          </div>
+            <div className="row">{insertions_array}</div>
 
-          <div className="row">
-            <div className="col-lg-6 text-center m-auto">
-              <button className="btn btn-primary fw-bold" onClick={redirectToInsertions}>
-                See Other Products
-              </button>
+            <div className="row">
+              <div className="col-lg-6 text-center m-auto">
+                <button
+                  className="btn btn-primary fw-bold"
+                  onClick={redirectToInsertions}
+                >
+                  See Other Products
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* // ========================================================== */}
       {/* Footer */}
