@@ -68,6 +68,7 @@ function Insertions(props) {
     e.preventDefault()
     setSearchString(document.getElementById("search").value)
   }
+  
 
   var date = new Date();
   const insertions_array = insertions.map((insertion) => {
