@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
 import axiosInstance from "../api/axiosInsertions";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 
 function Insertions(props) {
   /**
@@ -16,6 +19,11 @@ function Insertions(props) {
 
   // It will contain the id of the deleted insertion
   const [idToDelete, setIdToDelete] = useState(-1);
+
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const [searchString, setSearchString] = useState(searchParams.get("search"));
 
   /**
    ** FUNCTIONS
@@ -31,7 +39,9 @@ function Insertions(props) {
        * function is paused until the request completes.
        */
       await axiosInstance
-        .get("insertions/")
+        .get("insertions/", {
+          params: { "search": searchString }
+        })
         .then((res) => {
           setInsertions(res.data);
         })
@@ -39,8 +49,8 @@ function Insertions(props) {
           return error.response;
         });
     })();
-  }, [idToDelete]); // Whenever you delete an insertion, the fetch is repeated
-
+  }, [idToDelete, searchString]); // Whenever you delete an insertion, the fetch is repeated
+  
   // Manage Modal
   const handleCloseModal = () => setShowModal(false);
 
@@ -63,12 +73,11 @@ function Insertions(props) {
 
     setIdToDelete(-1); // Update again the variable for the reloading
   };
-/*
+
   const handleSearchSubmit = (e) => {
     e.preventDefault()
     setSearchString(document.getElementById("search").value)
-  }*/
-  
+  }
 
   var date = new Date();
   const insertions_array = insertions.map((insertion) => {
@@ -127,7 +136,20 @@ function Insertions(props) {
   });
 
   return (
-    <div className="container-lg mt-3 py-5">
+    <div className="container-lg py-5">
+      <form className="mb-5 d-flex justify-content-center" onSubmit={handleSearchSubmit}>
+        <div className="form-group d-flex w-50">
+          <input
+              className="form-control"
+              type="text"
+              id="search"
+              name="search"
+          />
+          <button className="btn btn-primary" type="submit">
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      </form>
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

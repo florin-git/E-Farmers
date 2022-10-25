@@ -13,9 +13,3 @@ DATABASE_USER=efarmers
 DATABASE_NAME=efarmers
 DATABASE_PORT=5432
 ```
-
-
-
-# Extra
-
-Install Tkinter ---> sudo apt-get -y install python-tk

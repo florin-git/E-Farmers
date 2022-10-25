@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-from django.core.management.commands.runserver import Command as runserver
 import os
 import sys
 
@@ -8,10 +7,6 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'insertions_service.settings')
-
-    runserver.default_port = "8081"
-    runserver.default_addr = "0.0.0.0"
-
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

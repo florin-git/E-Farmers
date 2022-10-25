@@ -7,10 +7,3 @@ npm i dotenv --save
 npm install axios
 npm install @reduxjs/toolkit react-redux
 npm install rc-year-calendar
-npm install @stripe/react-stripe-js @stripe/stripe-js
-
-npm install --save @fortawesome/free-solid-svg-icons
-npm install --save @fortawesome/react-fontawesome
-npm i --save @fortawesome/fontawesome-svg-core
-
-npm install @mui/icons-material @mui/material @emotion/styled @emotion/react

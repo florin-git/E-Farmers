@@ -1,6 +1,5 @@
 import React from "react";
 import Calendar from "rc-year-calendar";
-// import 'rc-year-calendar/dist/rc-year-calendar.css';
 
 /*
 function SeasonsCalendar(props) {
@@ -30,6 +29,7 @@ for (const x of Array(12).keys()) {
 const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
+
 class SeasonsCalendar extends React.Component {
   constructor() {
     super();
@@ -46,11 +46,21 @@ class SeasonsCalendar extends React.Component {
   }
 
   render() {
-    const seasonal_items = [];
-    
-    for (const item of this.state.value) {
-        seasonal_items.push(<li key={item}>{item}</li>);
+    function redirectToInsertions(event) {
+      const name = event.target.id
+      window.location.replace(`../insertions?search=${name}`);
     }
+
+    const seasonal_items = this.state.value.map((item) => {
+      return (
+        <div>
+          <div className="col" key={item}>
+            <button className="btn btn-outline-primary" id={item} onClick={redirectToInsertions}>{item}</button>
+          </div>
+        </div>
+        
+      );
+    });
 
     return (
       <div>
@@ -62,7 +72,9 @@ class SeasonsCalendar extends React.Component {
           enableRangeSelection={true}
           onDayClick={(e) => this.addLog(e.date.getMonth())}
         />
-        <div>{seasonal_items}</div>
+        <div className="my-5 row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
+          {seasonal_items}
+        </div>
       </div>
     );
   }
