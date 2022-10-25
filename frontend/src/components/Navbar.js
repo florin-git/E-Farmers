@@ -26,7 +26,7 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = 100000 // 100s
+  const delay = null // 10s
     
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification

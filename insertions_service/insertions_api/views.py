@@ -10,10 +10,25 @@ from django.http import HttpResponse
 ###
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
-        """
-        Return all the insertions.
-        """
-        insertions = Insertion.objects.all()
+        search_params = request.GET.get('search', '')
+        expiring_search = request.GET.get('expiring', '')
+        if expiring_search != "":
+            today = date.today()
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = insertions[:int(expiring_search)]
+        elif search_params == "":
+            insertions = Insertion.objects.all()
+        elif search_params == "expiring_products":
+            today = date.today()
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+        else:
+            is_first_word = True
+            for param in search_params.split():
+                if is_first_word:
+                    insertions = Insertion.objects.filter(title__icontains=param)
+                    is_first_word = False
+                else:
+                    insertions = (insertions | Insertion.objects.filter(title__icontains=param))
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -31,6 +46,10 @@ class InsertionsView(viewsets.ViewSet):
 
     def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
+        today = date.today()
+        if insertion.expiration_date < today:
+            insertion.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = InsertionSerializer(insertion)
         return Response(serializer.data)
 
@@ -49,11 +68,22 @@ class InsertionsView(viewsets.ViewSet):
             return response
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
-        insertion = Insertion.objects.get(id=insertion_id)  
+        insertion = Insertion.objects.get(id=insertion_id)
+        today = date.today()
+        if insertion.expiration_date < today:
+            insertion.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        request.data['reported'] = insertion.reported
+        request.data['expiration_date'] = insertion.expiration_date
         serializer = InsertionSerializer(instance=insertion, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                #insertion.image = request.FILES["image"]
+                #insertion.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except Exception as e:
+            print(e)
 
     def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)

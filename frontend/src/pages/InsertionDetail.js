@@ -50,13 +50,15 @@ function InsertionDetail({ insertion }) {
     return <Box key={box.id} {...box} />;
   });
 
+  var date = new Date();
+  // `/image/?${date.getMinutes()}` in order to avoid caching of the images
   return (
     <section>
       <div className="container py-5">
         <div className="row">
           <div className="col-lg-6">
             <img
-              src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + "/image/"}
+              src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + `/image/?${date.getMinutes()}`}
               alt="insertion_image"
               className="img-fluid"
             />
@@ -120,6 +122,11 @@ function InsertionDetail({ insertion }) {
               </Link>
             </div>
           )}
+          <div className="my-2">
+            <Link to={`${process.env.PUBLIC_URL}/insertions/${insertion_id}/edit/`} className="btn btn-warning btn-lg">
+              Modify Insertion
+            </Link>
+          </div>
         </div>
       </div>
     </section>

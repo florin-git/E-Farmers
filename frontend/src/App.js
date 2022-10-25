@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
+import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
 
 import Registration from "./pages/Registration";
@@ -55,6 +56,11 @@ function App(props) {
                 path="insertions/new/"
                 exact
                 element={<PublishInsertion />}
+              />
+              <Route
+                path="insertions/:insertion_id/edit/"
+                exact
+                element={<EditInsertion />}
               />
               <Route
                 path="insertions/:insertion_id/"

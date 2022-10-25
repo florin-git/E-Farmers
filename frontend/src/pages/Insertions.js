@@ -10,6 +10,7 @@ function Insertions(props) {
    ** VARIABLES
    */
   const [insertions, setInsertions] = useState([]);
+  const [image, setImage] = useState();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -63,49 +64,58 @@ function Insertions(props) {
     setIdToDelete(-1); // Update again the variable for the reloading
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    setSearchString(document.getElementById("search").value)
+  }
+
+  var date = new Date();
   const insertions_array = insertions.map((insertion) => {
+    // `/image/?${date.getMinutes()}` in order to avoid caching of the images
     return (
-      <div className="col" key={insertion.id}>
-        <div className="card w-75">
-          <img
-            src={
-              axiosInstance.defaults.baseURL +
-              "insertions/" +
-              insertion.id +
-              "/image/"
-            }
-            alt="img"
-            className="card-img-top img-fluid"
-          />
+      <div>
+        <div className="col" key={insertion.id}>
+          <div className="card w-75">
+            <img
+              src={
+                axiosInstance.defaults.baseURL +
+                "insertions/" +
+                insertion.id +
+                `/image/?${date.getMinutes()}`
+              }
+              alt="img"
+              className="card-img-top img-fluid"
+            />
 
-          <div className="card-body">
-            <h5 className="card-title">{insertion.title}</h5>
+            <div className="card-body">
+              <h5 className="card-title">{insertion.title}</h5>
 
-            <p className="card-text">
-              Expiration date: {insertion.expiration_date}
-            </p>
+              <p className="card-text">
+                Expiration date: {insertion.expiration_date}
+              </p>
 
-            <div className="container">
-              <div className="row">
-                <div className="col-sm">
-                  <Link
-                    className="btn btn-outline-primary"
-                    to={`${insertion.id}`}
-                  >
-                    View
-                  </Link>
-                </div>
+              <div className="container">
+                <div className="row">
+                  <div className="col-sm">
+                    <Link
+                      className="btn btn-outline-primary"
+                      to={`${insertion.id}`}
+                    >
+                      View
+                    </Link>
+                  </div>
 
-                <div className="col-sm">
-                  <button
-                    type="button"
-                    id={insertion.id}
-                    name="delete"
-                    onClick={(event) => handleShowModal(event)}
-                    className="btn btn-outline-danger"
-                  >
-                    Delete
-                  </button>
+                  <div className="col-sm">
+                    <button
+                      type="button"
+                      id={insertion.id}
+                      name="delete"
+                      onClick={(event) => handleShowModal(event)}
+                      className="btn btn-outline-danger"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
