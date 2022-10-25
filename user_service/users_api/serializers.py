@@ -41,6 +41,7 @@ class FarmerSerializer(serializers.ModelSerializer):
     #this give us the error NameError at /api/users/1/\nname 'user' is not defined\
     #ext_user = UserSerializer()                                 
     external_user_f = serializers.PrimaryKeyRelatedField(many = False, read_only = True)
+    print(external_user_f)
     
     #User = UserSerializer()
     class Meta:
@@ -76,6 +77,20 @@ class RiderSerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         rider = Rider.objects.create(**validated_data)
         return rider
+
+class ReviewSerializer(serializers.ModelSerializer):
+
+    # ADD HERE FARMER KEY
+    #external_farmer = serializers.PrimaryKeyRelatedField(many = False , read_only = True)
+
+    class Meta:
+        model= Review
+        fields= ('id','rating','comment','ext_farmer')
+
+    def create(self, validated_data):
+        review = Review.objects.create(**validated_data)
+        return review
+
 
    
 

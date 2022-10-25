@@ -42,7 +42,7 @@ class Rider(models.Model):
         null=True
     )
     def __str__(self):
-        return str(self.rider)
+        return str(self.bio)
 
 class Farmer(models.Model):
     # Farmer Properties
@@ -55,6 +55,21 @@ class Farmer(models.Model):
         blank=True,
         null=True
     )
+    
 
     def __str__(self):
-        return str(self.farmer)
+        return str(self.bio)
+
+class Review(models.Model):
+    
+    rating = models.DecimalField(default = 0.0, decimal_places =1, max_digits = 3)
+    comment = models.TextField()
+    ext_farmer = models.ForeignKey(
+        Farmer,
+        on_delete=models.CASCADE,
+        blank = True,
+        null = True
+    )
+
+    def __strd__(self):
+        return self.comment

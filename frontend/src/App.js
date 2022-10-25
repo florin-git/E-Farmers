@@ -16,6 +16,7 @@ import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import SeasonsCalendar from "./components/SeasonsCalendar";
 import useAuth from "./hooks/useAuth";
+import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE"
 
 import FarmerUpdate from "./pages/FarmerUpdate";
 import RiderUpdate from "./pages/RiderUpdate";
@@ -75,7 +76,7 @@ function App(props) {
               <Route path="user/profile/payments" exact element = {<TempPayPage />} />
 
               {/* You can access these components only if you are logged in */}
-              <Route element={<RequiredAuth allowRoles={[0]} />}>
+              <Route element={<RequiredAuthNOROLE  />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
                 <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />
