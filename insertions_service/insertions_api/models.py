@@ -10,7 +10,6 @@ class Insertion(models.Model):
     gathering_location = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
-    farmer = models.IntegerField(default=-1)
 
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
