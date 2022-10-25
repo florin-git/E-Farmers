@@ -13,6 +13,7 @@ function Insertions(props) {
    ** VARIABLES
    */
   const [insertions, setInsertions] = useState([]);
+  const [image, setImage] = useState();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -78,7 +79,9 @@ function Insertions(props) {
     setSearchString(document.getElementById("search").value)
   }
 
+  var date = new Date();
   const insertions_array = insertions.map((insertion) => {
+    // `/image/?${date.getMinutes()}` in order to avoid caching of the images
     return (
       <div>
         <div className="col" key={insertion.id}>
@@ -88,7 +91,7 @@ function Insertions(props) {
                 axiosInstance.defaults.baseURL +
                 "insertions/" +
                 insertion.id +
-                "/image/"
+                `/image/?${date.getMinutes()}`
               }
               alt="img"
               className="card-img-top img-fluid"
