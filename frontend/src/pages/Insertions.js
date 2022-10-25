@@ -63,11 +63,11 @@ function Insertions(props) {
 
     setIdToDelete(-1); // Update again the variable for the reloading
   };
-
+/*
   const handleSearchSubmit = (e) => {
     e.preventDefault()
     setSearchString(document.getElementById("search").value)
-  }
+  }*/
   
 
   var date = new Date();

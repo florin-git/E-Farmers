@@ -77,6 +77,20 @@ class RiderSerializer(serializers.ModelSerializer):
         rider = Rider.objects.create(**validated_data)
         return rider
 
+class ReviewSerializer(serializers.ModelSerializer):
+
+    # ADD HERE FARMER KEY
+    #external_farmer = serializers.PrimaryKeyRelatedField(many = False , read_only = True)
+
+    class Meta:
+        model= Review
+        fields= ('id','rating','comment','ext_farmer')
+
+    def create(self, validated_data):
+        review = Review.objects.create(**validated_data)
+        return review
+
+
    
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):  

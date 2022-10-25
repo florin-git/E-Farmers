@@ -14,3 +14,5 @@ REACT_APP_API_SUBSCRIPTION=http://localhost:5000/
 
 ### Remember to install the requirements. Add mui - stripe - faicon  
 > Updates from branch EF-32
+### Remember to install via npm:
+npm install @mui/material @emotion/react @emotion/styled

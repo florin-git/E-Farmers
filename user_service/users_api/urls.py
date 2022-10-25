@@ -25,5 +25,12 @@ urlpatterns = [
     })),
     path('users/<int:user_id>/<int:type>/' , UsersView.as_view({
         'post' : 'user_update',
-    }))
+    })),
+    path('farmers/<int:user_id>/' , UsersView.as_view({
+        'get'  : 'get_farmer',
+    })),
+    path('users/farmers/<int:farmer_id>/' , UsersView.as_view({
+        'post' : 'add_review',
+    })),
+    
 ]

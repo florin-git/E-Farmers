@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosOrder from "../api/axiosOrder";
@@ -7,14 +10,25 @@ import axiosOrder from "../api/axiosOrder";
 
 import MyModal from "../components/MyModal"
 
+import axiosUsers from "../api/axiosUsers";
+import Modal from "../hooks/Modal";
+import review_css from "../my_css/review.css";
+
+let id_order = 5792;
+let total_price = 69.99;
+
 
 function OrdersMainPage(props) {
 
     
     const [orders, setOrders] = useState([]);
 
-    //for modal
+    // Modal per display info ordine
     const [modalShow, setModalShow] = React.useState(false);
+
+    // Modal per la review
+    const [openModal, setOpenModal] = useState(false);
+
 
     // Authentication data from context storage
     const { auth } = useAuth();
@@ -50,7 +64,7 @@ function OrdersMainPage(props) {
             //     <td> {order.payment_method_id} </td>
             //     <td> {order.price} </td>
             // </tr>
-            <li className="list-group-item" key={order.id} >
+            <li key={order.id} className="list-group-item">
                 <div className="media align-items-lg-center flex-column flex-lg-row p-3">
                     <div className="media-body order-2 order-lg-1">
                         <h5 className="mt-0 font-weight-bold mb-2">Order N#:{order.payment_method_id}</h5>
@@ -58,19 +72,28 @@ function OrdersMainPage(props) {
                         <div className="d-flex align-items-center justify-content-between mt-1">
                             <h6 className="font-weight-bold my-2">Total : {order.price}</h6>
                             <ul className="list-inline small">
-                                {/*
-                                <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
-                                    Click to see More
-                                </Link>
-                                */}
+
+                            <div>
                                 <button type="button" className="btn btn-primary m-1" variant="primary" onClick={() => setModalShow(true)}>
                                     SEE PRODUCT INFORMATION
                                 </button>
-
-                                    <MyModal
-                                        show={modalShow}
-                                        onHide={() => setModalShow(false)}
-                                    />
+                                <MyModal
+                                    show={modalShow}
+                                    onHide={() => setModalShow(false)}
+                                />
+                            </div>
+                            
+                            <div> 
+                                <button 
+                                    onClick={() => setOpenModal(true)} 
+                                    className="btn btn-primary m-1">
+                                        Leave a Review!
+                                </button>
+                                <Modal 
+                                    open={openModal} 
+                                    onClose={() => setOpenModal(false)} 
+                                />
+                            </div>
                             </ul>
                         </div>
                     </div>

@@ -1,34 +1,35 @@
 import React from "react";
 // For managing the routing
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
 import NotFound from "./pages/NotFound";
 import SharedLayout from "./components/SharedLayout";
 import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
 
 import Home from "./pages/Home";
-
+// Import delle insertions
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
 import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
-
+// Import dell'user profile
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import useAuth from "./hooks/useAuth";
-
+import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE"
+// User advanced operation
 import FarmerUpdate from "./pages/FarmerUpdate";
 import RiderUpdate from "./pages/RiderUpdate";
 import UserProfile from "./pages/UserProfile";
 import FarmerProfile from "./pages/FarmerProfile";
 import RiderProfile from "./pages/RiderProfile";
-
-
+// Import carrello + pagamenti
 import ShoppingCart from "./pages/ShoppingCart";
 import OrdersMainPage from "./pages/OrdersMainPage";
 import TempPayPage from "./pages/TempPayPage";
+
+
 import SeasonsCalendar from "./components/SeasonsCalendar";
 
 function App(props) {
@@ -85,7 +86,7 @@ function App(props) {
               {/* Temp Page for testing */ }
               <Route path="user/profile/payments" exact element = {<TempPayPage />} />
               {/* You can access these components only if you are logged in */}
-              <Route element={<RequiredAuth />}>
+              <Route element={<RequiredAuthNOROLE  />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
                 <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />

@@ -133,11 +133,30 @@ class UsersView(viewsets.ViewSet):
         #serializer = UserSerializer(user, data = request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-
         return Response( serializer.data, status=status.HTTP_200_OK)
 
 
-                    
+    def get_farmer(self , request , user_id = None):    #GET /api/farmer/<int : user_id>/
+
+        farmer=Farmer.objects.get(ext_user_id = user_id)
+        farmer_serializer = FarmerSerializer(farmer)
+
+        return Response(farmer_serializer.data['id'], status=status.HTTP_200_OK)
+
+
+    def add_review(self,request, farmer_id = None):    #POST /api/farmer/<int:farmer_id>/
+
+        farmer = Farmer.objects.get(id = farmer_id)
+        review_serializer = ReviewSerializer(data = request.data)
+        
+        if review_serializer.is_valid(raise_exception=True):
+            #review_serializer.save()
+            review_serializer.save(ext_farmer=farmer)
+            print(farmer)
+            return Response(review_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print("ERROR HERE")
+
 
 
 class CustomTokenVerifyView(APIView):
