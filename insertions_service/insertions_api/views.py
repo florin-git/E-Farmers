@@ -40,6 +40,10 @@ class InsertionsView(viewsets.ViewSet):
 
     def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
+        today = date.today()
+        if insertion.expiration_date < today:
+            insertion.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = InsertionSerializer(insertion)
         return Response(serializer.data)
 
@@ -59,6 +63,9 @@ class InsertionsView(viewsets.ViewSet):
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
+        if insertion.expiration_date < today:
+            insertion.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         request.data['reported'] = insertion.reported
         request.data['expiration_date'] = insertion.expiration_date
         serializer = InsertionSerializer(instance=insertion, data=request.data)

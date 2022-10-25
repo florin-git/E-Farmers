@@ -71,9 +71,14 @@ function EditInsertion() {
       await axiosInstance
         .get(`insertions/${insertion_id}/`)
         .then((res) => {
-          // Insertion exists
-          setExistsURL(true);
-          setInsertion(res.data);
+          if(res.status == '204'){
+            setExistsURL(false);
+            navigate("/");
+          }
+          else {
+            setExistsURL(true);
+            setInsertion(res.data);
+          }
         })
         .catch((error) => {
           // If insertion does not exists
