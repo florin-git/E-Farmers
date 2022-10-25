@@ -36,7 +36,13 @@ class InsertionsView(viewsets.ViewSet):
         serializer = InsertionSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response({
+                    'insertion_id': serializer.data['id'],
+                },
+                status=status.HTTP_201_CREATED
+            )
+
 
     def retrieve_insertion(self, request, insertion_id=None): # GET /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)

@@ -2,7 +2,6 @@ from django.urls import path
 from .views import *
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenVerifyView,
 )
 
 urlpatterns = [
@@ -12,10 +11,8 @@ urlpatterns = [
     # The refresh api will also return a new refresh token, since the previous
     # one is blacklisted
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
-
-    # path('token/verify/', TokenVerifyView.as_view(), name="token_verify"),
+    path('token/verify/', CustomTokenVerifyView.as_view(), name="token_verify"),
     path('logout/blacklist/', BlacklistTokenView.as_view(), name="blacklist"),
-
 
     # Users
     path('users/', UsersView.as_view({
@@ -24,5 +21,16 @@ urlpatterns = [
     })),    
     path('users/<int:user_id>/', UsersView.as_view({
         'get': 'user_info',
+        'patch' : 'account_change',
     })),
+    path('users/<int:user_id>/<int:type>/' , UsersView.as_view({
+        'post' : 'user_update',
+    })),
+    path('farmers/<int:user_id>/' , UsersView.as_view({
+        'get'  : 'get_farmer',
+    })),
+    path('users/farmers/<int:farmer_id>/' , UsersView.as_view({
+        'post' : 'add_review',
+    })),
+    
 ]
