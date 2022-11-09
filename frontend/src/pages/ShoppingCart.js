@@ -1,55 +1,69 @@
 import React, { useEffect, useState } from "react";
-
-import useAuth from "../hooks/useAuth";
 import axiosInstance from "../api/axiosCart";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import CartItem from "../components/CartItem";
 
 function ShoppingCart({ cart }) {
   /**
    ** VARIABLES
    */
 
-  // Authentication data from context storage
-  const { auth } = useAuth();
-  const userId = auth.userId;
-
-  // axios function with JWT tokens
-  const axiosPrivate = useAxiosPrivate();
+  // Boxes of the cart
+  const [boxes, setBoxes] = useState([]);
 
   /**
    ** FUNCTIONS
    */
 
+  useEffect(()  => {
+    
+    (async () => {
+      await axiosInstance
+        .get(`users/${cart.user}/cart/items/`)
+        .then((res) => {
+          setBoxes(res.data);
+        })
+    })();
+  }, [cart.user]);
 
-/*
-  const boxes_array = cart.boxes.map((box) => {
+  console.log('Number of boxes :: ' + boxes.length);
 
-    // box is the id of the item Box
-    useEffect(() => {
-      async () => {
-        axiosInstance
-          .get(``)
-      }
-    })
-
-  });
-
-*/
-
-  /* 
-  ISSUE: 
-      if the cart does not exist it should be created. 
-      This error is not handled for the insertions too
-  */
-
-  /* How to get the boxes given the ids of em? */
+  const boxes_array = boxes.map((box) => {
+    return <CartItem key={box.id} {...box} />
+  })
 
   return (
-    <div>HELLO</div>
+    
+    <div className="container py-5 h-100">
+      <div className="row d-flex justify-content-center align-items-center h-100">
+        <div className="col">
+          <div className="card">
+            <div className="card-body p-4">
+              <div className="row">
+
+                <div className="col-lg-7">
+                  <div className="d-flex justify-content-center align-items-center mb-4">
+                    <div>
+                      <p className="mb-1">
+                        <h3>Shopping cart</h3>
+                      </p>
+                    </div>
+                  </div>
+                  {boxes_array}
+                </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   );
 }
 
 export default ShoppingCart;
+
+
 
 /** 
   <section className="h-100 h-custom">

@@ -37,6 +37,7 @@ function Box(props) {
         .get(`/insertions/${props.insertion}/`)
         .then((res) => {
           let farmer_id = res.data['farmer']
+          let insertion_name = res.data['title']
           
           /**
            * Try to add the box to the cart
@@ -45,8 +46,10 @@ function Box(props) {
           .put(`users/${userId}/cart/items/`, 
               {
                 insertion: props.insertion,
+                name: insertion_name,
                 size: props.size,
                 price: props.price,
+                weight: props.weight,
                 farmer: farmer_id
               })
           .then((res) => {
@@ -93,6 +96,7 @@ function Box(props) {
                         .put(`users/${userId}/cart/items/`, 
                           {
                             insertion: props.insertion,
+                            name: insertion_name,
                             size: props.size,
                             price: props.price,
                             farmer: farmer_id
@@ -124,6 +128,7 @@ function Box(props) {
                   .put(`users/${userId}/cart/items/`, 
                     {
                       insertion: props.insertion,
+                      name: insertion_name,
                       size: props.size,
                       price: props.price,
                       farmer: farmer_id

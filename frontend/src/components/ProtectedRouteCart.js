@@ -17,7 +17,7 @@ function ProtectedRouteCart() {
 
   // Retrieve the id from the JWT token
   const { auth } = useAuth();
-  const userId = auth.userId;;
+  const userId = auth.userId;
   const axiosPrivate = useAxiosPrivate();
 
   // This variable is used for the redirection
@@ -41,13 +41,13 @@ function ProtectedRouteCart() {
 
             console.log('<LOG REACT> :: ACCOUNT VERIFIED');
             axiosInstance
-            .get(`users/${userId}/cart/items/`)
+            .get(`users/${userId}/cart/`)
             .then((res) => {
                 // cart exists
                 setExistsURL(true);
                 setCart(res.data);
-                console.log('<LOG REACT> :: SHOPPING CART RESPONSE')
-                console.log(res.data);
+                console.log('<LOG REACT> :: CART')
+                console.group(cart)
             })
             .catch((error) => {
               alert('ADD A BOX!');

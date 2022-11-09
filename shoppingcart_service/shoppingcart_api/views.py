@@ -1,3 +1,4 @@
+from itsdangerous import Serializer
 from .models import *
 from .serializers import *
 from rest_framework import viewsets, status
@@ -23,6 +24,11 @@ class CartView(viewsets.ViewSet):
         cart.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def get_cart(self, request, user_id=None):  # GET /api/users/<int:user_id>/cart/
+        cart = Cart.objects.get(user=user_id);
+        serializer = CartSerializer(cart)
+        return Response(serializer.data);
+
 class CartItemView(viewsets.ViewSet):
 
     def list_cart_items(self, request, user_id=None):   # GET /api/users/<int:user_id>/cart/items/
@@ -37,10 +43,6 @@ class CartItemView(viewsets.ViewSet):
 
     def add_box(self, request, user_id=None):   # PUT /api/users/<int:user_id>/cart/items/
 
-#        cart = Cart.objects.get(user=user_id)
-#        box_size = request.size;
-#        box_insertion = request.insertion;
-#        box_object = Box.objects.get(insertion=box_insertion, size=box_size)
         try:
             shopping_cart = Cart.objects.get(user=user_id);
         except:
@@ -51,7 +53,9 @@ class CartItemView(viewsets.ViewSet):
 
             serializer = CartItemSerializer(data={
                 'cart': shopping_cart.pk,
+                'name': request.data['name'],
                 'size': request.data['size'],
+                'weight': request.data['weight'],
                 'price': request.data['price']
             })
 
