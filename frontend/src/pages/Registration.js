@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-
 import axiosInstance from "../api/axiosUsers";
+
+import useAuth from "../hooks/useAuth";
 
 function Registration(props) {
   /**
@@ -11,7 +12,7 @@ function Registration(props) {
 
   const PSW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const initialFormData = Object.freeze({
-    name: "",
+    account_type: "",
     email: "",
     password: "",
     confirmPsw: "",
@@ -27,6 +28,12 @@ function Registration(props) {
 
   // This variable is used for the redirection
   const navigate = useNavigate();
+
+  //Update autentication
+  const { setAuth } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
 
   /**
    ** FUNCTIONS
@@ -77,10 +84,44 @@ function Registration(props) {
           name: formData.name,
           email: formData.email,
           password: formData.password,
+          account_type: formData.account_type
         })
         .then(() => {
-          // If the submission was successful
-          navigate("/");
+          // If the submission was successful automatically log in PORCO DIO
+          axiosInstance
+          .post("login/", {
+            email: formData.email,
+            password: formData.password,
+          })
+          .then((res) => {
+            console.log("AutoLogin")
+            let userId = res.data.user_id;
+            let accountType = res.data.account_type;
+
+            // Generate JWT Token
+            axiosInstance
+              .post("token/", {
+                email: formData.email,
+                password: formData.password,
+              })
+              .then((res) => {
+                // Login successfully
+                const accessToken = res.data.access;
+                localStorage.setItem("refresh_token", res.data.refresh);
+
+                axiosInstance.defaults.headers[
+                  "Authorization"
+                ] = `JWT ${accessToken}`;
+
+                setAuth({ userId, accountType, accessToken });
+
+                navigate(from, { replace: true });
+              })
+          })
+          .catch((error) => {
+            return error.response;
+          });
+          // navigate("/");
         })
         .catch((error) => {
           const response = error.response;
@@ -150,6 +191,29 @@ function Registration(props) {
                               placeholder="Name"
                               value={formData.name}
                               name="name"
+                              onChange={(event) => {
+                                handleChange(event);
+                              }}
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center mb-4">
+                          <i className="fas fa-user fa-lg me-3 fa-fw"></i>
+                          <div className="form-group flex-fill mb-0">
+                            <label className="form-label" htmlFor="account_type">
+                              TYPE
+                            </label>
+
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="account_type"
+                              
+                              placeholder="Account_type"
+                              value={formData.account_type}
+                              name="account_type"
                               onChange={(event) => {
                                 handleChange(event);
                               }}

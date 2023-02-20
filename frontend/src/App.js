@@ -1,32 +1,45 @@
 import React from "react";
 // For managing the routing
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NotFound from "./pages/NotFound";
+import SharedLayout from "./components/SharedLayout";
+import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
 
+import Home from "./pages/Home";
+// Import delle insertions
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
 import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
-import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
-import SharedLayout from "./components/SharedLayout";
-import ProtectedRouteInsertion from "./components/ProtectedRouteInsertion";
+// Import dell'user profile
 import Registration from "./pages/Registration";
-import FarmerProfile from "./pages/FarmerProfile";
-import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
-import SeasonsCalendar from "./components/SeasonsCalendar";
 import useAuth from "./hooks/useAuth";
+import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE"
+// User advanced operation
+import FarmerUpdate from "./pages/FarmerUpdate";
+import RiderUpdate from "./pages/RiderUpdate";
+import UserProfile from "./pages/UserProfile";
+import FarmerProfile from "./pages/FarmerProfile";
+import RiderProfile from "./pages/RiderProfile";
+// Import carrello + pagamenti
+import ShoppingCart from "./pages/ShoppingCart";
+import OrdersMainPage from "./pages/OrdersMainPage";
+import TempPayPage from "./pages/TempPayPage";
+
+
+import SeasonsCalendar from "./components/SeasonsCalendar";
 
 function App(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const isLoggedIn = auth?.userId ? true : false;
 
-  console.log("APP", auth);
-  console.log("LOG", isLoggedIn);
-  console.log("APPTOKEN", auth?.accessToken);
+  //console.log("APP", auth);
+  //console.log("LOG", isLoggedIn);
+  //console.log("APPTOKEN", auth?.accessToken);
 
   return (
     <div>
@@ -39,7 +52,7 @@ function App(props) {
               <Route index element={<Home />} />
               {/* For Insertions service */}
               <Route path="calendar/" exact element={<SeasonsCalendar />} />
-              <Route path="insertions/" element={<Insertions />} />
+              <Route path="insertions/" exact element={<Insertions />} />
               <Route
                 path="insertions/new/"
                 exact
@@ -70,9 +83,18 @@ function App(props) {
                 </Route>
               )}
 
+              {/* Temp Page for testing */ }
+              <Route path="user/profile/payments" exact element = {<TempPayPage />} />
               {/* You can access these components only if you are logged in */}
-              <Route element={<RequiredAuth />}>
+              <Route element={<RequiredAuthNOROLE  />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
+                <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
+                <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />
+                <Route path="farmer/profile" exact element={<FarmerProfile />} />
+                <Route path="rider/profile" exact element={<RiderProfile />} />
+                <Route path="user/profile/orders" exact element={<OrdersMainPage />} />
+                {/* Access to personal shopping cart */}
+                <Route path="cart/" exact element={<ShoppingCart />} />
               </Route>
             </Route>
 

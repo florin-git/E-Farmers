@@ -74,6 +74,27 @@ services:
     depends_on:
       - db
 
+  subscription_service:
+    build:
+      context: .
+      dockerfile: ./subscription_service/Dockerfile
+    image: subscription_service:v1.0
+    container_name: subscription_service
+    command: sh -c "
+      python3 wait-for-service.py rabbitmq 5672 &&
+      flask init-db &&
+      flask restore-rabbitmq &&
+      flask run --host=0.0.0.0"
+    volumes:
+      - subscription-data:/usr/src/app/instance
+    ports:
+      - "5000:5000"
+    networks:
+      - frontend-net
+      - subscription-net
+    depends_on:
+      - rabbitmq
+
   db:
     image: library/postgres
     container_name: db
@@ -91,6 +112,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: on-failure
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - subscription-net
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
 volumes:
   postgres-data:
     driver: local
@@ -98,8 +131,12 @@ volumes:
     driver: local
   subscription-data:
     driver: local
+  rabbitmq-data:
+    driver: local
 
 networks:
+  subscription-net:
+    driver: bridge
   frontend-net:
     driver: bridge
   backend-net:

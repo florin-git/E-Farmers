@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInsertions";
 import { Link } from "react-router-dom";
 
+
+
 function Home(props) {
   const [insertions, setInsertions] = useState([]);
 
