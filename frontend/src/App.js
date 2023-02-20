@@ -73,7 +73,7 @@ function App(props) {
                 exact
                 element={<AddBoxes />}
               />
-              <Route path="farmer/profile/" exact element={<FarmerProfile />} />
+              <Route path="farmer/profile/:farmer_id" exact element={<FarmerProfile />} />
 
               {/* For Users service */}
               {!isLoggedIn && (
