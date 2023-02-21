@@ -3,7 +3,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
-import axiosInstance from "../api/axiosInsertions";
+
+import axiosUsers from "../api/axiosUsers";
+import axiosInsertions from "../api/axiosInsertions";
+import axiosSubscription from "../api/axiosSubscription";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -53,7 +56,7 @@ function PublishInsertion(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
-
+  const [farmerInfo, setFarmerInfo] = useState([]);
 
   /**
    ** FUNCTIONS
@@ -145,6 +148,25 @@ function PublishInsertion(props) {
     return valid;
   }
 
+
+  useEffect(() => {
+    /**
+     * Retrieve the farmer's info
+     */
+
+    (async () => {
+      await axiosUsers
+        .get(`farmers/${userId}/`)
+        .then((res) => {
+          setFarmerInfo(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    })();
+  }, [userId]);
+
+
   // On submit
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -165,11 +187,16 @@ function PublishInsertion(props) {
       /**
        * Create new insertion through API call
        */
-      await axiosInstance
+      await axiosInsertions
         .post("insertions/", form_data, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
+          // Send message on the RabbitMQ exchange
+          axiosSubscription.post(`farmer/${userId}/`, {
+            message: `${userId}-New insertion from ${farmerInfo.name} ${farmerInfo.last_name}`,
+          });
+
           // If the submission was successful
           navigate("/insertions");
         })

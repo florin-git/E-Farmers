@@ -18,16 +18,17 @@ const usePeriodicalAPICall = () => {
     await axiosInstance
       .get(`customer/${userId}/`)
       .then((res) => {
-
         // Store the notifications in the session storage
         if (res.data?.length > 0) {
           if ((currentNotification === "") | (currentNotification === null)) {
             sessionStorage.setItem("msg", res.data);
-          } else
+          } else{
+            console.log(res.data)
             sessionStorage.setItem(
               "msg",
               currentNotification + ", " + res.data
             );
+          }
         }
       })
       .catch((error) => {

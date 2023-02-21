@@ -142,8 +142,7 @@ class UsersView(viewsets.ViewSet):
 
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
-        print(user_serializer.data)
-
+        
         return Response({
             'user_id': user_serializer.data['id'],
             'name': user_serializer.data['name'],

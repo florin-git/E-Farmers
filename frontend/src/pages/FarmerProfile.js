@@ -3,7 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-import axiosInstance from "../api/axiosUsers";
+import axiosUsers from "../api/axiosUsers";
+import axiosSubscription from "../api/axiosSubscription";
+
+import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/FarmerProfile.css";
 
@@ -11,9 +14,12 @@ const star = <FontAwesomeIcon icon={faStar} style={{ color: "#28a745" }} />;
 const edit = <FontAwesomeIcon icon={faEdit} />;
 
 function FarmerProfile(props) {
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  const userId = auth.userId;
+
   // Retrieve the id from the URL
   const { farmer_id } = useParams();
-
   const [farmerInfo, setFarmerInfo] = useState([]);
 
   /**
@@ -22,10 +28,11 @@ function FarmerProfile(props) {
 
   useEffect(() => {
     /**
-     * Retrieve the boxes of this insertion from backend
+     * Retrieve the farmer's info
      */
+
     (async () => {
-      await axiosInstance
+      await axiosUsers
         .get(`farmers/${farmer_id}/`)
         .then((res) => {
           setFarmerInfo(res.data);
@@ -35,6 +42,19 @@ function FarmerProfile(props) {
         });
     })();
   }, [farmer_id]);
+
+  const handleSubscribe = (event) => {
+    axiosSubscription
+      .put(`customer/${userId}/`, {
+        farmer_id: farmer_id,
+      })
+      .then((res) => {
+        console.log("You are subscribed");
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
 
   return (
     <div className="container bootstrap snippets bootdey">
@@ -54,10 +74,19 @@ function FarmerProfile(props) {
 
             <ul className="nav-pills nav-stacked">
               <li className="active">
-                <a href="#">
+                {/* <a href="#">
                   {" "}
-                  <i className="fa fa-user"></i> Profile
-                </a>
+                  <i className="fa fa-user"></i> Subscribe
+                </a> */}
+                <button
+                  type="button"
+                  // id={insertion.id}
+                  name="delete"
+                  onClick={(event) => handleSubscribe(event)}
+                  className="btn btn-outline-warning"
+                >
+                  Subscribe
+                </button>
               </li>
               <li>
                 <Link className="" to={"/insertions/new/"} replace>

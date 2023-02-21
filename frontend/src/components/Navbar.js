@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -26,26 +26,73 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = null // 10s
-    
+  const delay = null; // 10s
+
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification
-   * from the farmers the user is subscribed to 
+   * from the farmers the user is subscribed to
    */
   const getNotifications = usePeriodicalAPICall();
 
   // This function is called every 'delay' interval if the user is logged in
-  useInterval(async () => {
-    await getNotifications();
-    const currentNotification = sessionStorage.getItem("msg");
-    if (currentNotification?.length > 0)
-      setNotifications(currentNotification.split(","));
-  }, isLoggedIn ? delay : null);
+  useInterval(
+    async () => {
+      await getNotifications();
+      const currentNotification = sessionStorage.getItem("msg");
+      if (currentNotification?.length > 0)
+        setNotifications(currentNotification.split(","));
+    },
+    isLoggedIn ? delay : null
+  );
 
   const deleteNotifications = async () => {
     setNotifications([]);
     sessionStorage.setItem("msg", "");
   };
+
+  // const deleteNotification = (idx) => {
+
+    
+  //   const a =  notifications.filter((prevNotification, preIdx) => preIdx !== idx)
+    
+  //   console.log(notifications)
+
+
+  //   // setNotifications([]);
+  //   // Keep all the notifications except the one visited
+  //   // setNotifications(
+  //   //   notifications.filter((prevNotification, preIdx) => preIdx !== idx)
+  //   // );
+
+  //   // sessionStorage.setItem(
+  //   //   "msg",
+  //   //   notifications.filter((prevNotification, preIdx) => preIdx !== idx)
+  //   // );
+  // };
+
+  const notifications_array = notifications.map((notification, idx) => {
+    const farmerId = notification.split("-")[0];
+    const message = notification.split("-")[1];
+
+    // console.log(idx)
+
+    return (
+      <li className="nav-item">
+        <button
+          className="no-button"
+          // onClick={deleteNotification(idx)}
+        >
+          <Link
+            className="nav-link"
+            aria-current="page"
+            to={`/farmer/profile/${farmerId}/`}
+          >
+            {message}
+          </Link>
+        </button>
+      </li>
+    );
+  });
 
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light">
@@ -82,7 +129,7 @@ function Navbar(props) {
               </Link>
             </li>
           </ul>
-          <ul className="navbar-nav navabr-right">
+          <ul className="navbar-nav navbar-right">
             {/*
             <li className="nav-item">
               <Link className="btn btn-primary mx-md-2" to={"insertions/new/"}>
@@ -126,7 +173,8 @@ function Navbar(props) {
                     className="dropdown-menu notification-dropdown"
                     aria-labelledby="navbarDropdown"
                   >
-                    <li>
+                    {notifications_array}
+                    {/* <li>
                       <a className="dropdown-item" href="#">
                         Ciccio publishes a new box
                       </a>
@@ -135,7 +183,7 @@ function Navbar(props) {
                       <a className="dropdown-item" href="#">
                         Another action
                       </a>
-                    </li>
+                    </li> */}
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
@@ -158,10 +206,7 @@ function Navbar(props) {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link
-                    className="btn btn-primary mx-md-2"
-                    to={"cart/"}
-                  >
+                  <Link className="btn btn-primary mx-md-2" to={"cart/"}>
                     Cart
                   </Link>
                 </li>
@@ -181,14 +226,10 @@ function Navbar(props) {
 
 export default Navbar;
 
-
-
-
 <div className="card mb-3">
   <div className="row g-0">
     <div className="col-md-8">
-      <div className="card-body p-4">
-      </div>
+      <div className="card-body p-4"></div>
     </div>
   </div>
-</div>
+</div>;

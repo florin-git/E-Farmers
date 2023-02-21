@@ -57,7 +57,7 @@ function UserProfile(props) {
         {extraInfo.farm_location}{" "}
       </p>
       <div>
-        <Link className="btn btn-warning" to={`/farmer/profile/${userId}`} replace >
+        <Link className="btn btn-warning" to={`/farmer/profile/${userId}/`} replace >
           My Personal Page
         </Link>
       </div>
