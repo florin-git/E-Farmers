@@ -20,8 +20,3 @@
 .salmon {
   color: #fa5b4f;
 }
-
-.no-button {
-  all: unset;
-  cursor: pointer;
-}

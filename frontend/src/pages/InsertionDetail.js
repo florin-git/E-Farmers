@@ -67,15 +67,13 @@ function InsertionDetail({ insertion }) {
   }, [farmerId]);
 
 
-  console.log(farmerInfo)
-
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
     box_sizes.push(box.size);
 
     /**
      * With the notation ...box are passed
-     * all the attributes of box to the Componenet Box
+     * all the attributes of box to the Component Box
      */
     return <Box key={box.id} {...box} />;
   });

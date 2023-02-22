@@ -17,7 +17,7 @@ import Login from "./pages/Login";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import useAuth from "./hooks/useAuth";
-import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE"
+import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE";
 // User advanced operation
 import FarmerUpdate from "./pages/FarmerUpdate";
 import RiderUpdate from "./pages/RiderUpdate";
@@ -29,7 +29,6 @@ import ShoppingCart from "./pages/ShoppingCart";
 import OrdersMainPage from "./pages/OrdersMainPage";
 import TempPayPage from "./pages/TempPayPage";
 
-
 import SeasonsCalendar from "./components/SeasonsCalendar";
 
 function App(props) {
@@ -37,9 +36,12 @@ function App(props) {
   const { auth } = useAuth();
   const isLoggedIn = auth?.userId ? true : false;
 
-  //console.log("APP", auth);
-  //console.log("LOG", isLoggedIn);
-  //console.log("APPTOKEN", auth?.accessToken);
+  /**
+   * User Indices:
+   * - 0: Generic user
+   * - 1: Farmer
+   * - 2: Rider
+   */
 
   return (
     <div>
@@ -47,22 +49,13 @@ function App(props) {
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             {/* Whenever you are, if you are logged in
-                then you will remain logged in after reloding the page */}
+                then you will remain logged in after reloading the page */}
             <Route element={<PersistLogin />}>
               <Route index element={<Home />} />
               {/* For Insertions service */}
               <Route path="calendar/" exact element={<SeasonsCalendar />} />
               <Route path="insertions/" exact element={<Insertions />} />
-              <Route
-                path="insertions/new/"
-                exact
-                element={<PublishInsertion />}
-              />
-              <Route
-                path="insertions/:insertion_id/edit/"
-                exact
-                element={<EditInsertion />}
-              />
+
               <Route
                 path="insertions/:insertion_id/"
                 exact
@@ -73,7 +66,11 @@ function App(props) {
                 exact
                 element={<AddBoxes />}
               />
-              <Route path="farmer/profile/:farmer_id/" exact element={<FarmerProfile />} />
+              <Route
+                path="farmer/profile/:farmer_id/"
+                exact
+                element={<FarmerProfile />}
+              />
 
               {/* For Users service */}
               {!isLoggedIn && (
@@ -83,18 +80,52 @@ function App(props) {
                 </Route>
               )}
 
-              {/* Temp Page for testing */ }
-              <Route path="user/profile/payments" exact element = {<TempPayPage />} />
+              {/* Temp Page for testing */}
+              <Route
+                path="user/profile/payments"
+                exact
+                element={<TempPayPage />}
+              />
               {/* You can access these components only if you are logged in */}
-              <Route element={<RequiredAuthNOROLE  />}>
+              <Route element={<RequiredAuth allowedRoles={[0, 1, 2]} />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
-                <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
-                <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />
-                <Route path="farmer/profile" exact element={<FarmerProfile />} />
+                <Route
+                  path="user/profile/farmer_update"
+                  exact
+                  element={<FarmerUpdate />}
+                />
+                <Route
+                  path="user/profile/rider_update"
+                  exact
+                  element={<RiderUpdate />}
+                />
+                <Route
+                  path="farmer/profile"
+                  exact
+                  element={<FarmerProfile />}
+                />
                 <Route path="rider/profile" exact element={<RiderProfile />} />
-                <Route path="user/profile/orders" exact element={<OrdersMainPage />} />
+                <Route
+                  path="user/profile/orders"
+                  exact
+                  element={<OrdersMainPage />}
+                />
                 {/* Access to personal shopping cart */}
                 <Route path="cart/" exact element={<ShoppingCart />} />
+
+                {/* You can modify insertions only if you are a Farmer */}
+                <Route element={<RequiredAuth allowedRoles={[1]} />}>
+                  <Route
+                    path="insertions/new/"
+                    exact
+                    element={<PublishInsertion />}
+                  />
+                  <Route
+                    path="insertions/:insertion_id/edit/"
+                    exact
+                    element={<EditInsertion />}
+                  />
+                </Route>
               </Route>
             </Route>
 

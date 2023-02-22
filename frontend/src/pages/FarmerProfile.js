@@ -30,7 +30,6 @@ function FarmerProfile(props) {
     /**
      * Retrieve the farmer's info
      */
-
     (async () => {
       await axiosUsers
         .get(`farmers/${farmer_id}/`)

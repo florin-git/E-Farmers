@@ -56,7 +56,6 @@ function PublishInsertion(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
-  const [farmerInfo, setFarmerInfo] = useState([]);
 
   /**
    ** FUNCTIONS
@@ -148,25 +147,6 @@ function PublishInsertion(props) {
     return valid;
   }
 
-
-  useEffect(() => {
-    /**
-     * Retrieve the farmer's info
-     */
-
-    (async () => {
-      await axiosUsers
-        .get(`farmers/${userId}/`)
-        .then((res) => {
-          setFarmerInfo(res.data);
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-    })();
-  }, [userId]);
-
-
   // On submit
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -192,10 +172,26 @@ function PublishInsertion(props) {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
-          // Send message on the RabbitMQ exchange
-          axiosSubscription.post(`farmer/${userId}/`, {
-            message: `${userId}-New insertion from ${farmerInfo.name} ${farmerInfo.last_name}`,
-          });
+          // Retrieve the farmer's info
+          axiosUsers
+            .get(`farmers/${userId}/`)
+            .then((res) => {
+              // setFarmerInfo(res.data);
+
+              const farmerInfo = res.data;
+
+              /**
+               * Send message on the RabbitMQ exchange.
+               * The message is composed by the user id and
+               *  the text of the message separated by '-'.
+               */
+              axiosSubscription.post(`farmer/${userId}/`, {
+                message: `${userId}-New insertion by ${farmerInfo.name} ${farmerInfo.last_name}`,
+              });
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
 
           // If the submission was successful
           navigate("/insertions");

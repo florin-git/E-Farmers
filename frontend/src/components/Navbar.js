@@ -12,8 +12,9 @@ import usePeriodicalAPICall from "../hooks/usePeriodicalAPICall";
 function Navbar(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
-  // If the userId exixts, then true; else false
+  // If the userId exists, then true; else false
   const isLoggedIn = auth?.userId ? true : false;
+  const isFarmer = auth?.accountType === 1;
 
   // This variable is used for the redirection
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = null; // 10s
+  const delay = 100000; // 100s
 
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification
@@ -50,46 +51,31 @@ function Navbar(props) {
     sessionStorage.setItem("msg", "");
   };
 
-  // const deleteNotification = (idx) => {
-
-    
-  //   const a =  notifications.filter((prevNotification, preIdx) => preIdx !== idx)
-    
-  //   console.log(notifications)
-
-
-  //   // setNotifications([]);
-  //   // Keep all the notifications except the one visited
-  //   // setNotifications(
-  //   //   notifications.filter((prevNotification, preIdx) => preIdx !== idx)
-  //   // );
-
-  //   // sessionStorage.setItem(
-  //   //   "msg",
-  //   //   notifications.filter((prevNotification, preIdx) => preIdx !== idx)
-  //   // );
-  // };
+  function deleteNotification(idx) {
+    // Keep all the notifications except the one visited
+    const newNotifications = notifications.filter(
+      (prevNotification, preIdx) => preIdx !== idx
+    );
+    setNotifications(newNotifications);
+    sessionStorage.setItem("msg", newNotifications);
+  }
 
   const notifications_array = notifications.map((notification, idx) => {
     const farmerId = notification.split("-")[0];
     const message = notification.split("-")[1];
 
-    // console.log(idx)
-
     return (
       <li className="nav-item">
-        <button
-          className="no-button"
-          // onClick={deleteNotification(idx)}
+        <Link
+          className="nav-link"
+          aria-current="page"
+          to={`/farmer/profile/${farmerId}/`}
+          onClick={() => {
+            deleteNotification(idx);
+          }}
         >
-          <Link
-            className="nav-link"
-            aria-current="page"
-            to={`/farmer/profile/${farmerId}/`}
-          >
-            {message}
-          </Link>
-        </button>
+          {message}
+        </Link>
       </li>
     );
   });
@@ -130,12 +116,11 @@ function Navbar(props) {
             </li>
           </ul>
           <ul className="navbar-nav navbar-right">
-            {/*
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="btn btn-primary mx-md-2" to={"insertions/new/"}>
                 Publish an Insertion
               </Link>
-            </li>*/}
+            </li> */}
 
             {/* If you are NOT logged in, then the Login
               button is displayed */}
@@ -197,6 +182,16 @@ function Navbar(props) {
                     </li>
                   </ul>
                 </li>
+                {isFarmer && (
+                  <li className="nav-item">
+                    <Link
+                      className="btn btn-primary mx-md-2"
+                      to={"insertions/new/"}
+                    >
+                      Publish an Insertion
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link
                     className="btn btn-primary mx-md-2"
