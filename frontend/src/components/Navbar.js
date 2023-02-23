@@ -16,6 +16,8 @@ function Navbar(props) {
   const isLoggedIn = auth?.userId ? true : false;
   const isFarmer = auth?.accountType === 1;
 
+  // console.log()
+
   // This variable is used for the redirection
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ function Navbar(props) {
 
   // Manage notifications
   const [notifications, setNotifications] = useState([]);
-  const delay = 100000; // 100s
+  const delay = 10000; // 100s
 
   /**
    * The 'usePeriodicalAPICall' hook check new publishing notification

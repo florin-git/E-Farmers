@@ -12,7 +12,8 @@ function RiderUpdate(props) {
   });
 
   // Authentication data from context storage
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  console.log(auth)
   const userId = auth.userId;
 
   const axiosPrivate = useAxiosPrivate();
@@ -69,7 +70,10 @@ function RiderUpdate(props) {
                   account_type: type
                 })
                 .then((res) => {
-                  console.log(res.data)
+                  setAuth((prev) => {
+                    // Change accountType to rider
+                    return { ...prev, accountType: type };
+                  });
                   navigate("/user/profile/")
                 })
                 .catch((error)=> {

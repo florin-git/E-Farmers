@@ -17,7 +17,7 @@ import Login from "./pages/Login";
 import RequiredAuth from "./components/RequiredAuth";
 import PersistLogin from "./components/PersistLogin";
 import useAuth from "./hooks/useAuth";
-import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE";
+
 // User advanced operation
 import FarmerUpdate from "./pages/FarmerUpdate";
 import RiderUpdate from "./pages/RiderUpdate";

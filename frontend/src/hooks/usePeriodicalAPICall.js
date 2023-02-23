@@ -20,12 +20,12 @@ const usePeriodicalAPICall = () => {
         // Store the notifications in the session storage
         if (res.data?.length > 0) {
           // At the beginning, the notification is undefined
-          // or the key "msg" exists but there is no message
-          if (
-            (currentNotification === undefined) |
-            (currentNotification[0] === "")
-          ) {
-            sessionStorage.setItem("msg", res.data);
+          if (currentNotification === undefined) {
+            sessionStorage.setItem("msg", res.data[0]);
+          }
+          // if the key "msg" exists but there is no message
+          else if (currentNotification[0] === "") {
+            sessionStorage.setItem("msg", res.data[0]);
           }
           // When there are already other messages
           else {

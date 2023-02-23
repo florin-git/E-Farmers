@@ -133,11 +133,11 @@ class UsersView(viewsets.ViewSet):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_farmer(self, request, user_id=None):  # GET /api/farmer/<int : user_id>/
+    def get_farmer(self, request, user_id=None):  # GET /api/farmers/<int:user_id>/
 
         farmer = Farmer.objects.get(ext_user_id=user_id)
         farmer_serializer = FarmerSerializer(farmer)
-        
+
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
         
