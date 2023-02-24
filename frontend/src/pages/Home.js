@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInsertions";
 import { Link } from "react-router-dom";
+import ListInsertions from "../components/ListInsertions";
 
 function Home(props) {
   const [insertions, setInsertions] = useState([]);
@@ -18,7 +19,7 @@ function Home(props) {
        */
       await axiosInstance
         .get("insertions/", {
-          params: { expiring: "5" },
+          params: { expiring: "4" },
         })
         .then((res) => {
           setInsertions(res.data);

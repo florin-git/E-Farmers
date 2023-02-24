@@ -4,16 +4,18 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
 import axiosInstance from "../api/axiosInsertions";
+import useAuth from "../hooks/useAuth";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
-function FarmerInsertions({ farmerId }) {
+function ListInsertions({ farmerUserId, searchString }) {
   /**
    ** VARIABLES
    */
-  const [insertions, setInsertions] = useState([]);
-  const [image, setImage] = useState();
 
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  const userId = auth.userId;
+
+  const [insertions, setInsertions] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   // It will contain the id of the deleted insertion
@@ -34,7 +36,10 @@ function FarmerInsertions({ farmerId }) {
        */
       await axiosInstance
         .get("insertions/", {
-          params: { "farmer": farmerId }
+          params: {
+            farmer: farmerUserId,
+            search: searchString,
+          },
         })
         .then((res) => {
           setInsertions(res.data);
@@ -43,8 +48,8 @@ function FarmerInsertions({ farmerId }) {
           return error.response;
         });
     })();
-  }, [idToDelete, farmerId]); // Whenever you delete an insertion, the fetch is repeated
-  
+  }, [idToDelete, farmerUserId, searchString]); // Whenever you delete an insertion, the fetch is repeated
+
   // Manage Modal
   const handleCloseModal = () => setShowModal(false);
 
@@ -103,18 +108,21 @@ function FarmerInsertions({ farmerId }) {
                       View
                     </Link>
                   </div>
-
-                  <div className="col-sm">
-                    <button
-                      type="button"
-                      id={insertion.id}
-                      name="delete"
-                      onClick={(event) => handleShowModal(event)}
-                      className="btn btn-outline-danger"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  
+                  {/* Show delete button only if you were the published or the insertion */}
+                  {userId == insertion.farmer && (
+                    <div className="col-sm">
+                      <button
+                        type="button"
+                        id={insertion.id}
+                        name="delete"
+                        onClick={(event) => handleShowModal(event)}
+                        className="btn btn-outline-danger"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -150,4 +158,4 @@ function FarmerInsertions({ farmerId }) {
   );
 }
 
-export default FarmerInsertions;
+export default ListInsertions;

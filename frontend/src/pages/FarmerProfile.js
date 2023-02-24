@@ -3,13 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
+import ListInsertions from "../components/ListInsertions";
+
 import axiosUsers from "../api/axiosUsers";
 import axiosSubscription from "../api/axiosSubscription";
 
 import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/FarmerProfile.css";
-import FarmerInsertions from "../components/FarmerInsertions";
 
 const star = <FontAwesomeIcon icon={faStar} style={{ color: "#28a745" }} />;
 const edit = <FontAwesomeIcon icon={faEdit} />;
@@ -20,7 +21,7 @@ function FarmerProfile(props) {
   const userId = auth.userId;
 
   // Retrieve the id from the URL
-  const { farmer_id } = useParams();
+  const farmerUserId = useParams()?.farmer_id;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
   /**
@@ -33,7 +34,7 @@ function FarmerProfile(props) {
      */
     (async () => {
       await axiosUsers
-        .get(`farmers/${farmer_id}/`)
+        .get(`farmers/${farmerUserId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
         })
@@ -41,12 +42,12 @@ function FarmerProfile(props) {
           console.log(error.response);
         });
     })();
-  }, [farmer_id]);
+  }, [farmerUserId]);
 
   const handleSubscribe = (event) => {
     axiosSubscription
       .put(`customer/${userId}/`, {
-        farmer_id: farmer_id,
+        farmer_id: farmerUserId,
       })
       .then((res) => {
         console.log("You are subscribed");
@@ -87,13 +88,6 @@ function FarmerProfile(props) {
                 >
                   Subscribe
                 </button>
-              </li>
-              <li>
-                <Link className="" to={`/insertions?farmer=${farmer_id}`} replace>
-                  <i className="fa fa-edit"></i>
-                  Insertions
-                  <span className="label label-warning pull-right r-activity"></span>
-                </Link>
               </li>
               <li>
                 <Link className="" to={"/insertions/new/"} replace>
@@ -162,7 +156,7 @@ function FarmerProfile(props) {
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <h5 className="mb-0">Insertions</h5>
                 </div>
-                <FarmerInsertions farmerId={farmer_id}/>
+                <ListInsertions farmerUserId={farmerUserId} />
               </div>
 
               {/*              <div className="col-md-6">

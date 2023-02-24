@@ -77,6 +77,8 @@ class InsertionsView(viewsets.ViewSet):
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
+        today = date.today()
+        
         if insertion.expiration_date < today:
             insertion.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
