@@ -9,6 +9,7 @@ import axiosSubscription from "../api/axiosSubscription";
 import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/FarmerProfile.css";
+import FarmerInsertions from "../components/FarmerInsertions";
 
 const star = <FontAwesomeIcon icon={faStar} style={{ color: "#28a745" }} />;
 const edit = <FontAwesomeIcon icon={faEdit} />;
@@ -88,6 +89,13 @@ function FarmerProfile(props) {
                 </button>
               </li>
               <li>
+                <Link className="" to={`/insertions?farmer=${farmer_id}`} replace>
+                  <i className="fa fa-edit"></i>
+                  Insertions
+                  <span className="label label-warning pull-right r-activity"></span>
+                </Link>
+              </li>
+              <li>
                 <Link className="" to={"/insertions/new/"} replace>
                   <i className="fa fa-edit"></i>
                   Publish an Insertion
@@ -152,41 +160,9 @@ function FarmerProfile(props) {
             <div className="row">
               <div className="py-4 px-4">
                 <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h5 className="mb-0">Recent Products</h5>
-                  <a href="#" className="btn btn-link text-muted">
-                    Show all
-                  </a>
+                  <h5 className="mb-0">Insertions</h5>
                 </div>
-                <div className="row">
-                  <div className="col-lg-6 mb-2 pr-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 mb-2 pl-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1493571716545-b559a19edd14?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 pr-lg-1 mb-2">
-                    <img
-                      src="https://images.unsplash.com/photo-1453791052107-5c843da62d97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 pl-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1475724017904-b712052c192a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                </div>
+                <FarmerInsertions farmerId={farmer_id}/>
               </div>
 
               {/*              <div className="col-md-6">
