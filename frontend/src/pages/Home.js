@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInsertions";
 import { Link } from "react-router-dom";
 
-
-
 function Home(props) {
   const [insertions, setInsertions] = useState([]);
 
@@ -30,8 +28,6 @@ function Home(props) {
         });
     })();
   }, []); // Whenever you delete an insertion, the fetch is repeated
-
-  console.log(insertions);
 
   const insertions_array = insertions.map((insertion) => {
     // `/image/?${date.getMinutes()}` in order to avoid caching of the images

@@ -15,7 +15,7 @@ function FarmerUpdate(props) {
   });
 
   // Authentication data from context storage
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const userId = auth.userId;
   const axiosPrivate = useAxiosPrivate();
 
@@ -63,7 +63,10 @@ function FarmerUpdate(props) {
                   account_type: type
                 })
                 .then((res) => {
-                  console.log(res.data)
+                  setAuth((prev) => {
+                    // Change accountType to farmer
+                    return { ...prev, accountType: type };
+                  });
                   navigate("/user/profile/")
                 })
                 .catch((error)=> {

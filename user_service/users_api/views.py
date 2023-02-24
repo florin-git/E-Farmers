@@ -133,17 +133,14 @@ class UsersView(viewsets.ViewSet):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_farmer(self, request, user_id=None):  # GET /api/farmer/<int : user_id>/
+    def get_farmer(self, request, user_id=None):  # GET /api/farmers/<int:user_id>/
 
         farmer = Farmer.objects.get(ext_user_id=user_id)
         farmer_serializer = FarmerSerializer(farmer)
 
-        user_id = farmer_serializer.data['id']
-
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
-        print(user_serializer.data)
-
+        
         return Response({
             'user_id': user_serializer.data['id'],
             'name': user_serializer.data['name'],
@@ -163,7 +160,6 @@ class UsersView(viewsets.ViewSet):
         if review_serializer.is_valid(raise_exception=True):
             # review_serializer.save()
             review_serializer.save(ext_farmer=farmer)
-            print(farmer)
             return Response(review_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print("ERROR HERE")

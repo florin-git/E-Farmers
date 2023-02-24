@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from "../components/Box";
 
-import axiosInstance from "../api/axiosInsertions";
+import axiosInsertions from "../api/axiosInsertions";
+import axiosUsers from "../api/axiosUsers";
+
 import useAuth from "../hooks/useAuth";
 
 // The component receives the insertion's detail from ProtectedRouteInsertion
@@ -24,6 +26,10 @@ function InsertionDetail({ insertion }) {
   const { auth } = useAuth();
   const userId = auth.userId;
 
+  // Farmer info
+  const farmerId = insertion.farmer;
+  const [farmerInfo, setFarmerInfo] = useState([]);
+
   /**
    ** FUNCTIONS
    */
@@ -33,7 +39,7 @@ function InsertionDetail({ insertion }) {
      * Retrieve the boxes of this insertion from backend
      */
     (async () => {
-      await axiosInstance
+      await axiosInsertions
         .get(`insertions/${insertion_id}/boxes/`)
         .then((res) => {
           setBoxes(res.data);
@@ -44,13 +50,30 @@ function InsertionDetail({ insertion }) {
     })();
   }, [insertion_id]);
 
+  useEffect(() => {
+    /**
+     * Retrieve the farmer's info
+     */
+    (async () => {
+      await axiosUsers
+        .get(`farmers/${farmerId}/`)
+        .then((res) => {
+          setFarmerInfo(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    })();
+  }, [farmerId]);
+
+
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
     box_sizes.push(box.size);
 
     /**
      * With the notation ...box are passed
-     * all the attributes of box to the Componenet Box
+     * all the attributes of box to the Component Box
      */
     return <Box key={box.id} {...box} />;
   });
@@ -64,7 +87,7 @@ function InsertionDetail({ insertion }) {
           <div className="col-lg-6">
             <img
               src={
-                axiosInstance.defaults.baseURL +
+                axiosInsertions.defaults.baseURL +
                 "insertions/" +
                 insertion_id +
                 `/image/?${date.getMinutes()}`
@@ -89,7 +112,9 @@ function InsertionDetail({ insertion }) {
             </p>
             <p className="">
               <strong className="orange">Farmer</strong>:{" "}
-              {insertion.farmer}
+              <Link className="" to={`/farmer/profile/${farmerInfo.user_id}`}>
+                {farmerInfo.name} {farmerInfo.last_name}
+              </Link>
             </p>
 
             <hr />
