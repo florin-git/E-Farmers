@@ -93,7 +93,7 @@ function FarmerUpdate(props) {
 
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                        FARMER UPDATE PAG
+                        Farmer Additional Information
                       </p>
 
                       {/* Start Form */}

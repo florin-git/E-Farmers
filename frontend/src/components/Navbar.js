@@ -154,7 +154,7 @@ function Navbar(props) {
                     className="btn btn-primary mx-md-2"
                     to={"user/profile/"}
                   >
-                    Profile
+                    Account
                   </Link>
                 </li>
                 <li className="nav-item">

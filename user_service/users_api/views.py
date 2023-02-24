@@ -56,6 +56,8 @@ class UsersView(viewsets.ViewSet):
             if serializer.errors['email'][0] == "user with this Email already exists.":
                 return Response("Email already used", status=status.HTTP_406_NOT_ACCEPTABLE)
 
+
+
     def user_info(self, request, user_id=None):  # GET /api/users/<int:id>/
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
@@ -89,7 +91,7 @@ class UsersView(viewsets.ViewSet):
 
         # The token was not passed into the header request
         raise PermissionDenied("No token in the header!", code=403)
-
+   
     # POST /api/users/<int:id>/<int:type>
     def user_update(self, request, user_id=None, type=None):
         JWT_authenticator = JWTAuthentication()

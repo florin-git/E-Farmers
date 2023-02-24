@@ -75,7 +75,7 @@ function OrdersMainPage(props) {
 
                             <div>
                                 <button type="button" className="btn btn-primary m-1" variant="primary" onClick={() => setModalShow(true)}>
-                                    SEE PRODUCT INFORMATION
+                                    See Product Information
                                 </button>
                                 <MyModal
                                     show={modalShow}
