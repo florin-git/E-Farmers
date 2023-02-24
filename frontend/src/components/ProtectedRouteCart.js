@@ -38,16 +38,12 @@ function ProtectedRouteCart() {
           user_id: userId,
         })
         .then((res) => {
-
-            console.log('<LOG REACT> :: ACCOUNT VERIFIED');
             axiosInstance
             .get(`users/${userId}/cart/`)
             .then((res) => {
                 // cart exists
                 setExistsURL(true);
                 setCart(res.data);
-                console.log('<LOG REACT> :: CART')
-                console.group(cart)
             })
             .catch((error) => {
               alert('ADD A BOX!');

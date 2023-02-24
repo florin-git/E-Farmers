@@ -22,13 +22,14 @@ function ShoppingCart({ cart }) {
         .then((res) => {
           setBoxes(res.data);
         })
+        .catch((error) => {
+          return error.response;
+        })
     })();
   }, [cart.user]);
 
-  console.log('Number of boxes :: ' + boxes.length);
-
   const boxes_array = boxes.map((box) => {
-    return <CartItem key={box.id} {...box} />
+    return (<CartItem key={box.id} {...box} />);
   })
 
   return (
@@ -50,7 +51,6 @@ function ShoppingCart({ cart }) {
                   </div>
                   {boxes_array}
                 </div>
-              
               </div>
             </div>
           </div>

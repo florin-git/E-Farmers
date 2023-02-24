@@ -64,3 +64,21 @@ class CartItemView(viewsets.ViewSet):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_409_CONFLICT)
+    
+    def remove_box(self, request, user_id=None):    # DELETE /api/users/<int:user_id>/cart/items/
+        try:
+            shopping_cart = Cart.objects.get(user=user_id);
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        print(request.data)
+
+        box = CartItem.objects.get(
+            cart=shopping_cart.user,
+            name=request.data['name'],
+            weight=request.data['weight'],
+            price=request.data['price']
+            )
+            
+        box.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

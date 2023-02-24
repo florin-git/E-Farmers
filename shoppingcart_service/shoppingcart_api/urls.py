@@ -9,6 +9,7 @@ urlpatterns = [
     })),
     path('users/<int:user_id>/cart/items/', CartItemView.as_view({
         'get':'list_cart_items',
-        'put':'add_box'
+        'put':'add_box',
+        'delete':'remove_box'
     }))
 ]
