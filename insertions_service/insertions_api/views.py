@@ -12,10 +12,18 @@ class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
         search_params = request.GET.get('search', '')
         expiring_search = request.GET.get('expiring', '')
+        farmer_param = None
+        try:
+            if(request.GET.get('farmer', '') != ''):
+                farmer_param = int(request.GET.get('farmer', ''))
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
         if expiring_search != "":
             today = date.today()
             insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
             insertions = insertions[:int(expiring_search)]
+        elif farmer_param != None:
+            insertions = Insertion.objects.filter(farmer=farmer_param)
         elif search_params == "":
             insertions = Insertion.objects.all()
         elif search_params == "expiring_products":
@@ -69,6 +77,8 @@ class InsertionsView(viewsets.ViewSet):
 
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
+        today = date.today()
+        
         if insertion.expiration_date < today:
             insertion.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
