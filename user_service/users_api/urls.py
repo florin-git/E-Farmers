@@ -1,12 +1,13 @@
 from django.urls import path
 from .views import *
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 urlpatterns = [
     path('login/', LoginView.as_view()),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('oauth/token/', OAuthTokenObtainPairView.as_view(), name='google_token_obtain_pair'),
+    
     
     # The refresh api will also return a new refresh token, since the previous
     # one is blacklisted
