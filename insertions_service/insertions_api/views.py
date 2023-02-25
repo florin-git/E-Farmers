@@ -137,6 +137,7 @@ class BookingView(viewsets.ViewSet):
     
     def book_product(self, request): # POST /api/booking/
         # Creates a new request
+        print(request.data)
         serializer = RequestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

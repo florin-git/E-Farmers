@@ -23,9 +23,9 @@ class Insertion(models.Model):
     gathering_location = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
-    farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farmer')
+    farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insertion_farmer')
     private = models.BooleanField(default=False)
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='user')
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='insertion_user')
 
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
@@ -35,8 +35,8 @@ class Box(models.Model):
     number_of_available_boxes = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
 
 class Request(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    farmer = models.ForeignKey(Farmer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_user')
+    farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_farmer')
     title = models.CharField(max_length=50)
     comment = models.TextField(blank=True)
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
