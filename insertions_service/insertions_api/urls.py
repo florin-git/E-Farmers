@@ -20,5 +20,19 @@ urlpatterns = [
     path('insertions/<int:insertion_id>/boxes/', BoxesView.as_view({
         'get': 'list_insertion_boxes',
         'post': 'add_boxes'
+    })),
+
+    # Booking
+    path('booking/', BookingView.as_view({
+        'post': 'book_product',
+        'delete': 'cancel_booking'
+    })),
+    
+    path('booking/requests/', BookingView.as_view({
+        'get': 'list_booked_products'
+    })),
+
+    path('booking/inbox/', BookingView.as_view({
+        'get': 'list_requests'
     }))
 ]

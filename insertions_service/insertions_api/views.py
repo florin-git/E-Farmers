@@ -119,3 +119,31 @@ class BoxesView(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+###
+#* Booking
+###
+class BookingView(viewsets.ViewSet):
+    def list_booked_products(self, request): # GET /api/booking/requests/<int:user_id>/
+        # Returns the list of a user's requests (booked products)
+        requests = Request.objects.filter(user=int(request.GET.get('user_id', '')))
+        serializer = RequestSerializer(requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def list_requests(self, request): # GET /api/booking/inbox/<int:farmer_id>/
+        # Returns the list of a farmer's requests received by users
+        list_of_requests = Request.objects.filter(farmer=int(request.GET.get('farmer_id', '')))
+        serializer = RequestSerializer(list_of_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def book_product(self, request): # POST /api/booking/
+        # Creates a new request
+        serializer = RequestSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def cancel_booking(self, request): # GET /api/booking/<int:id>
+        # Deletes a request
+        request_to_be_deleted = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        request_to_be_deleted.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
