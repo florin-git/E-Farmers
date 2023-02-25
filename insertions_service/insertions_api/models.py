@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from insertions_api.box_sizes import *
 
@@ -22,7 +23,9 @@ class Insertion(models.Model):
     gathering_location = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to='images/', blank=True)
     reported = models.BooleanField(default=False)
-    farmer = models.IntegerField(default=-1)
+    farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farmer')
+    private = models.BooleanField(default=False)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='user')
 
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
