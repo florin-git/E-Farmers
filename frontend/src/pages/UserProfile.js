@@ -10,7 +10,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -22,6 +21,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import FormForFarmer from "../components/FormForFarmer";
 import FormForRider from "../components/FormForRider";
+
+
 
 
 // Variable for spawning the advanced Farmer/Rider info 
@@ -77,6 +78,7 @@ function UserProfile(props) {
 
     // Display change account settings
     const [accountType, setaccountType] = useState(0);
+    const [accountTypeFlag, setAccountTypeFlag] = useState(0);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -91,7 +93,7 @@ function UserProfile(props) {
                  */
                 setUserInfo(res.data[0]);
                 setaccountType(res.data[0].account_type);
-                if (accountType === 1 || accountType === 2){
+                if (accountTypeFlag !== 0 ){
                     console.log("Account Type : ",res.data[0].account_type);
                     setExtraInfo(res.data[1]);    
                 }
@@ -100,7 +102,7 @@ function UserProfile(props) {
               console.log(error.response);
             });
         
-    }, [userId, axiosPrivate, location, navigate, ]);
+    }, [userId, axiosPrivate, location, navigate,accountTypeFlag]);
 
     // Function for spawning farmer or rider info for form
     const handleClickOpen = (selectedValue) => {
@@ -109,14 +111,28 @@ function UserProfile(props) {
     };
     const handleClose = () => {
         setOpen(false);
+        if(accountType === 0){
+            axiosPrivate
+                .get(`users/${userId}/`)
+                .then((res) => {
+                    if(res.data[0].account_type === 0);
+                        setAccountTypeFlag(accountType);
+                })
+                .catch((error)=>{
+                    console.log(error.response);
+                });
+        }
     };
+    const closeWithoutSaving = () => {
+        setOpen(false);
+    }
 
     return (
         <div className="container rounded bg-white mt-5 mb-5">
             <div className="row">
                 <div className="col-md-5 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                        <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"></img>
+                        <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Pennello Cinghiale"></img>
                         <span className="font-weight-bold">{userInfo.name}</span>
                         <span className="text-black-50">{userInfo.email}</span>
                     </div>
@@ -162,11 +178,16 @@ function UserProfile(props) {
                                     <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={accountType}
+                                    value={accountTypeFlag}
                                     label="TypeOfAccount"
                                     onChange={(event) => {
-                                        setaccountType(event.target.value);
-                                        handleClickOpen(event.target.value);
+                                        if(accountTypeFlag === 1 || accountTypeFlag === 2) {
+                                            console.log("Operation non allowed : Please contact an administrator")
+                                        }
+                                        else{
+                                            setaccountType(event.target.value);
+                                            handleClickOpen(event.target.value);
+                                        }
                                     }}
                                     >
                                     <MenuItem value={0}>Customer</MenuItem>
@@ -181,11 +202,11 @@ function UserProfile(props) {
 
                         <div>
                           <BootstrapDialog
-                            onClose={handleClose}
+                            onClose={closeWithoutSaving}
                             aria-labelledby="customized-dialog-title"
                             open={open}
                           >
-                            <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                            <BootstrapDialogTitle id="customized-dialog-title" onClose={closeWithoutSaving}>
                               Addional Information Required
                             </BootstrapDialogTitle>
                             <DialogContent dividers>
@@ -200,6 +221,9 @@ function UserProfile(props) {
                               </Typography>
                             </DialogContent>
                             <DialogActions>
+                              <Button autoFocus onClick={closeWithoutSaving}>
+                                Cancel
+                              </Button>
                               <Button autoFocus onClick={handleClose}>
                                 Save changes
                               </Button>
@@ -207,7 +231,7 @@ function UserProfile(props) {
                           </BootstrapDialog>
                         </div>
 
-                        {accountType === 1 &&
+                        {accountTypeFlag === 1 &&
                         <div> 
                             <div className="row mt-6">
                                 <div className="col-md-6"><label className="labels"><h6>Farmer Location : {extraInfo.farm_location}</h6></label></div>
@@ -216,13 +240,13 @@ function UserProfile(props) {
                                 <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
                             </div>
                             <div className="mt-5 text-center">
-                                <Link className="btn btn-warning" to={`/farmer/profile/${userId}`} replace >
+                                <Link className="btn btn-warning" to={`/farmer/profile/}`} replace >
                                     Personal Farmer Page
                                 </Link>
                             </div>
                         </div>
                         }
-                        {accountType === 2 &&
+                        {accountTypeFlag === 2 &&
                           <div> 
                           <div className="row mt-6">
                               <div className="col-md-6"><label className="labels"><h6>Avalaible : </h6></label></div>
@@ -231,7 +255,7 @@ function UserProfile(props) {
                               <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
                           </div>
                           <div className="mt-5 text-center">
-                              <Link className="btn btn-warning" to={`/rider/profile/${userId}`} replace >
+                              <Link className="btn btn-warning" to={`/rider/profile/`} replace >
                                   Personal Rider Page
                               </Link>
                           </div>

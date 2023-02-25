@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInstance from "../api/axiosUsers";
@@ -24,7 +24,7 @@ function FarmerUpdate(props) {
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 1
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   /**
    ** FUNCTIONS
@@ -72,7 +72,7 @@ function FarmerUpdate(props) {
                   })
                   .then((res) => {
                     console.log(res.data)
-                    navigate("/user/profile/")
+                    //navigate("/user/profile/")
                   })
                   .catch((error)=> {
                     console.log(error.response);
@@ -142,8 +142,8 @@ function FarmerUpdate(props) {
         </div>
 
         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-          <button type="submit" className="btn btn-primary btn-lg" >
-            Apply Changes
+          <button type="submit" className="btn btn-primary btn-lg" onclick={handleSubmit} >
+            Confirm
           </button>
         </div>
         </form>

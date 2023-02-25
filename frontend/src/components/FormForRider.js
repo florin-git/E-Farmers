@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -7,6 +7,7 @@ import {FormControlLabel,Switch} from "@mui/material";
 
 
 function RiderUpdate(props) {
+
   const initialFormData = Object.freeze({
     bio: ""
   });
@@ -22,7 +23,8 @@ function RiderUpdate(props) {
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 2
-  const navigate = useNavigate();
+  const [disableButton, setDisableButton] = useState(false);
+  //const navigate = useNavigate();
   
 
   //set default value to the switch.
@@ -43,8 +45,6 @@ function RiderUpdate(props) {
         [name]: value.trim(),
       };
     });
-
-
   }
   // Submit event
   const handleSubmit = (event) => {
@@ -70,7 +70,8 @@ function RiderUpdate(props) {
                 })
                 .then((res) => {
                   console.log(res.data)
-                  navigate("/user/profile/")
+                  //navigate("/user/profile/")
+                  setDisableButton(true);
                 })
                 .catch((error)=> {
                   console.log(error.response);
@@ -124,9 +125,11 @@ function RiderUpdate(props) {
             />
 
         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-          <button type="submit" className="btn btn-primary btn-lg" >
-            Apply Changes
-          </button>
+          {disableButton === false &&
+            <button type="submit" className="btn btn-primary btn-lg">
+              Confirm
+            </button> 
+          }
         </div>
         </form>
     </div>

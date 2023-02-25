@@ -19,8 +19,6 @@ import PersistLogin from "./components/PersistLogin";
 import useAuth from "./hooks/useAuth";
 import RequiredAuthNOROLE from "./components/RequiredAuthNOROLE"
 // User advanced operation
-import FarmerUpdate from "./pages/FarmerUpdate";
-import RiderUpdate from "./pages/RiderUpdate";
 import UserProfile from "./pages/UserProfile";
 import FarmerProfile from "./pages/FarmerProfile";
 import RiderProfile from "./pages/RiderProfile";
@@ -88,8 +86,6 @@ function App(props) {
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuthNOROLE  />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
-                <Route path="user/profile/farmer_update" exact element={<FarmerUpdate />} />
-                <Route path="user/profile/rider_update" exact element={<RiderUpdate />} />
                 <Route path="farmer/profile" exact element={<FarmerProfile />} />
                 <Route path="rider/profile" exact element={<RiderProfile />} />
                 <Route path="user/profile/orders" exact element={<OrdersMainPage />} />
