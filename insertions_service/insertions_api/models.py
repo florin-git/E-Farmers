@@ -10,12 +10,6 @@ class User(models.Model):
         db_table = 'users_api_user'
         managed = False
 
-class Farmer(models.Model):
-    id = models.IntegerField(primary_key=True)
-    class Meta:
-        db_table = 'users_api_farmer'
-        managed = False
-
 class Insertion(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
