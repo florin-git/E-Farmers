@@ -1,11 +1,146 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axiosInstance from "../api/axiosInsertions";
+import Modal from "react-bootstrap/Modal";
+import BookingItem from "../components/BookingItem";
+import useAuth from "../hooks/useAuth";
 
 function Inbox() {
+        // Authentication data from context storage
+    const { auth } = useAuth();
+    const userId = auth.userId;
+
+    const [requests, setRequests] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [idToDecline, setIdToDecline] = useState(-1);
+    const [action, setAction] = useState('decline');
+
+    useEffect(() => {
+            (async () => {
+            await axiosInstance
+                .get("booking/inbox/", {
+                params: {
+                    farmer_id: userId,
+                },
+                })
+                .then((res) => {
+                setRequests(res.data);
+                })
+                .catch((error) => {
+                return error.response;
+                });
+            })();
+        }, [idToDecline]);
+
+    // Manage Modal
+    const handleCloseModal = () => {
+        setIdToDecline(-1);
+        setShowModal(false);
+    }
+
+    // If you push the 'Delete' button
+    const handleShowModal = (event) => {
+        setAction(event.target.value);
+        if(action === 'decline'){
+            setIdToDecline(event.target.id);
+        }
+        setShowModal(true);
+    };
+
+    // Decline
+    const handleDeclining = async () => {
+        await axiosInstance
+            .delete("booking/", {
+                params: {
+                    request_id: idToDecline,
+                }
+            });
+
+        setShowModal(false); // Close modal
+
+        // Keep all the insertions except the one deleted
+        setRequests(
+            requests.filter((prevRequests) => prevRequests.id !== idToDecline)
+        );
+
+        setIdToDecline(-1); // Update again the variable for the reloading
+    };
+
+    // Decline
+    const handleAccepting = async () => {
+        await axiosInstance
+            .delete("booking/", {
+                params: {
+                    request_id: idToDecline,
+                }
+            });
+
+        setShowModal(false); // Close modal
+
+        // Keep all the insertions except the one deleted
+        setRequests(
+            requests.filter((prevRequests) => prevRequests.id !== idToDecline)
+        );
+
+        setIdToDecline(-1); // Update again the variable for the reloading
+    };
+
+    const requets_array = requests.map((request) => {
+        return (
+            <BookingItem 
+                inbox='true' 
+                onInteraction={handleShowModal}
+                id={request.id}
+                title={request.title} 
+                comment={request.comment} 
+                weight={request.weight} 
+                deadline={request.deadline} 
+                user={request.user} 
+                farmer={request.farmer}
+            />
+        );
+    })
 
     return (
-        <p>inbox</p>
+        <div className="container-lg py-5">
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        {action === 'decline' && (
+                            <span>Decline request</span>
+                        )}
+                        {action === 'accept' && (
+                            <span>Accept request</span>
+                        )}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {action === 'decline' && (
+                        <span>Are you sure you want to decline this request?</span>
+                    )}
+                    {action === 'accept' && (
+                        <span>Would you like to proceed with the creation of the insertion?</span>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-light" onClick={handleCloseModal}>
+                        Close
+                    </button>
+                    {action === 'decline' && (
+                        <button className="btn btn-danger" onClick={handleDeclining}>
+                            Yes
+                        </button>
+                    )}
+                    {action === 'accept' && (
+                        <button className="btn btn-primary" onClick={handleAccepting}>
+                            Yes
+                        </button>
+                    )}
+                </Modal.Footer>
+            </Modal>
+            <ul className="list-inline shadow g-3 pt-3 pb-3">
+                {requets_array}
+            </ul>
+        </div>
     );
 }
 

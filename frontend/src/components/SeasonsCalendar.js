@@ -51,7 +51,7 @@ function SeasonsCalendar() {
   const navigate = useNavigate();
 
   // console.log(seasonal_food.get(seasons.get(tomorrow.getMonth())));
-  const [seasonalFood, setSeason] = useState(seasonal_food.get(seasons.get(tomorrow.getMonth())));
+  const [seasonalFood, setSeason] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setProduct] = useState('');
   const [subscriptions, setSubscriptions] = useState([]);
@@ -95,6 +95,7 @@ function SeasonsCalendar() {
   };
 
   useEffect(() => {
+    setSeason(seasonal_food.get(seasons.get(tomorrow.getMonth())));
     getSubscriptions();
   }, []);
 
@@ -229,6 +230,20 @@ function SeasonsCalendar() {
     window.location.replace(`../insertions?search=${name}`);
   }
 
+  function handleFarmerChange(event) {
+    console.log(event.target.name + event.target.value);
+    // Get name and value of the changed field
+    const { name, value } = event.target;
+
+    // Update formData with the changed value
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: value,
+      };
+    });
+  }
+
   const seasonal_items = seasonalFood.map((item) => {
     /*
     return (
@@ -252,20 +267,24 @@ function SeasonsCalendar() {
                     <button className="btn btn-outline-primary" id={item} onClick={redirectToInsertions}>View</button>
                   </div>
                 </div>
-                <br/>
-                <div className="row">
-                  <div className="col-sm">
-                    <button
-                      type="button"
-                      id={item}
-                      name="book"
-                      onClick={(event) => handleShowModal(event)}
-                      className="btn btn-outline-warning"
-                    >
-                      Book from a farmer
-                    </button>
-                  </div>
-                </div>
+                  {subscriptions.length != 0 && (
+                    <div>
+                      <br/>
+                        <div className="row">
+                          <div className="col-sm">
+                          <button
+                            type="button"
+                            id={item}
+                            name="book"
+                            onClick={(event) => handleShowModal(event)}
+                            className="btn btn-outline-warning"
+                          >
+                            Book from a farmer
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -356,7 +375,7 @@ function SeasonsCalendar() {
                       id="farmer"
                       name="farmer"
                       value={formData.farmer}
-                      onChange={handleChange}
+                      onChange={handleFarmerChange}
                     >
                       {subscriptions.map(farmer => {return (<option value={farmer[0]}>{farmer[1]}</option>)})};
                     </select>

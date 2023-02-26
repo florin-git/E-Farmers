@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 
-function BookingItem({ inbox, title, comment, weight, deadline, user, farmer }){
+function BookingItem({ id, inbox, title, comment, weight, deadline, user, farmer, onInteraction }){
     const { auth } = useAuth();
     const userId = auth.userId;
 
@@ -15,22 +15,28 @@ function BookingItem({ inbox, title, comment, weight, deadline, user, farmer }){
                 </p>
                     
                 <p className="card-text">
-                    Weight: {weight}
+                    Weight (kg): {weight}
                 </p>
 
                 <p className="card-text">
                     Deadline: {deadline}
                 </p>
 
+                {inbox === 'false' && (
+                    <p className="card-text">
+                        Farmer: {farmer}
+                    </p>
+                )}
+
                 <div className="container">
                     <div className="row">
-                        {userId == user &&(
+                        {inbox === 'false' && userId == user &&(
                             <div className="col-sm">
                                 <button
                                         type="button"
-                                        id={title}
+                                        id={id}
                                         name="cancel"
-                                        // onClick={(event) => handleShowModal(event)}
+                                        onClick={(event) => onInteraction(event)}
                                         className="btn btn-outline-danger"
                                     >
                                     Cancel booking
@@ -39,17 +45,34 @@ function BookingItem({ inbox, title, comment, weight, deadline, user, farmer }){
                         )}
                         
                         {/* Show delete button only if you were the published or the insertion */}
-                        {inbox === 'true' && userId == farmer && (
-                            <div className="col-sm">
-                            <button
-                                type="button"
-                                id={title}
-                                name="create"
-                                // onClick={(event) => handleShowModal(event)}
-                                className="btn btn-outline-primary"
-                            >
-                                Create insertion
-                            </button>
+                        {inbox === 'true' && farmer == userId && (
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <button
+                                            type="button"
+                                            id={id}
+                                            value='decline'
+                                            name="decline"
+                                            onClick={(event) => onInteraction(event)}
+                                            className="btn btn-outline-danger"
+                                        >
+                                            Decline
+                                        </button>
+                                    </div>
+                                    <div className="col-sm">
+                                        <button
+                                            type="button"
+                                            id={id}
+                                            value='accept'
+                                            name="accept"
+                                            onClick={(event) => onInteraction(event)}
+                                            className="btn btn-outline-primary"
+                                        >
+                                            Accept
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
