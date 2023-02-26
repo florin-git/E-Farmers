@@ -123,6 +123,12 @@ class BoxesView(viewsets.ViewSet):
 #* Booking
 ###
 class BookingView(viewsets.ViewSet):
+    def get_request(self, request): # GET /api/booking/<int:user_id>/
+        # Return the request specified
+        request = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        serializer = RequestSerializer(request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def list_booked_products(self, request): # GET /api/booking/requests/<int:user_id>/
         # Returns the list of a user's requests (booked products)
         requests = Request.objects.filter(user=int(request.GET.get('user_id', '')))

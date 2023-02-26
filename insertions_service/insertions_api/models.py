@@ -19,7 +19,13 @@ class Insertion(models.Model):
     reported = models.BooleanField(default=False)
     farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insertion_farmer')
     private = models.BooleanField(default=False)
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='insertion_user')
+    request = models.OneToOneField(
+        'Request',
+        related_name="insertion_request",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
 
 class Box(models.Model):
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
@@ -35,3 +41,10 @@ class Request(models.Model):
     comment = models.TextField(blank=True)
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
     deadline = models.DateField()
+    insertion = models.OneToOneField(
+        Insertion,
+        related_name="request_insertion",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )

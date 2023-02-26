@@ -24,6 +24,7 @@ urlpatterns = [
 
     # Booking
     path('booking/', BookingView.as_view({
+        'get': 'get_request',
         'post': 'book_product',
         'delete': 'cancel_booking'
     })),

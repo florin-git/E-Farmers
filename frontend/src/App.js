@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 // Import delle insertions
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
+import PublishPrivateInsertion from "./pages/PublishPrivateInsertion";
 import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
 import BookedProducts from "./pages/BookedProducts";
@@ -123,6 +124,11 @@ function App(props) {
                     path="insertions/new/"
                     exact
                     element={<PublishInsertion />}
+                  />
+                  <Route
+                    path="insertions/new/private/"
+                    exact
+                    element={<PublishPrivateInsertion />}
                   />
                   <Route
                     path="insertions/:insertion_id/edit/"

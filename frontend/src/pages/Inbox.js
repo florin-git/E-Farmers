@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axiosInstance from "../api/axiosInsertions";
 import Modal from "react-bootstrap/Modal";
 import BookingItem from "../components/BookingItem";
@@ -11,7 +12,7 @@ function Inbox() {
 
     const [requests, setRequests] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [idToDecline, setIdToDecline] = useState(-1);
+    const [selectedId, setSelectedId] = useState(-1);
     const [action, setAction] = useState('decline');
 
     useEffect(() => {
@@ -29,20 +30,18 @@ function Inbox() {
                 return error.response;
                 });
             })();
-        }, [idToDecline]);
+        }, [selectedId]);
 
     // Manage Modal
     const handleCloseModal = () => {
-        setIdToDecline(-1);
+        setSelectedId(-1);
         setShowModal(false);
     }
 
     // If you push the 'Delete' button
     const handleShowModal = (event) => {
         setAction(event.target.value);
-        if(action === 'decline'){
-            setIdToDecline(event.target.id);
-        }
+        setSelectedId(event.target.id);
         setShowModal(true);
     };
 
@@ -51,7 +50,7 @@ function Inbox() {
         await axiosInstance
             .delete("booking/", {
                 params: {
-                    request_id: idToDecline,
+                    request_id: selectedId,
                 }
             });
 
@@ -59,29 +58,10 @@ function Inbox() {
 
         // Keep all the insertions except the one deleted
         setRequests(
-            requests.filter((prevRequests) => prevRequests.id !== idToDecline)
+            requests.filter((prevRequests) => prevRequests.id !== selectedId)
         );
 
-        setIdToDecline(-1); // Update again the variable for the reloading
-    };
-
-    // Decline
-    const handleAccepting = async () => {
-        await axiosInstance
-            .delete("booking/", {
-                params: {
-                    request_id: idToDecline,
-                }
-            });
-
-        setShowModal(false); // Close modal
-
-        // Keep all the insertions except the one deleted
-        setRequests(
-            requests.filter((prevRequests) => prevRequests.id !== idToDecline)
-        );
-
-        setIdToDecline(-1); // Update again the variable for the reloading
+        setSelectedId(-1); // Update again the variable for the reloading
     };
 
     const requets_array = requests.map((request) => {
@@ -131,9 +111,12 @@ function Inbox() {
                         </button>
                     )}
                     {action === 'accept' && (
-                        <button className="btn btn-primary" onClick={handleAccepting}>
+                        <Link
+                            className="btn btn-primary"
+                            to={`/insertions/new/private/?request_id=${selectedId}`}
+                        >
                             Yes
-                        </button>
+                        </Link>
                     )}
                 </Modal.Footer>
             </Modal>
