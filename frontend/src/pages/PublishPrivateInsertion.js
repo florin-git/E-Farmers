@@ -26,6 +26,7 @@ function PublishPrivateInsertion(props) {
     image: "",
     reported: false,
   });
+  const [price, setPrice] = useState(0.00);
 
   /**
    * Variables for managing the input checks.
@@ -36,6 +37,7 @@ function PublishPrivateInsertion(props) {
    */
   const [formValidation, setformValidation] = useState({
     expiration_date: "",
+    price: "",
   });
 
   /**
@@ -48,6 +50,7 @@ function PublishPrivateInsertion(props) {
    */
   const [formValidationClass, setformValidationClass] = useState({
     expiration_date_for_class: "",
+    price_for_class: "",
   });
 
   // This variable is used for the redirection
@@ -96,6 +99,10 @@ function PublishPrivateInsertion(props) {
     });
   }
 
+  function handlePriceChange(event) {
+    setPrice(event.target.value);
+  }
+
   function handleImageChange(event) {
     // Get previous data
     let newFormData = { ...formData };
@@ -133,6 +140,18 @@ function PublishPrivateInsertion(props) {
         if (formValidationClass.expiration_date_for_class === "is-invalid")
           formValidationClass.expiration_date_for_class = "is-valid";
       }
+    }
+
+    // Check price
+    if (price <= 0) {
+      formValidation.price = "The price must be greater than 0!";
+      formValidationClass.price_for_class = "is-invalid";
+    } else {
+      formValidation.price = "";
+
+      // If previously you inserted a wrong input
+      if (formValidationClass.price_for_class === "is-invalid")
+        formValidationClass.price_for_class = "is-valid";
     }
 
     // Update formValidation
@@ -194,13 +213,26 @@ function PublishPrivateInsertion(props) {
             let box_data = new FormData();
             box_data.append("insertion", res.data.insertion_id);
             box_data.append("weight", request.weight);
-            box_data.append("size", 0);
-            box_data.append("price", 1);
+            box_data.append("size", 3);
+            box_data.append("price", price);
             box_data.append("number_of_available_boxes", 1);
             axiosInsertions
                 .post(`insertions/${res.data.insertion_id}/boxes/`, box_data)
-            // If the submission was successful
-            navigate("/insertions");
+                .then(() => {
+                  let request_data = new FormData();
+                  request_data.append("id", request.id);
+                  request_data.append("insertion", res.data.insertion_id);
+                  request_data.append("user", request.user);
+                  request_data.append("farmer", request.farmer);
+                  request_data.append("title", request.title);
+                  request_data.append("comment", request.comment);
+                  request_data.append("weight", request.weight);
+                  request_data.append("deadline", request.deadline);
+                  axiosInsertions
+                      .put('booking/', request_data);
+                  // If the submission was successful
+                  navigate("/insertions");
+                });
         })
         .catch((error) => {
           console.log(error.response);
@@ -241,6 +273,24 @@ function PublishPrivateInsertion(props) {
                     onChange={handleChange}
                     required
                 />
+                </div>
+
+                <div className="form-group mt-3">
+                  <label htmlFor="price">Price</label>
+                  <input
+                    type="number"
+                    className={`form-control ${formValidationClass.price_for_class}`}
+                    id="price"
+                    min="0.00"
+                    step="0.01"
+                    value={price}
+                    name="price"
+                    onChange={handlePriceChange}
+                    required
+                  />
+                  {formValidation.price.length > 0 && (
+                    <span className="invalid-feedback">{formValidation.price}</span>
+                  )}
                 </div>
 
                 <div className="row">

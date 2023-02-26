@@ -4,6 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import *
 from django.http import HttpResponse
+from django.http import QueryDict
 
 ###
 #* Insertions
@@ -123,11 +124,29 @@ class BoxesView(viewsets.ViewSet):
 #* Booking
 ###
 class BookingView(viewsets.ViewSet):
-    def get_request(self, request): # GET /api/booking/<int:user_id>/
+    def get_request(self, request): # GET /api/booking/<int:request_id>/
         # Return the request specified
+        today = date.today()
         request = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        if request.deadline < today:
+            request.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = RequestSerializer(request)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def accept_request(self, request): # PUT /api/booking/
+        # Set the request's insertion field
+        today = date.today()
+        # return Response(None, status=status.HTTP_200_OK)
+        
+        product_request = Request.objects.get(id=int(request.data['id']))
+        if product_request.deadline < today:
+            request.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = RequestSerializer(instance=product_request, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
     def list_booked_products(self, request): # GET /api/booking/requests/<int:user_id>/
         # Returns the list of a user's requests (booked products)
