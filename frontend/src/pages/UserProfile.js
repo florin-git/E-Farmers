@@ -22,9 +22,6 @@ import Typography from '@mui/material/Typography';
 import FormForFarmer from "../components/FormForFarmer";
 import FormForRider from "../components/FormForRider";
 
-
-
-
 // Variable for spawning the advanced Farmer/Rider info 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -80,6 +77,8 @@ function UserProfile(props) {
     const [accountType, setaccountType] = useState(0);
     const [accountTypeFlag, setAccountTypeFlag] = useState(0);
     const [open, setOpen] = useState(false);
+    const [trigger,setTrigger] = useState(false);
+
 
     useEffect(() => {
         //Retrieve the user info
@@ -92,9 +91,9 @@ function UserProfile(props) {
                  *  the second, IF EXISTS, contains extra info about rider/farmer
                  */
                 setUserInfo(res.data[0]);
-                setaccountType(res.data[0].account_type);
+                setAccountTypeFlag(res.data[0].account_type);
                 if (accountTypeFlag !== 0 ){
-                    console.log("Account Type : ",res.data[0].account_type);
+                    //console.log("Account Type : ",res.data[0].account_type);
                     setExtraInfo(res.data[1]);    
                 }
             })
@@ -102,29 +101,51 @@ function UserProfile(props) {
               console.log(error.response);
             });
         
-    }, [userId, axiosPrivate, location, navigate,accountTypeFlag]);
+    }, [userId, axiosPrivate, accountTypeFlag]);
 
     // Function for spawning farmer or rider info for form
     const handleClickOpen = (selectedValue) => {
         if(selectedValue !== 0)
             setOpen(true);
     };
-    const handleClose = () => {
+    const closeWithSaving = () => {
+        //Starta la post al child.
+        setTrigger(true);
+        /*
+        axiosPrivate
+            .get(`users/${userId}/`)
+            .then((res) => {
+                if(res.data[0].account_type !== 0)
+                    setAccountTypeFlag(accountType);
+            })
+            .catch((error)=>{
+                console.log(error.response);
+            });
         setOpen(false);
-        if(accountType === 0){
-            axiosPrivate
-                .get(`users/${userId}/`)
-                .then((res) => {
-                    if(res.data[0].account_type === 0);
-                        setAccountTypeFlag(accountType);
-                })
-                .catch((error)=>{
-                    console.log(error.response);
-                });
-        }
+        */
     };
     const closeWithoutSaving = () => {
+        setaccountType(accountTypeFlag);
         setOpen(false);
+        setTrigger(false);
+    }
+
+    const parentFunction = (flag) => {
+        if (flag){
+            console.log("Post Success");
+            setAccountTypeFlag(accountType);
+        }
+        else
+            console.log("Post Failed")
+
+        setTrigger(false);
+        setOpen(false);
+  
+    }
+    //props for child
+    let childProps = {
+        trigger:trigger,
+        parentFunction: parentFunction
     }
 
     return (
@@ -181,9 +202,8 @@ function UserProfile(props) {
                                     value={accountTypeFlag}
                                     label="TypeOfAccount"
                                     onChange={(event) => {
-                                        if(accountTypeFlag === 1 || accountTypeFlag === 2) {
+                                        if(accountTypeFlag === 1 || accountTypeFlag === 2) 
                                             console.log("Operation non allowed : Please contact an administrator")
-                                        }
                                         else{
                                             setaccountType(event.target.value);
                                             handleClickOpen(event.target.value);
@@ -216,7 +236,7 @@ function UserProfile(props) {
                                   </p>
                               </Typography>
                               <Typography gutterBottom>
-                                { accountType === 1 && <FormForFarmer /> }
+                                { accountType === 1 && <FormForFarmer {...childProps} /> }
                                 { accountType === 2 && <FormForRider /> }
                               </Typography>
                             </DialogContent>
@@ -224,7 +244,9 @@ function UserProfile(props) {
                               <Button autoFocus onClick={closeWithoutSaving}>
                                 Cancel
                               </Button>
-                              <Button autoFocus onClick={handleClose}>
+                              <Button onClick={() => {
+                                    closeWithSaving();
+                                }}>
                                 Save changes
                               </Button>
                             </DialogActions>

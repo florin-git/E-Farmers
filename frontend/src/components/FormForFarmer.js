@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInstance from "../api/axiosUsers";
 
 
-function FarmerUpdate(props) {
+
+const FormForFarmer = (props) => {
   /**
    ** VARIABLES
    */
@@ -21,6 +22,7 @@ function FarmerUpdate(props) {
 
   // Form
   const [formData, setFormData] = useState(initialFormData);
+  const [flagForm, setFlagForm] = useState(false);
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 1
@@ -31,6 +33,8 @@ function FarmerUpdate(props) {
    */
 
   function handleChange(event) {
+    if (!flagForm)
+      setFlagForm(true);
     // Get name and value of the changed field
     const { name, value } = event.target;
     // Update formData with the changed value
@@ -43,14 +47,24 @@ function FarmerUpdate(props) {
   }
 
   const validateInput = () => {
-    if(formData.bio.length > 20 )
-      return true;
-    else
+    if (!flagForm)
       return false;
+    else{
+      /* Controllo sull'input */
+      return true;
+    }
   };
+
+  useEffect(() => {
+    if ( props.trigger ){
+      console.log("Child Trigger : ", props.trigger)
+      handleSubmit()
+    }
+  }, [props.trigger]);
+
           
   const handleSubmit = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     if(validateInput()){
       (async () => {
         await axiosPrivate
@@ -72,6 +86,7 @@ function FarmerUpdate(props) {
                   })
                   .then((res) => {
                     console.log(res.data)
+                    props.parentFunction(flagForm);
                     //navigate("/user/profile/")
                   })
                   .catch((error)=> {
@@ -86,6 +101,8 @@ function FarmerUpdate(props) {
             console.log(error.response);
           });
       })();
+    }else{
+      props.parentFunction();
     }
   };
 
@@ -141,14 +158,16 @@ function FarmerUpdate(props) {
             </div>
         </div>
 
+        {/*
         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
           <button type="submit" className="btn btn-primary btn-lg" onclick={handleSubmit} >
             Confirm
           </button>
         </div>
+              */}
         </form>
     </div>
   );
 }
 
-export default FarmerUpdate;
+export default FormForFarmer;

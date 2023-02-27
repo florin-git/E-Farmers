@@ -6,7 +6,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {FormControlLabel,Switch} from "@mui/material";
 
 
-function RiderUpdate(props) {
+const RiderUpdate = ({trigger}) => {
 
   const initialFormData = Object.freeze({
     bio: ""
@@ -23,7 +23,6 @@ function RiderUpdate(props) {
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 2
-  const [disableButton, setDisableButton] = useState(false);
   //const navigate = useNavigate();
   
 
@@ -46,6 +45,9 @@ function RiderUpdate(props) {
       };
     });
   }
+
+  
+
   // Submit event
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,7 +73,6 @@ function RiderUpdate(props) {
                 .then((res) => {
                   console.log(res.data)
                   //navigate("/user/profile/")
-                  setDisableButton(true);
                 })
                 .catch((error)=> {
                   console.log(error.response);
@@ -124,13 +125,13 @@ function RiderUpdate(props) {
             label="Avalaible" 
             />
 
+        {/*
         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-          {disableButton === false &&
-            <button type="submit" className="btn btn-primary btn-lg">
-              Confirm
-            </button> 
-          }
+          <button type="submit" className="btn btn-primary btn-lg" onclick={handleSubmit} >
+            Confirm
+          </button>
         </div>
+              */}
         </form>
     </div>
   );
