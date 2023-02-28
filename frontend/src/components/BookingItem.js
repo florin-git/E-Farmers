@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 
-function BookingItem({ id, inbox, title, comment, weight, deadline, user, farmer, onInteraction }){
+function BookingItem({ id, inbox, accepted, insertion_id, title, comment, weight, deadline, user, farmer, onInteraction }){
     const { auth } = useAuth();
     const userId = auth.userId;
 
@@ -30,11 +30,12 @@ function BookingItem({ id, inbox, title, comment, weight, deadline, user, farmer
 
                 <div className="container">
                     <div className="row">
-                        {inbox === 'false' && userId == user &&(
+                        {inbox === 'false' && userId == user && accepted === false &&(
                             <div className="col-sm">
                                 <button
                                         type="button"
                                         id={id}
+                                        value="cancel"
                                         name="cancel"
                                         onClick={(event) => onInteraction(event)}
                                         className="btn btn-outline-danger"
@@ -43,8 +44,38 @@ function BookingItem({ id, inbox, title, comment, weight, deadline, user, farmer
                                 </button>
                             </div>
                         )}
+                        {inbox === 'false' && userId == user && accepted === true &&(
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <button
+                                                type="button"
+                                                id={id}
+                                                value="cancel"
+                                                name="cancel"
+                                                onClick={(event) => onInteraction(event)}
+                                                className="btn btn-outline-danger"
+                                            >
+                                            Delete request
+                                        </button>
+                                    </div>
+                                    <div className="col-sm">
+                                        <button
+                                                type="button"
+                                                id={insertion_id}
+                                                value="view"
+                                                name="view"
+                                                onClick={(event) => onInteraction(event)}
+                                                className="btn btn-outline-primary"
+                                            >
+                                            View insertion
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         
-                        {/* Show delete button only if you were the published or the insertion */}
+                        {/* Show decline/accept only if you are the farmer receiving the request */}
                         {inbox === 'true' && farmer == userId && (
                             <div className="container">
                                 <div className="row">

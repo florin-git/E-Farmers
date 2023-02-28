@@ -43,6 +43,8 @@ function Inbox() {
         setAction(event.target.value);
         setSelectedId(event.target.id);
         setShowModal(true);
+        console.log('action: ' + action);
+        console.log('selectedId: ' + selectedId);
     };
 
     // Decline

@@ -11,6 +11,7 @@ from django.http import QueryDict
 ###
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
+        # Returns all the public insertions
         search_params = request.GET.get('search', '')
         expiring_search = request.GET.get('expiring', '')
         farmer_param = None
@@ -21,23 +22,23 @@ class InsertionsView(viewsets.ViewSet):
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
         if expiring_search != "":
             today = date.today()
-            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day, private=False)
             insertions = insertions[:int(expiring_search)]
         elif farmer_param != None:
-            insertions = Insertion.objects.filter(farmer=farmer_param)
+            insertions = Insertion.objects.filter(farmer=farmer_param, private=False)
         elif search_params == "":
-            insertions = Insertion.objects.all()
+            insertions = Insertion.objects.filter(private=False)
         elif search_params == "expiring_products":
             today = date.today()
-            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day, private=False)
         else:
             is_first_word = True
             for param in search_params.split():
                 if is_first_word:
-                    insertions = Insertion.objects.filter(title__icontains=param)
+                    insertions = Insertion.objects.filter(title__icontains=param, private=False)
                     is_first_word = False
                 else:
-                    insertions = (insertions | Insertion.objects.filter(title__icontains=param))
+                    insertions = (insertions | Insertion.objects.filter(title__icontains=param, private=False))
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         

@@ -242,7 +242,7 @@ function PublishPrivateInsertion(props) {
 
   return (
     <div className="container-md py-5">
-      <h1 className="title text-center">{request.title}</h1>
+      <h1 className="text-center">{request.title}</h1>
       <hr/>
       <div className="row ">
         <div className="d-flex justify-content-center align-items-center h-100">

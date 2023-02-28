@@ -50,7 +50,6 @@ function SeasonsCalendar() {
 
   const navigate = useNavigate();
 
-  // console.log(seasonal_food.get(seasons.get(tomorrow.getMonth())));
   const [seasonalFood, setSeason] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setProduct] = useState('');
@@ -218,9 +217,11 @@ function SeasonsCalendar() {
   };
 
   // Manage Modal
-  const handleCloseModal = () => setShowModal(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-  const handleShowModal = async (event) => {
+  const handleShowModal = (event) => {
     setShowModal(true);
     setProduct(event.target.id);
   };
@@ -231,7 +232,6 @@ function SeasonsCalendar() {
   }
 
   function handleFarmerChange(event) {
-    console.log(event.target.name + event.target.value);
     // Get name and value of the changed field
     const { name, value } = event.target;
 
@@ -298,12 +298,16 @@ function SeasonsCalendar() {
       <div id="events-log">
         <h3>The calendar of seasonal food</h3>
       </div>
-      <Calendar
-        minDate={new Date()}
-        enableRangeSelection={true}
-        // onDayClick={(e) => this.addLog(e.date.getMonth())}
-        onDayClick={(event) => handleDaySelection(event)}
-      />
+      {showModal == false && (
+        <Calendar
+          minDate={new Date()}
+          enableRangeSelection={true}
+          onDayClick={(event) => handleDaySelection(event)}
+        />
+      )}
+      {showModal == true && (
+        <Calendar/>
+      )}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
