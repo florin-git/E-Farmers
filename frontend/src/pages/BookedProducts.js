@@ -92,7 +92,7 @@ function BookedProducts() {
                             <span>Deletion</span>
                         )}
                         {action === 'view' && (
-                            <span>View insertion</span>
+                            <span>Ready!</span>
                         )}
                     </Modal.Title>
                 </Modal.Header>
@@ -101,7 +101,7 @@ function BookedProducts() {
                         <span>Are you sure you want to cancel this request?</span>
                     )}
                     {action === 'view' && (
-                        <span>The request is ready! Click the insertion to proceed </span>
+                        <span>The request is ready! Click the button to see the insertion that the farmer has prepared for you.</span>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
@@ -118,7 +118,7 @@ function BookedProducts() {
                             className="btn btn-primary"
                             to={`/insertions/${selectedId}`}
                         >
-                            Go to the insertion page
+                            View insertion
                         </Link>
                     )}
                 </Modal.Footer>

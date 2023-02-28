@@ -67,11 +67,14 @@ function Inbox() {
     };
 
     const requets_array = requests.map((request) => {
+        let accepted = (request.insertion != null)
         return (
             <BookingItem 
                 inbox='true' 
                 onInteraction={handleShowModal}
                 id={request.id}
+                accepted={accepted}
+                insertion_id={request.insertion}
                 title={request.title} 
                 comment={request.comment} 
                 weight={request.weight} 
@@ -93,6 +96,12 @@ function Inbox() {
                         {action === 'accept' && (
                             <span>Accept request</span>
                         )}
+                        {action === 'delete' && (
+                            <span>Delete request</span>
+                        )}
+                        {action === 'view' && (
+                            <span>View insertion</span>
+                        )}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -101,6 +110,12 @@ function Inbox() {
                     )}
                     {action === 'accept' && (
                         <span>Would you like to proceed with the creation of the insertion?</span>
+                    )}
+                    {action === 'view' && (
+                        <span>The insertion related to this request was created successfully.</span>
+                    )}
+                    {action === 'delete' && (
+                        <span>Are you sure you want to delete this request and its related insertion?</span>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
@@ -118,6 +133,19 @@ function Inbox() {
                             to={`/insertions/new/private/?request_id=${selectedId}`}
                         >
                             Yes
+                        </Link>
+                    )}
+                    {action === 'delete' && (
+                        <button className="btn btn-danger" onClick={handleDeclining}>
+                            Yes
+                        </button>
+                    )}
+                    {action === 'view' && (
+                        <Link
+                            className="btn btn-primary"
+                            to={`/insertions/${selectedId}`}
+                        >
+                            View the insertion
                         </Link>
                     )}
                 </Modal.Footer>

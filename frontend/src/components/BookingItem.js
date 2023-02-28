@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 function BookingItem({ id, inbox, accepted, insertion_id, title, comment, weight, deadline, user, farmer, onInteraction }){
@@ -68,7 +69,7 @@ function BookingItem({ id, inbox, accepted, insertion_id, title, comment, weight
                                                 onClick={(event) => onInteraction(event)}
                                                 className="btn btn-outline-primary"
                                             >
-                                            View insertion
+                                            Ready!
                                         </button>
                                     </div>
                                 </div>
@@ -76,7 +77,7 @@ function BookingItem({ id, inbox, accepted, insertion_id, title, comment, weight
                         )}
                         
                         {/* Show decline/accept only if you are the farmer receiving the request */}
-                        {inbox === 'true' && farmer == userId && (
+                        {inbox === 'true' && farmer == userId && accepted === false && (
                             <div className="container">
                                 <div className="row">
                                     <div className="col-sm">
@@ -102,6 +103,32 @@ function BookingItem({ id, inbox, accepted, insertion_id, title, comment, weight
                                         >
                                             Accept
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {inbox === 'true' && farmer == userId && accepted === true && (
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <button
+                                            type="button"
+                                            id={id}
+                                            value='delete'
+                                            name="delete"
+                                            onClick={(event) => onInteraction(event)}
+                                            className="btn btn-outline-danger"
+                                        >
+                                            Delete request and insertion
+                                        </button>
+                                    </div>
+                                    <div className="col-sm">
+                                        <Link
+                                            className="btn btn-outline-primary"
+                                            to={`/insertions/${insertion_id}`}
+                                        >
+                                            View insertion
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
