@@ -3,9 +3,13 @@ from .views import *
 
 urlpatterns = [
     path('users/<int:user_id>/cart/', CartView.as_view({
+        'get':'get_cart',
         'post':'create_cart',
-        'get': 'cart_info',
-        'put': 'add_boxes',
         'delete': 'delete_cart'
     })),
+    path('users/<int:user_id>/cart/items/', CartItemView.as_view({
+        'get':'list_cart_items',
+        'put':'add_box',
+        'delete':'remove_box'
+    }))
 ]

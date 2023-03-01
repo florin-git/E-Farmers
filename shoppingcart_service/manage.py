@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+from django.core.management.commands.runserver import Command as runserver
 import os
 import sys
-from django.core.management.commands.runserver import Command as runserver
 
 
 def main():

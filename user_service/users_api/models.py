@@ -28,7 +28,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return str(self.name)
+        return str(self.user)
 
 class Rider(models.Model):
     # Rider Properties 
