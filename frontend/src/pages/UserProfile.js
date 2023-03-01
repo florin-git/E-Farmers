@@ -267,7 +267,7 @@ function UserProfile(props) {
                                 <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
                             </div>
                             <div className="mt-5 text-center">
-                                <Link className="btn btn-warning" to={`/farmer/profile/}`} replace >
+                                <Link className="btn btn-warning" to={`/farmer/profile/`} replace >
                                     Personal Farmer Page
                                 </Link>
                             </div>
