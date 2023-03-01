@@ -1,19 +1,26 @@
-import React from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-function RequiredAuth() {
+function RequiredAuth({ allowedRoles }) {
   const { auth } = useAuth();
   const location = useLocation();
 
-  // If you are logged in, then 'auth?.userId' is not null
-  // and so you can access the protected page.
-  return auth?.userId ? (
-    <Outlet />
-  ) : (
-    // If you are not logged in, you are redirected to the login page
-    <Navigate to="login/" state={{ from: location }} replace />
-  );
+  /**
+   * You can access protected pages if you are logged in, so
+   * 'auth?.userId' is not null and if your account type
+   * is compliant with the ones that are allowed.
+   */
+  if (!auth?.userId) {
+    return <Navigate to="login/" state={{ from: location }} replace />;
+  }
+  // You are logged in
+  if (allowedRoles?.includes(auth?.accountType)) {
+    return <Outlet />;
+  } else {
+    // if your account type is not compliant with the ones that are allowed,
+    // then you are redirected to home.
+    return <Navigate to="/" replace />;
+  }
 }
 
 export default RequiredAuth;

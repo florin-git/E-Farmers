@@ -1,107 +1,299 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
-function UserProfile(props) {
-  /**
-   ** VARIABLES
-   */
+// Change Account GUI
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import FormForFarmer from "../components/FormForFarmer";
+import FormForRider from "../components/FormForRider";
 
-  // Authentication data from context storage
-  const { auth } = useAuth();
-  const userId = auth.userId;
+// Variable for spawning the advanced Farmer/Rider info 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+      padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+      padding: theme.spacing(1),
+    },
+}));
+  
+function BootstrapDialogTitle(props) {
+    const { children, onClose, ...other } = props;
 
-  // axios function with JWT tokens
-  const axiosPrivate = useAxiosPrivate();
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  /**
-   ** FUNCTIONS
-   */
-
-  useEffect(() => {
-    /**
-     * Retrieve the user info
-     */
-    (async () => {
-      await axiosPrivate
-        .get(`users/${userId}/`)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error.response);
-          console.log("LOGIN AGAIN")
-          // If also the refresh token expires then you have to
-          // log in again
-          navigate("login/", { state: { from: location }, replace: true });
-        });
-    })();
-
-  }, [userId, axiosPrivate, location, navigate]);
-
-  return (
-    <div>
-      <section className="vh-100">
-        <div className="container py-5 h-100">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col col-lg-6 mb-4 mb-lg-0">
-              <div className="card mb-3">
-                <div className="row g-0">
-                  <div
-                    className="col-md-4 gradient-custom text-center text-white"
-                    // style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;"
-                  >
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                      alt="Avatar"
-                      className="img-fluid my-5"
-                      width="80px;"
-                    />
-                    <h5>Marie Horwitz</h5>
-                    <p>Web Designer</p>
-                    <i className="far fa-edit mb-5"></i>
-                  </div>
-                  <div className="col-md-8">
-                    <div className="card-body p-4">
-                      <h6>Information</h6>
-                      {/* <hr className="mt-0 mb-4"> */}
-                      <div className="row pt-1">
-                        <div className="col-6 mb-3">
-                          <h6>Email</h6>
-                          <p className="text-muted">info@example.com</p>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <h6>Phone</h6>
-                          <p className="text-muted">123 456 789</p>
-                        </div>
-                      </div>
-                      <h6>Projects</h6>
-                      {/* <hr className="mt-0 mb-4"> */}
-                      <div className="row pt-1">
-                        <div className="col-6 mb-3">
-                          <h6>Recent</h6>
-                          <p className="text-muted">Lorem ipsum</p>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <h6>Most Viewed</h6>
-                          <p className="text-muted">Dolor sit amet</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+    return (
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        {children}
+        {onClose ? (
+            <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+            }}
+            >
+            <CloseIcon />
+            </IconButton>
+        ) : null}
+        </DialogTitle>
+    );
 }
 
+function UserProfile(props) {
+    /**
+     ** VARIABLES
+    */
+
+    // Authentication data from context storage
+    const { auth } = useAuth();
+    const userId = auth.userId;
+    // axios function with JWT tokens
+    const axiosPrivate = useAxiosPrivate();
+    // User information
+    const [userInfo, setUserInfo] = useState([]);
+    const [extraInfo, setExtraInfo] = useState([]);
+    // Navigation variable
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Display change account settings
+    const [accountType, setaccountType] = useState(0);
+    const [accountTypeFlag, setAccountTypeFlag] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [trigger,setTrigger] = useState(false);
+
+
+    useEffect(() => {
+        //Retrieve the user info
+        axiosPrivate
+            .get(`users/${userId}/`)
+            .then((res) => {
+                /**
+                 * The result is a list:
+                 *  the first JSON record contains user's info
+                 *  the second, IF EXISTS, contains extra info about rider/farmer
+                 */
+                setUserInfo(res.data[0]);
+                setAccountTypeFlag(res.data[0].account_type);
+                if (accountTypeFlag !== 0 ){
+                    //console.log("Account Type : ",res.data[0].account_type);
+                    setExtraInfo(res.data[1]);    
+                }
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        
+    }, [userId, axiosPrivate, accountTypeFlag]);
+
+    // Function for spawning farmer or rider info for form
+    const handleClickOpen = (selectedValue) => {
+        if(selectedValue !== 0)
+            setOpen(true);
+    };
+    const closeWithSaving = () => {
+        //Starta la post al child.
+        setTrigger(true);
+        /*
+        axiosPrivate
+            .get(`users/${userId}/`)
+            .then((res) => {
+                if(res.data[0].account_type !== 0)
+                    setAccountTypeFlag(accountType);
+            })
+            .catch((error)=>{
+                console.log(error.response);
+            });
+        setOpen(false);
+        */
+    };
+    const closeWithoutSaving = () => {
+        setaccountType(accountTypeFlag);
+        setOpen(false);
+        setTrigger(false);
+    }
+
+    const parentFunction = (flag) => {
+        if (flag){
+            console.log("Post Success");
+            setAccountTypeFlag(accountType);
+        }
+        else
+            console.log("Post Failed")
+
+        setTrigger(false);
+        setOpen(false);
+  
+    }
+    //props for child
+    let childProps = {
+        trigger:trigger,
+        parentFunction: parentFunction
+    }
+
+    return (
+        <div className="container rounded bg-white mt-5 mb-5">
+            <div className="row">
+                <div className="col-md-5 border-right">
+                    <div className="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Pennello Cinghiale"></img>
+                        <span className="font-weight-bold">{userInfo.name}</span>
+                        <span className="text-black-50">{userInfo.email}</span>
+                    </div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                        <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
+                        Orders
+                        </Link>
+                    </div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                        <Link className="btn btn-primary m-1 " to={"/"} >
+                        Cards
+                        </Link>   
+                    </div>
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                        <Link className="btn btn-primary m-1 " to={"/"} >
+                        Utils
+                        </Link>
+                    </div>   
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                        <Link className="btn btn-warning" to={"payments/"} id = "payments" >
+                            Payments Page!
+                        </Link>
+                    </div>   
+                </div>
+                <div className="col-md-7 border-right">
+                    <div className="p-3 py-5">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h4 className="text-right">Account Information </h4>
+                        </div>
+                        <div className="row mt-2">
+                            <div className="col-md-6"><label className="labels"><h6>Name : {userInfo.name}</h6></label></div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-md-6"><label className="labels"><h6>Email : {userInfo.email}</h6></label></div>
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-md-6"><label className="labels"><h6>Mobile Number : {userInfo.phone}</h6></label></div>
+                            <div className="col-md-6"><label className="labels"><h6>Shipping Address : {userInfo.saddress}</h6></label></div>
+                            <div className="col-md-6"><label className="labels"><h6>Billing Address : {userInfo.baddress}</h6></label></div> 
+                        </div> 
+                        <div className="row mt-5">
+                            <div className="d-flex flex-row align-items-center mb-4">
+                            <i className="fas fa-user"></i>
+                            <div className="form-group flex-fill mb-0">
+                                <Box sx={{ minWidth: 240 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">AccountType</InputLabel>
+                                    <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={accountTypeFlag}
+                                    label="TypeOfAccount"
+                                    onChange={(event) => {
+                                        if(accountTypeFlag === 1 || accountTypeFlag === 2) 
+                                            console.log("Operation non allowed : Please contact an administrator")
+                                        else{
+                                            setaccountType(event.target.value);
+                                            handleClickOpen(event.target.value);
+                                        }
+                                    }}
+                                    >
+                                    <MenuItem value={0}>Customer</MenuItem>
+                                    <MenuItem value={1}>Farmer</MenuItem>
+                                    <MenuItem value={2}>Rider</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                </Box>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div>
+                          <BootstrapDialog
+                            onClose={closeWithoutSaving}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                          >
+                            <BootstrapDialogTitle id="customized-dialog-title" onClose={closeWithoutSaving}>
+                              Addional Information Required
+                            </BootstrapDialogTitle>
+                            <DialogContent dividers>
+                              <Typography gutterBottom>
+                                <p className="text-center fw-bold mb-5 mx-1 mx-md-4 mt-4">  
+                                  You must compile this part for your desired specific account. 
+                                  </p>
+                              </Typography>
+                              <Typography gutterBottom>
+                                { accountType === 1 && <FormForFarmer {...childProps} /> }
+                                { accountType === 2 && <FormForRider /> }
+                              </Typography>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button autoFocus onClick={closeWithoutSaving}>
+                                Cancel
+                              </Button>
+                              <Button onClick={() => {
+                                    closeWithSaving();
+                                }}>
+                                Save changes
+                              </Button>
+                            </DialogActions>
+                          </BootstrapDialog>
+                        </div>
+
+                        {accountTypeFlag === 1 &&
+                        <div> 
+                            <div className="row mt-6">
+                                <div className="col-md-6"><label className="labels"><h6>Farmer Location : {extraInfo.farm_location}</h6></label></div>
+                            </div>
+                            <div className="row mt-7">
+                                <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
+                            </div>
+                            <div className="mt-5 text-center">
+                                <Link className="btn btn-warning" to={`/farmer/profile/}`} replace >
+                                    Personal Farmer Page
+                                </Link>
+                            </div>
+                        </div>
+                        }
+                        {accountTypeFlag === 2 &&
+                          <div> 
+                          <div className="row mt-6">
+                              <div className="col-md-6"><label className="labels"><h6>Avalaible : </h6></label></div>
+                          </div>
+                          <div className="row mt-7">
+                              <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
+                          </div>
+                          <div className="mt-5 text-center">
+                              <Link className="btn btn-warning" to={`/rider/profile/`} replace >
+                                  Personal Rider Page
+                              </Link>
+                          </div>
+                      </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+      );
+}
+    
 export default UserProfile;
+    

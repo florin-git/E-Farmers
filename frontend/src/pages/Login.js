@@ -73,7 +73,7 @@ function Login(props) {
         password: formData.password,
       })
       .then((res) => {
-        console.log("Login", res.data.user_id);
+        //console.log("Login", res.data.user_id);
         const userId = res.data.user_id;
         const accountType = res.data.account_type;
 

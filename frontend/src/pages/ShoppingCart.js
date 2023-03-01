@@ -13,9 +13,7 @@ function ShoppingCart({ cart }) {
   /**
    ** FUNCTIONS
    */
-
   useEffect(()  => {
-    
     (async () => {
       await axiosInstance
         .get(`users/${cart.user}/cart/items/`)
@@ -44,9 +42,9 @@ function ShoppingCart({ cart }) {
                 <div className="col-lg-7">
                   <div className="d-flex justify-content-center align-items-center mb-4">
                     <div>
-                      <p className="mb-1">
+                      <div className="mb-1">
                         <h3>Shopping cart</h3>
-                      </p>
+                      </div>
                     </div>
                   </div>
                   {boxes_array}

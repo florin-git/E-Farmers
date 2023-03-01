@@ -96,17 +96,6 @@ celerybeat-schedule.*
 # SageMath parsed files 
 *.sage.py 
 
-# Environments 
-# .env 
-.venv 
-share/
-bin/
-env/ 
-venv/ 
-ENV/ 
-env.bak/ 
-venv.bak/ 
-
 # mkdocs documentation 
 /site 
 

@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import Box from "../components/Box";
 
 import axiosInstance from "../api/axiosInsertions";
+import useAuth from "../hooks/useAuth";
 
 // The component receives the insertion's detail from ProtectedRouteInsertion
 function InsertionDetail({ insertion }) {
@@ -18,6 +19,10 @@ function InsertionDetail({ insertion }) {
 
   // Array containing the sizes of the boxes of this insertion
   const box_sizes = [];
+
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  const userId = auth.userId;
 
   /**
    ** FUNCTIONS
@@ -50,13 +55,20 @@ function InsertionDetail({ insertion }) {
   });
   
 
+  var date = new Date();
+  // `/image/?${date.getMinutes()}` in order to avoid caching of the images
   return (
     <section>
       <div className="container py-5">
         <div className="row">
           <div className="col-lg-6">
             <img
-              src={axiosInstance.defaults.baseURL + "insertions/" + insertion_id + "/image/"}
+              src={
+                axiosInstance.defaults.baseURL +
+                "insertions/" +
+                insertion_id +
+                `/image/?${date.getMinutes()}`
+              }
               alt="insertion_image"
               className="img-fluid"
             />
@@ -74,6 +86,10 @@ function InsertionDetail({ insertion }) {
             <p className="">
               <strong className="orange">Gathering location</strong>:{" "}
               {insertion.gathering_location}
+            </p>
+            <p className="">
+              <strong className="orange">Farmer</strong>:{" "}
+              {insertion.farmer}
             </p>
 
             <hr />
@@ -117,6 +133,16 @@ function InsertionDetail({ insertion }) {
             <div className="my-2">
               <Link to={`boxes/`} className="btn btn-warning btn-lg">
                 Add Boxes
+              </Link>
+            </div>
+          )}
+          {userId === insertion.farmer && (
+            <div className="my-2">
+              <Link
+                to={`${process.env.PUBLIC_URL}/insertions/${insertion_id}/edit/`}
+                className="btn btn-warning btn-lg"
+              >
+                Modify Insertion
               </Link>
             </div>
           )}
