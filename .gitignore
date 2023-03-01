@@ -184,3 +184,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+e-farm/
