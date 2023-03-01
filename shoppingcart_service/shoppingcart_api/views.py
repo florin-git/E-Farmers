@@ -25,16 +25,16 @@ class CartView(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_cart(self, request, user_id=None):  # GET /api/users/<int:user_id>/cart/
-        cart = Cart.objects.get(user=user_id);
+        cart = Cart.objects.get(user=user_id)
         serializer = CartSerializer(cart)
-        return Response(serializer.data);
+        return Response(serializer.data)
 
 class CartItemView(viewsets.ViewSet):
 
     def list_cart_items(self, request, user_id=None):   # GET /api/users/<int:user_id>/cart/items/
         
-        shopping_cart = Cart.objects.get(user=user_id);
-        cart_id = shopping_cart.pk;
+        shopping_cart = Cart.objects.get(user=user_id)
+        cart_id = shopping_cart.pk
 
         cart_items = CartItem.objects.filter(cart_id=cart_id).order_by('size')
 
@@ -44,11 +44,11 @@ class CartItemView(viewsets.ViewSet):
     def add_box(self, request, user_id=None):   # PUT /api/users/<int:user_id>/cart/items/
 
         try:
-            shopping_cart = Cart.objects.get(user=user_id);
+            shopping_cart = Cart.objects.get(user=user_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        box_farmer = request.data['farmer'];
+        box_farmer = request.data['farmer']
         if(box_farmer == shopping_cart.current_farmer):
 
             serializer = CartItemSerializer(data={

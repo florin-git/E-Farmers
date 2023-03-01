@@ -27,6 +27,7 @@ import ShoppingCart from "./pages/ShoppingCart";
 import OrdersMainPage from "./pages/OrdersMainPage";
 import TempPayPage from "./pages/TempPayPage";
 
+import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
 import SeasonsCalendar from "./components/SeasonsCalendar";
 
@@ -90,7 +91,11 @@ function App(props) {
                 <Route path="rider/profile" exact element={<RiderProfile />} />
                 <Route path="user/profile/orders" exact element={<OrdersMainPage />} />
                 {/* Access to personal shopping cart */}
-                <Route path="cart/" exact element={<ShoppingCart />} />
+                <Route
+                  path="user/cart/"
+                  exact
+                  element={<ProtectedRouteCart />}
+                />
               </Route>
             </Route>
 

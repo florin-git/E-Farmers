@@ -172,6 +172,11 @@ function UserProfile(props) {
                         Utils
                         </Link>
                     </div>   
+                    <div className="row d-flex justify-content-center align-items-center"> 
+                        <Link className="btn btn-warning" to={"payments/"} id = "payments" >
+                            Payments Page!
+                        </Link>
+                    </div>   
                 </div>
                 <div className="col-md-7 border-right">
                     <div className="p-3 py-5">
