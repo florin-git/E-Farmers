@@ -116,7 +116,18 @@ function BookedProducts() {
                 </Modal.Footer>
             </Modal>
             <ul className="list-inline shadow g-3 pt-3 pb-3">
-                {requests.length == 0 && (<h5 className="text-center">Subscribe to a farmer and start booking products!</h5>)}
+                {requests.length == 0 && (
+                    <div>
+                        <h5 className="text-center">You have no booking requests.</h5>
+                        <hr/>
+                        <p className="text-center">
+                            1) Subscribe to a farmer
+                        </p>
+                        <p className="text-center">
+                            2) Go to the <Link to={`/calendar`}>calendar</Link> and start booking products!
+                        </p>
+                    </div>
+                )}
                 {requets_array}
             </ul>
         </div>
