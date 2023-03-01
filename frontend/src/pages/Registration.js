@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
+
 import axiosInstance from "../api/axiosUsers";
 
 import useAuth from "../hooks/useAuth";
@@ -12,7 +13,7 @@ function Registration(props) {
 
   const PSW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const initialFormData = Object.freeze({
-    account_type: "",
+    // account_type: "",
     email: "",
     password: "",
     confirmPsw: "",
@@ -29,11 +30,10 @@ function Registration(props) {
   // This variable is used for the redirection
   const navigate = useNavigate();
 
-  //Update autentication
+  //Update authentication
   const { setAuth } = useAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-
 
   /**
    ** FUNCTIONS
@@ -66,9 +66,9 @@ function Registration(props) {
   }
 
   const validate = () => {
-    const securePSw = PSW_REGEX.test(formData.password)
-    setValidPsw(securePSw)
-    
+    const securePSw = PSW_REGEX.test(formData.password);
+    setValidPsw(securePSw);
+
     const compare = formData.password === formData.confirmPsw;
     setValidMatch(compare);
     return compare && securePSw;
@@ -84,43 +84,43 @@ function Registration(props) {
           name: formData.name,
           email: formData.email,
           password: formData.password,
-          account_type: formData.account_type
+          // account_type: formData.account_type,
         })
         .then(() => {
-          // If the submission was successful automatically log in PORCO DIO
+          // If the submission was successful automatically log in
           axiosInstance
-          .post("login/", {
-            email: formData.email,
-            password: formData.password,
-          })
-          .then((res) => {
-            console.log("AutoLogin")
-            let userId = res.data.user_id;
-            let accountType = res.data.account_type;
+            .post("login/", {
+              email: formData.email,
+              password: formData.password,
+            })
+            .then((res) => {
+              console.log("AutoLogin");
+              let userId = res.data.user_id;
+              let accountType = res.data.account_type;
 
-            // Generate JWT Token
-            axiosInstance
-              .post("token/", {
-                email: formData.email,
-                password: formData.password,
-              })
-              .then((res) => {
-                // Login successfully
-                const accessToken = res.data.access;
-                localStorage.setItem("refresh_token", res.data.refresh);
+              // Generate JWT Token
+              axiosInstance
+                .post("token/", {
+                  email: formData.email,
+                  password: formData.password,
+                })
+                .then((res) => {
+                  // Login successfully
+                  const accessToken = res.data.access;
+                  localStorage.setItem("refresh_token", res.data.refresh);
 
-                axiosInstance.defaults.headers[
-                  "Authorization"
-                ] = `JWT ${accessToken}`;
+                  axiosInstance.defaults.headers[
+                    "Authorization"
+                  ] = `JWT ${accessToken}`;
 
-                setAuth({ userId, accountType, accessToken });
+                  setAuth({ userId, accountType, accessToken });
 
-                navigate(from, { replace: true });
-              })
-          })
-          .catch((error) => {
-            return error.response;
-          });
+                  navigate(from, { replace: true });
+                });
+            })
+            .catch((error) => {
+              return error.response;
+            });
           // navigate("/");
         })
         .catch((error) => {
@@ -164,9 +164,7 @@ function Registration(props) {
                       <Alert.Heading>
                         A server/network error occurred
                       </Alert.Heading>
-                      <p>
-                        Double check the input and try again.
-                      </p>
+                      <p>Double check the input and try again.</p>
                     </Alert>
 
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
@@ -199,10 +197,13 @@ function Registration(props) {
                           </div>
                         </div>
 
-                        <div className="d-flex flex-row align-items-center mb-4">
+                        {/* <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div className="form-group flex-fill mb-0">
-                            <label className="form-label" htmlFor="account_type">
+                            <label
+                              className="form-label"
+                              htmlFor="account_type"
+                            >
                               TYPE
                             </label>
 
@@ -210,7 +211,6 @@ function Registration(props) {
                               type="text"
                               className="form-control"
                               id="account_type"
-                              
                               placeholder="Account_type"
                               value={formData.account_type}
                               name="account_type"
@@ -220,7 +220,7 @@ function Registration(props) {
                               required
                             />
                           </div>
-                        </div>
+                        </div> */}
 
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -320,6 +320,7 @@ function Registration(props) {
                             <a href="#!">Terms of service</a>
                           </label>
                         </div> */}
+                        
 
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                           <button
