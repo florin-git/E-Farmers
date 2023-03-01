@@ -22,7 +22,7 @@ urlpatterns = [
         'post': 'add_boxes'
     })),
 
-    # Bookin
+    # Booking
     path('booking/', BookingView.as_view({
         'post': 'book_product'
     })),

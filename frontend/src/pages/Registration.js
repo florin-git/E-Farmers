@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
-import axiosInstance from "../api/axiosUsers";
+import axiosUsers from "../api/axiosUsers";
 
 import useAuth from "../hooks/useAuth";
 
@@ -79,7 +79,7 @@ function Registration(props) {
     event.preventDefault();
 
     if (validate()) {
-      axiosInstance
+      axiosUsers
         .post("users/", {
           name: formData.name,
           email: formData.email,
@@ -88,7 +88,7 @@ function Registration(props) {
         })
         .then(() => {
           // If the submission was successful automatically log in
-          axiosInstance
+          axiosUsers
             .post("login/", {
               email: formData.email,
               password: formData.password,
@@ -99,7 +99,7 @@ function Registration(props) {
               let accountType = res.data.account_type;
 
               // Generate JWT Token
-              axiosInstance
+              axiosUsers
                 .post("token/", {
                   email: formData.email,
                   password: formData.password,
@@ -109,7 +109,7 @@ function Registration(props) {
                   const accessToken = res.data.access;
                   localStorage.setItem("refresh_token", res.data.refresh);
 
-                  axiosInstance.defaults.headers[
+                  axiosUsers.defaults.headers[
                     "Authorization"
                   ] = `JWT ${accessToken}`;
 

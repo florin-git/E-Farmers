@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
-// Account information to hold for rappresentation
+// Account information to hold for representation
 let type;
 let element;
 
@@ -48,7 +48,7 @@ function UserProfile(props) {
    */
 
   // LEGENDA =   [ 0 : USER -- 1 : FARMER -- 2 : RIDER ]
-        
+
   const farmerInfo = userInfo.account_type === 1 && (
     <div className="col-6 mb-3">
       <h6>Farm Location</h6>
@@ -57,7 +57,11 @@ function UserProfile(props) {
         {extraInfo.farm_location}{" "}
       </p>
       <div>
-        <Link className="btn btn-warning" to={`/farmer/profile/${userId}/`} replace >
+        <Link
+          className="btn btn-warning"
+          to={`/farmer/profile/${userId}/`}
+          replace
+        >
           My Personal Page
         </Link>
       </div>
@@ -66,13 +70,13 @@ function UserProfile(props) {
 
   const riderInfo = userInfo.account_type === 2 && (
     <div className="col-6 mb-3">
-      <h6>Avalaible</h6>
-      <p className="text-muted" id="Avalaible">
+      <h6>Available</h6>
+      <p className="text-muted" id="Available">
         {" "}
-        {extraInfo.avalaible}{" "}
+        {extraInfo.available}{" "}
       </p>
       <div>
-        <Link className="btn btn-warning" to={"/rider/profile/"} replace >
+        <Link className="btn btn-warning" to={"/rider/profile/"} replace>
           Rider Page
         </Link>
       </div>
@@ -97,7 +101,7 @@ function UserProfile(props) {
           type = res.data[0].account_type;
           if (type === 1 || type === 2) {
             setExtraInfo(res.data[1]);
-            console.log("User speciale ongoing new actions.");
+            console.log("User special ongoing new actions.");
             modify_button(type);
           }
         })
@@ -125,23 +129,27 @@ function UserProfile(props) {
                       className="img-fluid my-5"
                       width="80px;"
                     />
-                  <div>
-                    <div className="row d-flex justify-content-center align-items-center"> 
-                      <Link className="btn btn-primary m-1" to={"orders/"} id="orders" >
-                        Orders
-                      </Link>
+                    <div>
+                      <div className="row d-flex justify-content-center align-items-center">
+                        <Link
+                          className="btn btn-primary m-1"
+                          to={"orders/"}
+                          id="orders"
+                        >
+                          Orders
+                        </Link>
+                      </div>
+                      <div className="row d-flex justify-content-center align-items-center">
+                        <Link className="btn btn-primary m-1 " to={"/"}>
+                          Cards
+                        </Link>
+                      </div>
+                      <div className="row d-flex justify-content-center align-items-center">
+                        <Link className="btn btn-primary m-1 " to={"/"}>
+                          Utils
+                        </Link>
+                      </div>
                     </div>
-                    <div className="row d-flex justify-content-center align-items-center"> 
-                      <Link className="btn btn-primary m-1 " to={"/"} >
-                        Cards
-                        </Link>   
-                    </div>
-                    <div className="row d-flex justify-content-center align-items-center"> 
-                    <Link className="btn btn-primary m-1 " to={"/"} >
-                        Utils
-                      </Link>
-                    </div>                                    
-                  </div>
                   </div>
                   <div className="col-md-8">
                     <div className="card-body p-4">
@@ -192,33 +200,45 @@ function UserProfile(props) {
                       </div>
                       <h6> Upgrade </h6>
                       <div className="row pt-1">
-                          <div className="col-6 mb-3">
-                            <div> 
-                              <Link className="btn btn-warning" to={"farmer_update/"} id = "farmer" >
-                                            Become a Farmer!
-                              </Link>
-                            </div>
+                        <div className="col-6 mb-3">
+                          <div>
+                            <Link
+                              className="btn btn-warning"
+                              to={"farmer_update/"}
+                              id="farmer"
+                            >
+                              Become a Farmer!
+                            </Link>
                           </div>
-                          <div className="col-6 mb-3">
-                            <div>
-                              <Link className="btn btn-warning" to={"rider_update/"} id = "rider" >
-                                            Become a Rider!
-                              </Link>
-                            </div>
+                        </div>
+                        <div className="col-6 mb-3">
+                          <div>
+                            <Link
+                              className="btn btn-warning"
+                              to={"rider_update/"}
+                              id="rider"
+                            >
+                              Become a Rider!
+                            </Link>
                           </div>
+                        </div>
 
-                          <div className="col-6 mb-3">
-                            <div> 
-                              <Link className="btn btn-warning" to={"payments/"} id = "payments" >
-                                            Payments Page!
-                              </Link>
-                            </div>
+                        <div className="col-6 mb-3">
+                          <div>
+                            <Link
+                              className="btn btn-warning"
+                              to={"payments/"}
+                              id="payments"
+                            >
+                              Payments Page!
+                            </Link>
                           </div>
-                      </div> 
+                        </div>
+                      </div>
 
-                      <div className = "row pt-1" id = "extrainfo">
-                        <h6 id="specialInfo">  </h6>
-                        {element} 
+                      <div className="row pt-1" id="extrainfo">
+                        <h6 id="specialInfo"> </h6>
+                        {element}
                       </div>
                       {userInfo.account_type !== 0 && (
                         <div className="row pt-1" id="extrainfo">
@@ -264,8 +284,8 @@ export default UserProfile;
     )}
     {type = 2 && (
     <div className="col-6 mb-3">
-      <h6>Avalaible</h6>
-      <p className="text-muted" id="Avalaible"></p>
+      <h6>Available</h6>
+      <p className="text-muted" id="Available"></p>
     </div>
     )}
   </div>

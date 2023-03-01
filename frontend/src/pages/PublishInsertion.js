@@ -3,8 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
-
-import axiosUsers from "../api/axiosUsers";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInsertions from "../api/axiosInsertions";
 import axiosSubscription from "../api/axiosSubscription";
 
@@ -56,6 +55,8 @@ function PublishInsertion(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
+  // axios function with JWT tokens
+  const axiosPrivate = useAxiosPrivate();
 
   /**
    ** FUNCTIONS
@@ -173,11 +174,9 @@ function PublishInsertion(props) {
         })
         .then(() => {
           // Retrieve the farmer's info
-          axiosUsers
+          axiosPrivate
             .get(`farmers/${userId}/`)
             .then((res) => {
-              // setFarmerInfo(res.data);
-
               const farmerInfo = res.data;
 
               /**

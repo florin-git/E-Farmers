@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../api/axiosUsers";
+import axiosUsers from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {FormControlLabel,Switch} from "@mui/material";
@@ -53,7 +53,7 @@ function RiderUpdate(props) {
     (async () => {
       await axiosPrivate
         .post(`users/${userId}/${type}/`, {
-          avalaible: false,
+          available: false,
           bio: formData.bio
         })
         .then((res) => {
@@ -63,7 +63,7 @@ function RiderUpdate(props) {
               user_id: userId,
             })
             .then(() => {
-              axiosInstance
+              axiosUsers
                 .patch(`users/${userId}/`, {
                   /*email : email,
                   password : "password",*/
@@ -133,7 +133,7 @@ function RiderUpdate(props) {
                             color= "success"
                           />
                           } 
-                            label="Avalaible" 
+                            label="Available" 
                           />
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                           <button

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import axiosInstance from "../api/axiosUsers";
+import axiosUsers from "../api/axiosUsers";
 
 
 function FarmerUpdate(props) {
@@ -56,7 +56,7 @@ function FarmerUpdate(props) {
               user_id: userId,
             })
             .then(() => {
-              axiosInstance
+              axiosUsers
                 .patch(`users/${userId}/`, {
                   /*email : email,
                   password : "password",*/

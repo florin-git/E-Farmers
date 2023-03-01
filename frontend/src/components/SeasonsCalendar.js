@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-import axiosUsers from "../api/axiosUsers";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInsertions from "../api/axiosInsertions";
 import axiosSubscription from "../api/axiosSubscription";
 
@@ -16,10 +16,70 @@ function SeasonsCalendar(props) {
 }*/
 
 const seasonal_food = new Map();
-seasonal_food.set('Winter', ["Chestnuts", "Grapefruit", "Lemons", "Oranges", "Tangerines", "Kale", "Leeks", "Radicchio", "Radishes", "Rutabaga", "Turnips"]);
-seasonal_food.set('Spring', ["Apricots", "Avocado", "Mango", "Pineapple", "Rhubarb", "Strawberries", "Artichoke", "Asparagus", "Carrots", "Celeriac", "Chives", "Collards", "Fava Beans", "Fennel", "Fiddlehead Ferns", "Morels", "Mustard Greens"]);
-seasonal_food.set('Summer', ["Blackberries", "Blueberries", "Nectarines", "Peaches", "Plums", "Raspberries", "Tomatoes", "Watermelon", "Broccoli", "Cucumber", "Green Beans", "Zucchini"]);
-seasonal_food.set('Fall', ["Apples", "Cranberries", "Figs", "Grapes", "Pears", "Pomegranate", "Quince", "Butternut Squash", "Cauliflower", "Garlic", "Ginger", "Mushrooms", "Potatoes", "Pumpkin", "Sweet Potatoes", "Swiss Chard"]);
+seasonal_food.set("Winter", [
+  "Chestnuts",
+  "Grapefruit",
+  "Lemons",
+  "Oranges",
+  "Tangerines",
+  "Kale",
+  "Leeks",
+  "Radicchio",
+  "Radishes",
+  "Rutabaga",
+  "Turnips",
+]);
+seasonal_food.set("Spring", [
+  "Apricots",
+  "Avocado",
+  "Mango",
+  "Pineapple",
+  "Rhubarb",
+  "Strawberries",
+  "Artichoke",
+  "Asparagus",
+  "Carrots",
+  "Celeriac",
+  "Chives",
+  "Collards",
+  "Fava Beans",
+  "Fennel",
+  "Fiddlehead Ferns",
+  "Morels",
+  "Mustard Greens",
+]);
+seasonal_food.set("Summer", [
+  "Blackberries",
+  "Blueberries",
+  "Nectarines",
+  "Peaches",
+  "Plums",
+  "Raspberries",
+  "Tomatoes",
+  "Watermelon",
+  "Broccoli",
+  "Cucumber",
+  "Green Beans",
+  "Zucchini",
+]);
+seasonal_food.set("Fall", [
+  "Apples",
+  "Cranberries",
+  "Figs",
+  "Grapes",
+  "Pears",
+  "Pomegranate",
+  "Quince",
+  "Butternut Squash",
+  "Cauliflower",
+  "Garlic",
+  "Ginger",
+  "Mushrooms",
+  "Potatoes",
+  "Pumpkin",
+  "Sweet Potatoes",
+  "Swiss Chard",
+]);
 
 const seasons = new Map();
 for (const x of Array(12).keys()) {
@@ -47,12 +107,13 @@ function SeasonsCalendar() {
   */
   const { auth } = useAuth();
   const userId = auth.userId;
+  const axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
 
   const [seasonalFood, setSeason] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setProduct] = useState('');
+  const [selectedProduct, setProduct] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
   const [formData, setFormData] = useState({
     comment: "",
@@ -76,8 +137,8 @@ function SeasonsCalendar() {
       .get(`customer/${userId}/subscriptions/`)
       .then((res) => {
         const farmers_names = new Array(res.data.length);
-        res.data.forEach((subscription_farmer_id, index) => 
-          axiosUsers
+        res.data.forEach((subscription_farmer_id, index) =>
+          axiosPrivate
             .get(`farmers/${subscription_farmer_id}/`)
             .then((res) => {
               farmers_names[index] = [subscription_farmer_id, res.data.name];
@@ -85,7 +146,7 @@ function SeasonsCalendar() {
             .catch((error) => {
               console.log(error.response);
             })
-        )
+        );
         setSubscriptions(farmers_names);
       })
       .catch((error) => {
@@ -125,8 +186,7 @@ function SeasonsCalendar() {
 
       // Check date
       if (deadline < today) {
-        formValidation.deadline =
-          "The expiration date cannot be in the past!";
+        formValidation.deadline = "The expiration date cannot be in the past!";
         formValidationClass.deadline_for_class = "is-invalid";
       } else {
         formValidation.deadline = "";
@@ -178,7 +238,6 @@ function SeasonsCalendar() {
     return valid;
   }
 
-
   // On submit
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -227,7 +286,7 @@ function SeasonsCalendar() {
   };
 
   function redirectToInsertions(event) {
-    const name = event.target.id
+    const name = event.target.id;
     window.location.replace(`../insertions?search=${name}`);
   }
 
@@ -260,31 +319,37 @@ function SeasonsCalendar() {
           <div className="card w-75">
             <div className="card-body">
               <h5 className="card-title">{item}</h5>
-              <br/>
+              <br />
               <div className="container">
                 <div className="row">
                   <div className="col-sm">
-                    <button className="btn btn-outline-primary" id={item} onClick={redirectToInsertions}>View</button>
+                    <button
+                      className="btn btn-outline-primary"
+                      id={item}
+                      onClick={redirectToInsertions}
+                    >
+                      View
+                    </button>
                   </div>
                 </div>
-                  {subscriptions.length != 0 && (
-                    <div>
-                      <br/>
-                        <div className="row">
-                          <div className="col-sm">
-                          <button
-                            type="button"
-                            id={item}
-                            name="book"
-                            onClick={(event) => handleShowModal(event)}
-                            className="btn btn-outline-warning"
-                          >
-                            Book from a farmer
-                          </button>
-                        </div>
+                {subscriptions.length != 0 && (
+                  <div>
+                    <br />
+                    <div className="row">
+                      <div className="col-sm">
+                        <button
+                          type="button"
+                          id={item}
+                          name="book"
+                          onClick={(event) => handleShowModal(event)}
+                          className="btn btn-outline-warning"
+                        >
+                          Book from a farmer
+                        </button>
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -305,9 +370,7 @@ function SeasonsCalendar() {
           onDayClick={(event) => handleDaySelection(event)}
         />
       )}
-      {showModal == true && (
-        <Calendar/>
-      )}
+      {showModal == true && <Calendar />}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -315,14 +378,14 @@ function SeasonsCalendar() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h6>Use this form to send a request to a farmer you are subscribed to.</h6>
+          <h6>
+            Use this form to send a request to a farmer you are subscribed to.
+          </h6>
           <div className="container-md py-5">
             <div className="row ">
               <div className="d-flex justify-content-center align-items-center h-100">
                 <form onSubmit={handleSubmit}>
-                  <h3>
-                    {selectedProduct}
-                  </h3>
+                  <h3>{selectedProduct}</h3>
 
                   <div className="form-group mt-3">
                     <label htmlFor="comment">Comment</label>
@@ -381,7 +444,10 @@ function SeasonsCalendar() {
                       value={formData.farmer}
                       onChange={handleFarmerChange}
                     >
-                      {subscriptions.map(farmer => {return (<option value={farmer[0]}>{farmer[1]}</option>)})};
+                      {subscriptions.map((farmer) => {
+                        return <option value={farmer[0]}>{farmer[1]}</option>;
+                      })}
+                      ;
                     </select>
                   </div>
 

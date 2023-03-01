@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 // Bootstrap Components
 import Modal from "react-bootstrap/Modal";
 
-import axiosInstance from "../api/axiosInsertions";
+import axiosInsertions from "../api/axiosInsertions";
 import useAuth from "../hooks/useAuth";
 
 function ListInsertions({ farmerUserId, searchString }) {
@@ -34,7 +34,7 @@ function ListInsertions({ farmerUserId, searchString }) {
        * Because the 'await' keyword, the asynchronous
        * function is paused until the request completes.
        */
-      await axiosInstance
+      await axiosInsertions
         .get("insertions/", {
           params: {
             farmer: farmerUserId,
@@ -61,7 +61,7 @@ function ListInsertions({ farmerUserId, searchString }) {
 
   // Deletion
   const handleDeletion = async () => {
-    await axiosInstance.delete(`insertions/${idToDelete}/`);
+    await axiosInsertions.delete(`insertions/${idToDelete}/`);
 
     setShowModal(false); // Close modal
 
@@ -82,7 +82,7 @@ function ListInsertions({ farmerUserId, searchString }) {
           <div className="card w-75">
             <img
               src={
-                axiosInstance.defaults.baseURL +
+                axiosInsertions.defaults.baseURL +
                 "insertions/" +
                 insertion.id +
                 `/image/?${date.getMinutes()}`

@@ -28,7 +28,7 @@ function RiderProfile(props){
 
                 <h4 className="mb-0">Troia Ambulante</h4>
                 <span className="text-muted d-block mb-2">El salvador</span>
-                <span className="text-muted d-block mb-2">STATUS : AVALAIBLE </span>
+                <span className="text-muted d-block mb-2">STATUS : Available </span>
                 <button className="btn btn-primary btn-sm follow">Change Status</button>
 
 

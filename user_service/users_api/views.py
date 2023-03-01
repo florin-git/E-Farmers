@@ -99,7 +99,6 @@ class UsersView(viewsets.ViewSet):
         user = User.objects.get(id=user_id)
         # We use the parameter type to differentiate the user choose . Passed via url by
         if(type == 1):
-            print("Sono un fottuto farmer")
             serializer_farmer = FarmerSerializer(data=request.data)
             if serializer_farmer.is_valid(raise_exception=True):
                 serializer_farmer.save()
@@ -112,7 +111,6 @@ class UsersView(viewsets.ViewSet):
 
                 return Response(serializer_farmer.data, status=status.HTTP_201_CREATED)
         else:
-            print("Sono un fottuto rider")
             serializer = RiderSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()

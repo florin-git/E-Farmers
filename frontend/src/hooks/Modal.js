@@ -4,9 +4,8 @@ import Box from '@mui/material/Box';
 import Rating  from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import axiosInstance from '../api/axiosUsers';
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
-import reviewCSS from "../my_css/review.css";
 
 let farmer_id=false;
 
@@ -14,6 +13,7 @@ const Modal = ({ open, onClose }) => {
 
   const { auth } = useAuth();
   const user_id = auth.userId;
+  const axiosPrivate = useAxiosPrivate();
 
   const [stars, setStars] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
@@ -38,7 +38,7 @@ const Modal = ({ open, onClose }) => {
   
 
   function getFarmer_id(user_id){
-    axiosInstance
+    axiosPrivate
       .get(`farmers/${user_id}/`)
       .then((res) => {
         farmer_id = res.data;
@@ -56,7 +56,7 @@ const Modal = ({ open, onClose }) => {
     console.log(user_id)
     console.log(farmer_id)
     event.preventDefault();
-    axiosInstance
+    axiosPrivate
       .post(`users/farmers/${farmer_id}/`, {
         rating : stars,
         comment : comment,

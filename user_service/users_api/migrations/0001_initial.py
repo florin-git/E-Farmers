@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
             name='Rider',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('avalaible', models.BooleanField(default=b'I00\n')),
+                ('available', models.BooleanField(default=b'I00\n')),
                 ('bio', models.CharField(max_length=255)),
                 ('ext_user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='external_user_r', to=settings.AUTH_USER_MODEL)),
             ],

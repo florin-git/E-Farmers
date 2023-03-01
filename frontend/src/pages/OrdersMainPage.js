@@ -9,7 +9,6 @@ import axiosOrder from "../api/axiosOrder";
 
 import MyModal from "../components/MyModal";
 
-import axiosUsers from "../api/axiosUsers";
 import Modal from "../hooks/Modal";
 import review_css from "../my_css/review.css";
 

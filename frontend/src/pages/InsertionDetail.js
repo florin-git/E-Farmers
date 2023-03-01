@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from "../components/Box";
 
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInsertions from "../api/axiosInsertions";
-import axiosUsers from "../api/axiosUsers";
 
 import useAuth from "../hooks/useAuth";
 
@@ -25,6 +25,8 @@ function InsertionDetail({ insertion }) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
+  // axios function with JWT tokens
+  const axiosPrivate = useAxiosPrivate();
 
   // Farmer info
   const farmerId = insertion.farmer;
@@ -54,8 +56,11 @@ function InsertionDetail({ insertion }) {
     /**
      * Retrieve the farmer's info
      */
+
+    if (farmerId === undefined) return;
+
     (async () => {
-      await axiosUsers
+      await axiosPrivate
         .get(`farmers/${farmerId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
@@ -65,7 +70,6 @@ function InsertionDetail({ insertion }) {
         });
     })();
   }, [farmerId]);
-
 
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
@@ -154,13 +158,15 @@ function InsertionDetail({ insertion }) {
           {/* If the insertion already contains all the possible boxes 
 						(i.e., small, medium, large; so the array length is 3),
 						then you cannot add more boxes */}
-          {userId === insertion.farmer && box_sizes.length !== 3 && insertion.private === false && (
-            <div className="my-2">
-              <Link to={`boxes/`} className="btn btn-warning btn-lg">
-                Add Boxes
-              </Link>
-            </div>
-          )}
+          {userId === insertion.farmer &&
+            box_sizes.length !== 3 &&
+            insertion.private === false && (
+              <div className="my-2">
+                <Link to={`boxes/`} className="btn btn-warning btn-lg">
+                  Add Boxes
+                </Link>
+              </div>
+            )}
           {userId === insertion.farmer && (
             <div className="my-2">
               <Link

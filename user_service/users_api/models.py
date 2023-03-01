@@ -31,7 +31,7 @@ class User(AbstractUser):
 
 class Rider(models.Model):
     # Rider Properties 
-    avalaible = models.BooleanField(default = FALSE)  
+    available = models.BooleanField(default = FALSE)  
     bio = models.CharField(max_length = 255)
     ext_user = models.OneToOneField (
         User,

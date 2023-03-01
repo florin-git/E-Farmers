@@ -5,7 +5,7 @@ import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import ListInsertions from "../components/ListInsertions";
 
-import axiosUsers from "../api/axiosUsers";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosSubscription from "../api/axiosSubscription";
 
 import useAuth from "../hooks/useAuth";
@@ -19,6 +19,7 @@ function FarmerProfile(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
+  const axiosPrivate = useAxiosPrivate();
 
   // Retrieve the id from the URL
   const farmerUserId = useParams()?.farmer_id;
@@ -33,7 +34,7 @@ function FarmerProfile(props) {
      * Retrieve the farmer's info
      */
     (async () => {
-      await axiosUsers
+      await axiosPrivate
         .get(`farmers/${farmerUserId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
