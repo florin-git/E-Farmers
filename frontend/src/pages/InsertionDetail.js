@@ -154,7 +154,7 @@ function InsertionDetail({ insertion }) {
           {/* If the insertion already contains all the possible boxes 
 						(i.e., small, medium, large; so the array length is 3),
 						then you cannot add more boxes */}
-          {box_sizes.length !== 3 && (
+          {userId === insertion.farmer && box_sizes.length !== 3 && insertion.private === false && (
             <div className="my-2">
               <Link to={`boxes/`} className="btn btn-warning btn-lg">
                 Add Boxes

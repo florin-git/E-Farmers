@@ -26,6 +26,7 @@ class BoxSerializer(serializers.ModelSerializer):
         # fields = ['weight', 'size', 'price', 'number_of_available_boxes']
         fields = '__all__' # Get all fields
 
-
-        
-    
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = '__all__'

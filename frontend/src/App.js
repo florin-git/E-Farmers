@@ -9,8 +9,11 @@ import Home from "./pages/Home";
 // Import delle insertions
 import Insertions from "./pages/Insertions";
 import PublishInsertion from "./pages/PublishInsertion";
+import PublishPrivateInsertion from "./pages/PublishPrivateInsertion";
 import EditInsertion from "./pages/EditInsertion.js";
 import AddBoxes from "./pages/AddBoxes";
+import BookedProducts from "./pages/BookedProducts";
+import Inbox from "./pages/Inbox";
 // Import dell'user profile
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -112,6 +115,8 @@ function App(props) {
                 />
                 {/* Access to personal shopping cart */}
                 <Route path="cart/" exact element={<ShoppingCart />} />
+                {/* Access to the list of booked products */}
+                <Route path="booking/" exact element={<BookedProducts />}/>
 
                 {/* You can modify insertions only if you are a Farmer */}
                 <Route element={<RequiredAuth allowedRoles={[1]} />}>
@@ -121,9 +126,20 @@ function App(props) {
                     element={<PublishInsertion />}
                   />
                   <Route
+                    path="insertions/new/private/"
+                    exact
+                    element={<PublishPrivateInsertion />}
+                  />
+                  <Route
                     path="insertions/:insertion_id/edit/"
                     exact
                     element={<EditInsertion />}
+                  />
+                  {/* You can receive and access booking orders only if you are a farmer */}
+                  <Route
+                    path="inbox/"
+                    exact
+                    element={<Inbox />}
                   />
                 </Route>
               </Route>

@@ -13,7 +13,10 @@ function Box(props) {
   return (
     <div className="col">
       <div className="card">
-        <h4 className="card-header fw-bold">{size} boxes</h4>
+        {props.size != 3
+          ? <h4 className="card-header fw-bold">{size} boxes</h4>
+          : <h4 className="card-header fw-bold">Box</h4>
+        }
         <div className="card-body">
           <p className="card-text">
             Box Weight:{" "}

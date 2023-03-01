@@ -116,6 +116,22 @@ function Navbar(props) {
                 Calendar
               </Link>
             </li>
+            {isLoggedIn && (
+              <React.Fragment>
+                <li>
+                  <Link className="nav-link" to={"booking/"}>
+                    Booked products
+                  </Link>
+                </li>
+                {isFarmer && (
+                  <li>
+                    <Link className="nav-link" to={"inbox/"}>
+                      Inbox
+                    </Link>
+                  </li>
+                )}
+              </React.Fragment>
+            )}
           </ul>
           <ul className="navbar-nav navbar-right">
             {/* <li className="nav-item">
