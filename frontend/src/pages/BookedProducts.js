@@ -18,11 +18,7 @@ function BookedProducts() {
     useEffect(() => {
             (async () => {
             await axiosInstance
-                .get("booking/requests/", {
-                params: {
-                    user_id: userId,
-                },
-                })
+                .get(`booking/requests/${userId}/`)
                 .then((res) => {
                 setRequests(res.data);
                 })
@@ -48,11 +44,7 @@ function BookedProducts() {
     // Cancellation
     const handleCancelling = async () => {
         await axiosInstance
-            .delete("booking/", {
-                params: {
-                    request_id: selectedId,
-                }
-            });
+            .delete(`booking/${selectedId}/`);
 
         setShowModal(false); // Close modal
 

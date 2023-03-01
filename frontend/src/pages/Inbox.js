@@ -18,11 +18,7 @@ function Inbox() {
     useEffect(() => {
             (async () => {
             await axiosInstance
-                .get("booking/inbox/", {
-                params: {
-                    farmer_id: userId,
-                },
-                })
+                .get(`booking/inbox/${userId}/`)
                 .then((res) => {
                 setRequests(res.data);
                 })
@@ -50,11 +46,7 @@ function Inbox() {
     // Decline
     const handleDeclining = async () => {
         await axiosInstance
-            .delete("booking/", {
-                params: {
-                    request_id: selectedId,
-                }
-            });
+            .delete(`booking/${selectedId}/`);
 
         setShowModal(false); // Close modal
 
@@ -151,6 +143,7 @@ function Inbox() {
                 </Modal.Footer>
             </Modal>
             <ul className="list-inline shadow g-3 pt-3 pb-3">
+                {requests.length == 0 && (<h5 className="text-center">You have no request at the moment.</h5>)}
                 {requets_array}
             </ul>
         </div>

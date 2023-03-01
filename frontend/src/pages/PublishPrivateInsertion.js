@@ -4,10 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
-import axiosUsers from "../api/axiosUsers";
 import axiosInsertions from "../api/axiosInsertions";
-import axiosSubscription from "../api/axiosSubscription";
-import axiosInstance from "../api/axiosUsers";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -67,11 +64,7 @@ function PublishPrivateInsertion(props) {
 
   const getRequest = async () => {
     await axiosInsertions
-        .get("booking/", {
-        params: {
-            request_id: searchParams.get('request_id', -1),
-        },
-        })
+        .get(`booking/${searchParams.get('request_id', -1)}/`)
         .then((res) => {
         setRequest(res.data);
         })
@@ -229,7 +222,7 @@ function PublishPrivateInsertion(props) {
                   request_data.append("weight", request.weight);
                   request_data.append("deadline", request.deadline);
                   axiosInsertions
-                      .put('booking/', request_data);
+                      .put(`booking/${request.id}/`, request_data);
                   // If the submission was successful
                   navigate("/insertions");
                 });

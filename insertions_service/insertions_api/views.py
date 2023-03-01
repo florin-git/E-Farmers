@@ -125,22 +125,21 @@ class BoxesView(viewsets.ViewSet):
 #* Booking
 ###
 class BookingView(viewsets.ViewSet):
-    def get_request(self, request): # GET /api/booking/<int:request_id>/
+    def get_request(self, request, request_id): # GET /api/booking/<int:request_id>/
         # Return the request specified
         today = date.today()
-        request = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        # request = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        request = Request.objects.get(id=request_id)
         if request.deadline < today:
             request.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = RequestSerializer(request)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def accept_request(self, request): # PUT /api/booking/
+    def accept_request(self, request, request_id): # PUT /api/booking/
         # Set the request's insertion field
         today = date.today()
-        # return Response(None, status=status.HTTP_200_OK)
-        
-        product_request = Request.objects.get(id=int(request.data['id']))
+        product_request = Request.objects.get(id=request_id)
         if product_request.deadline < today:
             request.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -149,28 +148,41 @@ class BookingView(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
-    def list_booked_products(self, request): # GET /api/booking/requests/<int:user_id>/
+    def list_booked_products(self, request, user_id): # GET /api/booking/requests/<int:user_id>/
         # Returns the list of a user's requests (booked products)
-        requests = Request.objects.filter(user=int(request.GET.get('user_id', '')))
+
+        # Delete all the expired requests
+        today = date.today()
+        requests_to_be_deleted = Request.objects.filter(user=user_id).exclude(deadline__gte = today)
+        for req in requests_to_be_deleted:
+            req.delete()
+
+        requests = Request.objects.filter(user=user_id)
         serializer = RequestSerializer(requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def list_requests(self, request): # GET /api/booking/inbox/<int:farmer_id>/
+    def list_requests(self, request, farmer_id): # GET /api/booking/inbox/<int:farmer_id>/
         # Returns the list of a farmer's requests received by users
-        list_of_requests = Request.objects.filter(farmer=int(request.GET.get('farmer_id', '')))
+
+        # Delete all the expired requests
+        today = date.today()
+        requests_to_be_deleted = Request.objects.filter(farmer=farmer_id).exclude(deadline__gte = today)
+        for req in requests_to_be_deleted:
+            req.delete()
+        
+        list_of_requests = Request.objects.filter(farmer=farmer_id)
         serializer = RequestSerializer(list_of_requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def book_product(self, request): # POST /api/booking/
         # Creates a new request
-        print(request.data)
         serializer = RequestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    def cancel_booking(self, request): # GET /api/booking/<int:id>
+    def cancel_booking(self, request, request_id): # GET /api/booking/<int:id>
         # Deletes a request
-        request_to_be_deleted = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        request_to_be_deleted = Request.objects.get(id=request_id)
         request_to_be_deleted.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

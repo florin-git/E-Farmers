@@ -22,19 +22,22 @@ urlpatterns = [
         'post': 'add_boxes'
     })),
 
-    # Booking
+    # Bookin
     path('booking/', BookingView.as_view({
+        'post': 'book_product'
+    })),
+
+    path('booking/<int:request_id>/', BookingView.as_view({
         'get': 'get_request',
-        'post': 'book_product',
         'put': 'accept_request',
         'delete': 'cancel_booking'
     })),
-    
-    path('booking/requests/', BookingView.as_view({
+
+    path('booking/requests/<int:user_id>/', BookingView.as_view({
         'get': 'list_booked_products'
     })),
 
-    path('booking/inbox/', BookingView.as_view({
+    path('booking/inbox/<int:farmer_id>/', BookingView.as_view({
         'get': 'list_requests'
     }))
 ]
