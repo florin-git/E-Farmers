@@ -100,6 +100,8 @@ function App(props) {
                   exact
                   element={<ProtectedRouteCart />}
                 />
+                {/*Access to payment page*/}
+                <Route path="user/cart/payment" exact element={<TempPayPage />}></Route>
               </Route>
             </Route>
 

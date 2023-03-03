@@ -84,4 +84,5 @@ class CartItemView(viewsets.ViewSet):
             )
             
         box.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
