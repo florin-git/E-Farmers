@@ -59,6 +59,9 @@ class CartItemView(viewsets.ViewSet):
                 'price': request.data['price']
             })
 
+            n_items = shopping_cart.number_of_items + 1 
+            shopping_cart.number_of_items = n_items
+
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
             return Response(status=status.HTTP_200_OK)
