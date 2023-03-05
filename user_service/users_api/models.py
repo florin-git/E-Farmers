@@ -1,5 +1,4 @@
 from pickle import FALSE
-from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
@@ -50,7 +49,7 @@ class Farmer(models.Model):
     bio = models.CharField(max_length = 255)
     ext_user = models.OneToOneField (
         User,
-        related_name="external_user_f",
+        related_name="external_user_f",     
         on_delete=models.CASCADE,
         blank=True,
         null=True

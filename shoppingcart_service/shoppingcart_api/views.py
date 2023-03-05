@@ -59,6 +59,9 @@ class CartItemView(viewsets.ViewSet):
                 'price': request.data['price']
             })
 
+            n_items = shopping_cart.number_of_items + 1 
+            shopping_cart.number_of_items = n_items
+
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
             return Response(status=status.HTTP_200_OK)
@@ -67,7 +70,7 @@ class CartItemView(viewsets.ViewSet):
     
     def remove_box(self, request, user_id=None):    # DELETE /api/users/<int:user_id>/cart/items/
         try:
-            shopping_cart = Cart.objects.get(user=user_id);
+            shopping_cart = Cart.objects.get(user=user_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -81,4 +84,5 @@ class CartItemView(viewsets.ViewSet):
             )
             
         box.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)

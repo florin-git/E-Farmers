@@ -23,9 +23,8 @@ import UserProfile from "./pages/UserProfile";
 import FarmerProfile from "./pages/FarmerProfile";
 import RiderProfile from "./pages/RiderProfile";
 // Import carrello + pagamenti
-import ShoppingCart from "./pages/ShoppingCart";
 import OrdersMainPage from "./pages/OrdersMainPage";
-import TempPayPage from "./pages/TempPayPage";
+import PaymentPage from "./pages/PaymentPage";
 
 import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
@@ -72,7 +71,16 @@ function App(props) {
                 exact
                 element={<AddBoxes />}
               />
-              <Route path="farmer/profile/:farmer_id" exact element={<FarmerProfile />} />
+              <Route 
+                path="farmer/profile/:farmer_id/" 
+                exact
+                element={<FarmerProfile />} 
+              />
+              <Route 
+                path="rider/profile/:rider_id/" 
+                exact
+                element={<RiderProfile />} 
+              />
 
               {/* For Users service */}
               {!isLoggedIn && (
@@ -83,12 +91,10 @@ function App(props) {
               )}
 
               {/* Temp Page for testing */ }
-              <Route path="user/profile/payments" exact element = {<TempPayPage />} />
+              <Route path="user/profile/payments" exact element = {<PaymentPage />} />
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuthNOROLE  />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
-                <Route path="farmer/profile" exact element={<FarmerProfile />} />
-                <Route path="rider/profile" exact element={<RiderProfile />} />
                 <Route path="user/profile/orders" exact element={<OrdersMainPage />} />
                 {/* Access to personal shopping cart */}
                 <Route
@@ -96,6 +102,8 @@ function App(props) {
                   exact
                   element={<ProtectedRouteCart />}
                 />
+                {/*Access to payment page*/}
+                <Route path="user/cart/payment" exact element={<PaymentPage />}></Route>
               </Route>
             </Route>
 

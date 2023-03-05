@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
@@ -6,7 +6,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {FormControlLabel,Switch} from "@mui/material";
 
 
-const RiderUpdate = ({trigger}) => {
+const RiderUpdate = (props) => {
 
   const initialFormData = Object.freeze({
     bio: ""
@@ -15,11 +15,11 @@ const RiderUpdate = ({trigger}) => {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
-
   const axiosPrivate = useAxiosPrivate();
 
   // Form
   const [formData, setFormData] = useState(initialFormData);
+  const [flagForm, setFlagForm] = useState(false);
 
   // Used to pass it to the post in order to recognize the type of account
   const type = 2
@@ -34,6 +34,10 @@ const RiderUpdate = ({trigger}) => {
   };
 
   function handleChange(event) {
+    //just a flag to avoid save changes with blank space
+    if(!flagForm)
+      setFlagForm(true)
+
     // Get name and value of the changed field
     const { name, value } = event.target;
 
@@ -46,46 +50,64 @@ const RiderUpdate = ({trigger}) => {
     });
   }
 
+  const validateInput = () => {
+    if (!flagForm)
+      return false;
+    else{
+      /* Controllo sull'input */
+      return true;
+    }
+  };
+
+  useEffect(() => {
+    if ( props.trigger ){
+      console.log("Child Trigger : ", props.trigger)
+      handleSubmit()
+    }
+  }, [props.trigger]);
   
 
   // Submit event
   const handleSubmit = (event) => {
-    event.preventDefault();
-    (async () => {
-      await axiosPrivate
-        .post(`users/${userId}/${type}/`, {
-          avalaible: false,
-          bio: formData.bio
-        })
-        .then((res) => {
-          console.log("Modificare campo Account Type dell'user")
-          axiosPrivate
-            .post(`token/verify/`, {
-              user_id: userId,
-            })
-            .then(() => {
-              axiosInstance
-                .patch(`users/${userId}/`, {
-                  /*email : email,
-                  password : "password",*/
-                  account_type: type
-                })
-                .then((res) => {
-                  console.log(res.data)
-                  //navigate("/user/profile/")
-                })
-                .catch((error)=> {
-                  console.log(error.response);
-                });
-            })
-            .catch((error) => {
-              console.log(error.response);
-            });
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-    })();
+    if(validateInput()){
+      (async () => {
+        await axiosPrivate
+          .post(`users/${userId}/${type}/`, {
+            avalaible: false,
+            bio: formData.bio
+          })
+          .then((res) => {
+            axiosPrivate
+              .post(`token/verify/`, {
+                user_id: userId,
+              })
+              .then(() => {
+                axiosInstance
+                  .patch(`users/${userId}/`, {
+                    /*email : email,
+                    password : "password",*/
+                    account_type: type
+                  })
+                  .then((res) => {
+                    console.log(res.data)
+                    props.parentFunction(flagForm);
+                    //navigate("/user/profile/")
+                  })
+                  .catch((error)=> {
+                    console.log(error.response);
+                  });
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+      })();
+    }else{
+      props.parentFunction();
+    }
   };
 
   return (

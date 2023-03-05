@@ -33,8 +33,10 @@ const FormForFarmer = (props) => {
    */
 
   function handleChange(event) {
+    
     if (!flagForm)
       setFlagForm(true);
+
     // Get name and value of the changed field
     const { name, value } = event.target;
     // Update formData with the changed value

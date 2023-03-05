@@ -5,17 +5,21 @@ import React, {useState} from "react";
 import axiosOrder from "../api/axiosOrder";
 
 const CheckoutForm = (props) => {
+    // Getting parameters
     const price = props.price;
+    const email = props.email;
+
+    // Stripe handling errors
     const [error, setError] = useState(null);
-    const [email, setEmail] = useState('');
     const stripe = useStripe();
-    const elements = useElements();// Handle real-time validation errors from the CardElement.
+    const elements = useElements();
+    
+    // Handle real-time validation errors from the CardElement.
     const handleChange = (event) => {
-    if (event.error) {
-        setError(event.error.message);
-    } else {
-        setError(null);
-    }
+        if (event.error)
+            setError(event.error.message);
+        else
+            setError(null);
     }
     // Handle form submission.
     const handleSubmit = async (event) => {
@@ -29,6 +33,7 @@ const CheckoutForm = (props) => {
         axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price})
         .then(response => {
             console.log(response.data);
+            
         })
         .catch(error => {
             console.log(error);
@@ -50,11 +55,8 @@ const CheckoutForm = (props) => {
                         <h3 className="title">Credit Card Details</h3>
                         <div className="row">
                         <div className="form-group col-sm-7">
-                            <label htmlFor="card-holder">Email Address</label>
-                            <input 
-                                className="form-input" id="email" name="name"    
-                                type="email" placeholder="test@example.com" 
-                                required value={email} onChange={(event) => { setEmail(event.target.value)}} />
+                            <label htmlFor="card-holder">Email Address</label>&emsp;
+                            {email}
                         </div>
                         <div className="form-group col-sm-8">
                             <label htmlFor="card-element">Credit or debit card</label> 

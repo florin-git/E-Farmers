@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosCart";
 import CartItem from "../components/CartItem";
+import { Link, useNavigate } from "react-router-dom";
 
 function ShoppingCart({ cart }) {
   /**
@@ -30,6 +31,7 @@ function ShoppingCart({ cart }) {
     return (<CartItem key={box.id} {...box} />);
   })
 
+
   return (
     
     <div className="container py-5 h-100">
@@ -54,6 +56,12 @@ function ShoppingCart({ cart }) {
           </div>
         </div>
       </div>
+      <Link
+        className="btn btn-primary mx-md-2"
+        to={"payment"}
+      >
+      Place Order
+      </Link>
     </div>
 
   );

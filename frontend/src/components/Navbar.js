@@ -160,7 +160,7 @@ function Navbar(props) {
                 <li className="nav-item">
                   <Link
                     className="btn btn-primary mx-md-2"
-                    to={"cart/"}
+                    to={"user/cart/"}
                   >
                     Cart
                   </Link>

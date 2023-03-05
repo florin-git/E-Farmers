@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
@@ -69,9 +68,6 @@ function UserProfile(props) {
     // User information
     const [userInfo, setUserInfo] = useState([]);
     const [extraInfo, setExtraInfo] = useState([]);
-    // Navigation variable
-    const navigate = useNavigate();
-    const location = useLocation();
 
     // Display change account settings
     const [accountType, setaccountType] = useState(0);
@@ -242,7 +238,7 @@ function UserProfile(props) {
                               </Typography>
                               <Typography gutterBottom>
                                 { accountType === 1 && <FormForFarmer {...childProps} /> }
-                                { accountType === 2 && <FormForRider /> }
+                                { accountType === 2 && <FormForRider {...childProps} /> }
                               </Typography>
                             </DialogContent>
                             <DialogActions>
@@ -267,7 +263,7 @@ function UserProfile(props) {
                                 <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
                             </div>
                             <div className="mt-5 text-center">
-                                <Link className="btn btn-warning" to={`/farmer/profile/}`} replace >
+                                <Link className="btn btn-warning" to={`/farmer/profile/${userId}`} replace >
                                     Personal Farmer Page
                                 </Link>
                             </div>
@@ -282,7 +278,7 @@ function UserProfile(props) {
                               <div className="col-md-6"><label className="labels"><h6>Biografy : {extraInfo.bio} </h6></label></div>
                           </div>
                           <div className="mt-5 text-center">
-                              <Link className="btn btn-warning" to={`/rider/profile/`} replace >
+                              <Link className="btn btn-warning" to={`/rider/profile/${userId}`} replace >
                                   Personal Rider Page
                               </Link>
                           </div>

@@ -65,6 +65,7 @@ function Box(props) {
              *  
              *  404 --> The cart doesn't exist
              */
+            console.log('ERROR GET CART')
             console.log(error.response['status']);
             if(error.response['status'] == 409) {
 
@@ -90,7 +91,7 @@ function Box(props) {
                         'farmer': farmer_id
                       })
                       .then((res) => {
-                        alert('CART CREATED!');
+                        alert('CART CREATED! FIRST IF');
                         console.log(res);
                         axiosInstance
                         .put(`users/${userId}/cart/items/`, 
@@ -99,6 +100,7 @@ function Box(props) {
                             name: insertion_name,
                             size: props.size,
                             price: props.price,
+                            weight: props.weight,
                             farmer: farmer_id
                           })
                         .then((res) => {
@@ -122,7 +124,7 @@ function Box(props) {
                   'farmer': farmer_id
                 })
                 .then((res) => {
-                  alert('CART CREATED!');
+                  alert('CART CREATED! SECOND IF');
                   console.log(res);
                   axiosInstance
                   .put(`users/${userId}/cart/items/`, 
@@ -131,6 +133,7 @@ function Box(props) {
                       name: insertion_name,
                       size: props.size,
                       price: props.price,
+                      weight: props.weight,
                       farmer: farmer_id
                     })
                   .then((res) => {

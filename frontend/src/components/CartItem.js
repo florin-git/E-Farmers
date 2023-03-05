@@ -19,7 +19,7 @@ function CartItem(props) {
   console.log(props.price);
 /*
   const handleDeletion = async () => {
-    await axiosInstance.delete(`/users/${userId}/cart/items/`, 
+    await axiosInstance.delete(`/users/${userId}/cart/items/`, a
     {
       name: props.name,
       weight: props.weight,

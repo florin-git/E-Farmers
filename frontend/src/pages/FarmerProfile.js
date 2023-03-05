@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-import axiosInstance from "../api/axiosUsers";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/FarmerProfile.css";
 
@@ -11,9 +12,12 @@ const star = <FontAwesomeIcon icon={faStar} style={{ color: "#28a745" }} />;
 const edit = <FontAwesomeIcon icon={faEdit} />;
 
 function FarmerProfile(props) {
-  // Retrieve the id from the URL
-  const { farmer_id } = useParams();
+  // Authentication data from context storage
+  const { auth } = useAuth();
+  const userId = auth.userId;
+  const axiosPrivate = useAxiosPrivate();
 
+  const farmerUserId = useParams()?.farmer_id;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
   /**
@@ -25,8 +29,8 @@ function FarmerProfile(props) {
      * Retrieve the boxes of this insertion from backend
      */
     (async () => {
-      await axiosInstance
-        .get(`farmers/${farmer_id}/`)
+      await axiosPrivate
+        .get(`farmers/${userId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
         })
@@ -34,7 +38,7 @@ function FarmerProfile(props) {
           console.log(error.response);
         });
     })();
-  }, [farmer_id]);
+  }, [farmerUserId]);
 
   return (
     <div className="container bootstrap snippets bootdey">
