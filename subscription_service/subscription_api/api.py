@@ -74,6 +74,7 @@ class Queue(Resource):
         # Delete a binding
         db = get_db()
         queue_name = "user_" + user_id
+        print("PRINT: " + request.get_json()['farmer_id'])
         exchange_name = "farmer_" + request.get_json()['farmer_id']
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()
