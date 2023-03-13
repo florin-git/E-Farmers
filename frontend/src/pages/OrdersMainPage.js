@@ -67,7 +67,7 @@ function OrdersMainPage(props) {
             <li key={order.id} className="list-group-item">
                 <div className="media align-items-lg-center flex-column flex-lg-row p-3">
                     <div className="media-body order-2 order-lg-1">
-                        <h5 className="mt-0 font-weight-bold mb-2"></h5>
+                        <h5 className="mt-0 font-weight-bold mb-2">Order Number:{order.payment_method_id}</h5>
                         <p className="font-italic text-muted mb-0 small"></p>
                         <div className="d-flex align-items-center justify-content-between mt-1">
                             <h6 className="font-weight-bold my-2">Total : {order.price}</h6>
