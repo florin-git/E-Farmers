@@ -53,6 +53,7 @@ class CartItemView(viewsets.ViewSet):
 
             serializer = CartItemSerializer(data={
                 'cart': shopping_cart.pk,
+                'box_id': request.data['box_id'],
                 'name': request.data['name'],
                 'size': request.data['size'],
                 'weight': request.data['weight'],

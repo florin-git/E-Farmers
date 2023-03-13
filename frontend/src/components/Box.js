@@ -46,6 +46,7 @@ function Box(props) {
           .put(`users/${userId}/cart/items/`, 
               {
                 insertion: props.insertion,
+                box_id: props.id,
                 name: insertion_name,
                 size: props.size,
                 price: props.price,
@@ -53,6 +54,7 @@ function Box(props) {
                 farmer: farmer_id
               })
           .then((res) => {
+            console.log(props.id);
             // alert that box has been added to cart
             alert('BOX HAS BEEN ADDED!');
             console.log(res);

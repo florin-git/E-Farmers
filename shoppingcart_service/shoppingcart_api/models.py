@@ -22,6 +22,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    box_id = models.IntegerField(default=0)
     name = models.CharField(max_length=50)
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
     size = models.IntegerField(choices=BOX_SIZES, default=0)

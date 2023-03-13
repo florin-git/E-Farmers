@@ -20,5 +20,9 @@ urlpatterns = [
     path('insertions/<int:insertion_id>/boxes/', BoxesView.as_view({
         'get': 'list_insertion_boxes',
         'post': 'add_boxes'
+    })),
+    path('boxes/<int:box_id>/decrease/', BoxesView.as_view({
+        'patch' : 'decrease_boxes'
     }))
+
 ]

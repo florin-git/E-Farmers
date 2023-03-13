@@ -8,6 +8,7 @@ import CheckoutForm from "../components/CheckoutForm";
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useAuth from "../hooks/useAuth";
 import axiosInstance from '../api/axiosCart';
+import axiosInsertions from '../api/axiosInsertions';
 
 // Cart components
 import CartItem from "../components/CartItem";
@@ -69,13 +70,14 @@ const TempPayPage = () => {
         })();
     }, [userId]);
   
-    const boxes_array = boxes.map((box) => {
-        price += parseFloat(box.price)
-    })
+    // Get the ID of the CartItem and pass to CheckoutForm in order to save the Order that contain all the ID of the CartItem 
+    const id_boxesArray = boxes.map((box) => (box.box_id)) 
+    boxes.map((box) => { price += parseFloat(box.price) }) 
+    console.log(boxes)
 
     return ( 
         <Elements stripe = {stripePromise}>
-            <CheckoutForm price = {price} email = {userEmail} boxes_array = {boxes_array} /> 
+            <CheckoutForm price = {price} email = {userEmail} boxes_array = {id_boxesArray} /> 
         </Elements>
     );
 
