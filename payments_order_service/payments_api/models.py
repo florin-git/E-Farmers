@@ -4,7 +4,9 @@ from django.db import models
 class Orders(models.Model):
     payment_method_id = models.CharField(max_length=150, default = ' ') #l'id dell'ordine viene generato automaticamente da stripe
     email = models.CharField(max_length=150, default = ' ')
-    tot_price = models.DecimalField(default=0.0, decimal_places=2, max_digits=16)
+    price = models.DecimalField(default=0.0, decimal_places=2, max_digits=16)
+    #data =
+    #farmer_name =
     def __str__(self):
         return self.payment_method_id
 

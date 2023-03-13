@@ -41,10 +41,10 @@ class NewView(viewsets.ViewSet):
             customer = customer_data[0]
             extra_msg = "Customer already exist."
             stripe.PaymentIntent.create(
-                customer=customer, 
-                payment_method=payment_method_id,  
-                currency='usd', # you can provide any currency you want
-                amount=999,
+                customer = customer, 
+                payment_method = payment_method_id,  
+                currency = 'usd', # you can provide any currency you want
+                amount = (request.data['price']*100),
                 confirm = True
             )     
             try:
