@@ -27,11 +27,14 @@ class NewView(viewsets.ViewSet):
 
     def save_stripe_info(self,request): #POST
         print(request.data)
+        
+        # data
         data = request.data
         email = data['email']
         payment_method_id = data['payment_method_id']
         extra_msg = ''
         customer_data = stripe.Customer.list(email=email).data
+        
         # Check if customer already exists
         if len(customer_data) == 0:
             # creating customer

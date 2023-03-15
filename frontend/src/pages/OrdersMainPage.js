@@ -1,22 +1,9 @@
 import React, { useEffect, useState } from "react";
-
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
-
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosOrder from "../api/axiosOrder";
-
-
 import MyModal from "../components/MyModal"
-
-import axiosUsers from "../api/axiosUsers";
 import Modal from "../hooks/Modal";
-import review_css from "../my_css/review.css";
-
-let id_order = 5792;
-let total_price = 69.99;
-
 
 function OrdersMainPage(props) {
 
@@ -53,21 +40,23 @@ function OrdersMainPage(props) {
             })
         })();
     }, []); 
-    
-
 
     const orders_array = orders.map((order) => {
+
+        /*Deduplicate boxes names */
+        let names = [... new Set(order.box_names.split(' '))];
+        let names_dedup = '';
+        names.map((word) => {
+            names_dedup += (word + ' ');
+        });
+
         return ( 
-            // <tr key={order.id}>
-            //     <td> {order.id} </td>
-            //     <td> {order.email} </td>
-            //     <td> {order.payment_method_id} </td>
-            //     <td> {order.price} </td>
-            // </tr>
             <li key={order.id} className="list-group-item">
                 <div className="media align-items-lg-center flex-column flex-lg-row p-3">
                     <div className="media-body order-2 order-lg-1">
-                        <h5 className="mt-0 font-weight-bold mb-2">Order Number:{order.payment_method_id}</h5>
+                        <h5 className="mt-0 font-weight-bold mb-2">Order Number: {order.payment_method_id}</h5>
+                        <h5 className="mt-0 font-weight-bold mb-2">Farmer: {order.farmer}</h5>
+                        <h5 className="mt-0 font-weight-bold mb-2">Boxes: {names_dedup}</h5>
                         <p className="font-italic text-muted mb-0 small"></p>
                         <div className="d-flex align-items-center justify-content-between mt-1">
                             <h6 className="font-weight-bold my-2">Total : {order.price}</h6>

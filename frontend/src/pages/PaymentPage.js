@@ -33,8 +33,6 @@ const TempPayPage = () => {
     const [userEmail, setUserEmail] = useState();
     const [totalPrice, setTotalPrice] = useState(0);    
 
-    console.log('USER ID ' + userId);
-
     /**
      * FUNCTIONS
      */
@@ -70,14 +68,25 @@ const TempPayPage = () => {
         })();
     }, [userId]);
   
-    // Get the ID of the CartItem and pass to CheckoutForm in order to save the Order that contain all the ID of the CartItem 
-    const id_boxesArray = boxes.map((box) => (box.box_id)) 
-    boxes.map((box) => { price += parseFloat(box.price) }) 
-    console.log(boxes)
+    // Get the IDs, box names and current farmer of the CartItem and pass to CheckoutForm in order to save the Order that contain all the ID of the CartItem 
+    const id_boxesArray = boxes.map((box) => (box.box_id));
+    
+    boxes.map((box) => { price += parseFloat(box.price) });
+
+    let box_names = '';
+    boxes.map((box) => { box_names += (box.name + ' ') });
+
+    let farmer = cart.current_farmer;
 
     return ( 
         <Elements stripe = {stripePromise}>
-            <CheckoutForm price = {price} email = {userEmail} boxes_array = {id_boxesArray} /> 
+            <CheckoutForm
+                price = {price}
+                email = {userEmail} 
+                boxes_array = {id_boxesArray} 
+                box_names = {box_names} 
+                farmer = {farmer}
+            /> 
         </Elements>
     );
 

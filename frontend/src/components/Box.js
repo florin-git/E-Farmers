@@ -54,9 +54,9 @@ function Box(props) {
                 farmer: farmer_id
               })
           .then((res) => {
-            console.log(props.id);
             // alert that box has been added to cart
             alert('BOX HAS BEEN ADDED!');
+            
             console.log(res);
           })
           .catch((error) => {

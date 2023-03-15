@@ -4,12 +4,20 @@ import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import React, {useState} from "react";
 import axiosOrder from "../api/axiosOrder";
 import axiosInsertions from "../api/axiosInsertions";
+import axiosCart from "../api/axiosCart";
+import useAuth from "../hooks/useAuth";
 
 const CheckoutForm = (props) => {
     // Getting parameters
     const price = props.price;
     const email = props.email;
     const boxes_array = props.boxes_array;
+    const box_names = props.box_names;
+    const farmer = props.farmer;
+    
+    // Authentication data from context storage
+    const { auth } = useAuth();
+    const userId = auth.userId;
 
     // Stripe handling errors
     const [error, setError] = useState(null);
@@ -23,7 +31,7 @@ const CheckoutForm = (props) => {
         else
             setError(null);
     }
-    console.log(boxes_array)
+
     // Handle form submission.
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,12 +41,15 @@ const CheckoutForm = (props) => {
             type: 'card',
             card: card
         });
-        axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price})
+        axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price, box_names, farmer})
         .then(response => {
-            console.log(response.data);
             boxes_array.map((box_id) => (
                 axiosInsertions.patch(`boxes/${box_id}/decrease/`)
             ))
+            axiosCart.delete(`users/${userId}/cart/`)
+            .then(() => {
+                alert('Cart deleted!');
+            })
         })
         .catch(error => {
             console.log(error);

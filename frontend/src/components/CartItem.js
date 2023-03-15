@@ -13,23 +13,7 @@ function CartItem(props) {
 
   let nameCap = makeCapital(props.name);
   let weight = parseFloat(props.weight).toFixed(1);
-
-  console.log(props.name);
-  console.log(props.weight);
-  console.log(props.price);
-/*
-  const handleDeletion = async () => {
-    await axiosInstance.delete(`/users/${userId}/cart/items/`, a
-    {
-      name: props.name,
-      weight: props.weight,
-      price:props.price
-
-    }).then((res) => {
-      alert('Cart Item deleted')
-    })
-  }
-*/
+  
   const handleDeletion = (event) => {
     axiosInstance.delete(`/users/${userId}/cart/items/`, 
     {data: {
