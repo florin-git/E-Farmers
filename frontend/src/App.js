@@ -22,16 +22,15 @@ import PersistLogin from "./components/PersistLogin";
 import useAuth from "./hooks/useAuth";
 
 // User advanced operation
-import FarmerUpdate from "./pages/FarmerUpdate";
-import RiderUpdate from "./pages/RiderUpdate";
 import UserProfile from "./pages/UserProfile";
 import ListSubscriptions from "./components/ListSubscriptions";
 import FarmerProfile from "./pages/FarmerProfile";
 import RiderProfile from "./pages/RiderProfile";
 // Import carrello + pagamenti
-import ShoppingCart from "./pages/ShoppingCart";
 import OrdersMainPage from "./pages/OrdersMainPage";
-import TempPayPage from "./pages/TempPayPage";
+import PaymentPage from "./pages/PaymentPage";
+
+import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
 import SeasonsCalendar from "./components/SeasonsCalendar";
 
@@ -75,6 +74,11 @@ function App(props) {
                 exact
                 element={<FarmerProfile />}
               />
+              <Route
+                path="rider/profile/:rider_id/"
+                exact
+                element={<RiderProfile />}
+              />
 
               {/* For Users service */}
               {!isLoggedIn && (
@@ -88,7 +92,7 @@ function App(props) {
               <Route
                 path="user/profile/payments"
                 exact
-                element={<TempPayPage />}
+                element={<PaymentPage />}
               />
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuth allowedRoles={[0, 1, 2]} />}>
@@ -114,10 +118,8 @@ function App(props) {
                   exact
                   element={<OrdersMainPage />}
                 />
-                {/* Access to personal shopping cart */}
-                <Route path="cart/" exact element={<ShoppingCart />} />
                 {/* Access to the list of booked products */}
-                <Route path="booking/" exact element={<BookedProducts />}/>
+                <Route path="booking/" exact element={<BookedProducts />} />
 
                 {/* You can modify insertions only if you are a Farmer */}
                 <Route element={<RequiredAuth allowedRoles={[1]} />}>
@@ -137,12 +139,25 @@ function App(props) {
                     element={<EditInsertion />}
                   />
                   {/* You can receive and access booking orders only if you are a farmer */}
-                  <Route
-                    path="inbox/"
-                    exact
-                    element={<Inbox />}
-                  />
+                  <Route path="inbox/" exact element={<Inbox />} />
                 </Route>
+                <Route
+                  path="user/profile/orders"
+                  exact
+                  element={<OrdersMainPage />}
+                />
+                {/* Access to personal shopping cart */}
+                <Route
+                  path="user/cart/"
+                  exact
+                  element={<ProtectedRouteCart />}
+                />
+                {/*Access to payment page*/}
+                <Route
+                  path="user/cart/payment"
+                  exact
+                  element={<PaymentPage />}
+                ></Route>
               </Route>
             </Route>
 

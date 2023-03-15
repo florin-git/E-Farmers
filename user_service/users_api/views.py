@@ -13,7 +13,6 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class LoginView(APIView):
-
     def post(self, request):
         email = request.data['email']
         password = request.data['password']
@@ -57,6 +56,8 @@ class UsersView(viewsets.ViewSet):
             if serializer.errors['email'][0] == "user with this Email already exists.":
                 return Response("Email already used", status=status.HTTP_406_NOT_ACCEPTABLE)
 
+
+
     def user_info(self, request, user_id=None):  # GET /api/users/<int:id>/
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
@@ -90,7 +91,7 @@ class UsersView(viewsets.ViewSet):
 
         # The token was not passed into the header request
         raise PermissionDenied("No token in the header!", code=403)
-
+   
     # POST /api/users/<int:id>/<int:type>
     def user_update(self, request, user_id=None, type=None):
         JWT_authenticator = JWTAuthentication()
@@ -132,13 +133,18 @@ class UsersView(viewsets.ViewSet):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_farmer(self, request, user_id=None):  # GET /api/farmers/<int:user_id>/
-
+    def get_farmer(self, request, user_id=None):  # GET /api/farmer/<int:user_id>/
+        
         farmer = Farmer.objects.get(ext_user_id=user_id)
         farmer_serializer = FarmerSerializer(farmer)
 
+        #* Check
+        user_id = farmer.ext_user_id 
+        ###
+
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
+        #print(user_serializer.data)
 
         return Response({
             'user_id': user_serializer.data['id'],
@@ -150,6 +156,35 @@ class UsersView(viewsets.ViewSet):
             'bio': farmer_serializer.data['bio'],
         },
             status=status.HTTP_200_OK)
+    
+    def get_rider(self, request, user_id=None): #GET /api/riders/<int:user_id>
+
+        rider = Rider.objects.get(ext_user_id=user_id)
+        rider_serializer = RiderSerializer(rider)
+
+        user_id = rider.ext_user_id
+        user = User.objects.get(id=user_id)
+        user_serializer = UserSerializer(user)
+
+        return Response({
+            'user_id': user_serializer.data['id'],
+            'name': user_serializer.data['name'],
+            'last_name': user_serializer.data['last_name'],
+            'email': user_serializer.data['email'],
+            'phone_number': user_serializer.data['phone_number'],
+            'avalaible': rider_serializer.data['avalaible'],
+            'bio': rider_serializer.data['bio'],
+        },
+            status=status.HTTP_200_OK)
+
+    def change_status(self, request, user_id=None):  # PATCH /api/riders/<int:id>/
+        print(request.data)
+        rider = Rider.objects.get(ext_user_id=user_id)
+        serializer = RiderSerializer(
+            instance=rider, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def add_review(self, request, farmer_id=None):  # POST /api/farmer/<int:farmer_id>/
 
@@ -166,6 +201,29 @@ class UsersView(viewsets.ViewSet):
 
 class CustomTokenVerifyView(APIView):
     def post(self, request):  # POST /api/token/verify/
+        JWT_authenticator = JWTAuthentication()
+        # Authenticate the token in the Authorization header
+        response = JWT_authenticator.authenticate(request)
+
+        if response is not None:
+            # Unpacking
+            user, token = response
+            serializer = UserSerializer(user)
+            # print("this is decoded token claims", token.payload)
+
+            if serializer.data["id"] == request.data['user_id']:
+                return Response(status=status.HTTP_200_OK)
+
+            else:
+                # The token is associated with another user
+                raise PermissionDenied("Access denied!", code=403)
+
+        # The token was not passed into the header request
+        raise PermissionDenied("No token in the header!", code=403)
+
+
+class CustomTokenVerifyView(APIView):
+    def post(self, request): # POST /api/token/verify/
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
         response = JWT_authenticator.authenticate(request)

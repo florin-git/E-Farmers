@@ -3,20 +3,25 @@ import "../my_css/PaymentOrderFE/PayForm.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useState } from "react";
 import axiosOrder from "../api/axiosOrder";
+import axiosInsertions from "../api/axiosInsertions";
 
 const CheckoutForm = (props) => {
+  // Getting parameters
   const price = props.price;
+  const email = props.email;
+  const boxes_array = props.boxes_array;
+
+  // Stripe handling errors
   const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
   const stripe = useStripe();
-  const elements = useElements(); // Handle real-time validation errors from the CardElement.
+  const elements = useElements();
+
+  // Handle real-time validation errors from the CardElement.
   const handleChange = (event) => {
-    if (event.error) {
-      setError(event.error.message);
-    } else {
-      setError(null);
-    }
+    if (event.error) setError(event.error.message);
+    else setError(null);
   };
+  console.log(boxes_array);
   // Handle form submission.
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +35,9 @@ const CheckoutForm = (props) => {
       .saveStripeInfo({ email, payment_method_id: paymentMethod.id, price })
       .then((response) => {
         console.log(response.data);
+        boxes_array.map((box_id) =>
+          axiosInsertions.patch(`boxes/${box_id}/decrease/`)
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -56,19 +64,8 @@ const CheckoutForm = (props) => {
               <h3 className="title">Credit Card Details</h3>
               <div className="row">
                 <div className="form-group col-sm-7">
-                  <label htmlFor="card-holder">Email Address</label>
-                  <input
-                    className="form-input"
-                    id="email"
-                    name="name"
-                    type="email"
-                    placeholder="test@example.com"
-                    required
-                    value={email}
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                    }}
-                  />
+                  <label htmlFor="card-holder">Email Address</label>&emsp;
+                  {email}
                 </div>
                 <div className="form-group col-sm-8">
                   <label htmlFor="card-element">Credit or debit card</label>
@@ -85,6 +82,18 @@ const CheckoutForm = (props) => {
               </div>
             </div>
           </form>
+        </div>
+        <div className="form-group col-sm-8">
+          <label htmlFor="card-element">Credit or debit card</label>
+          <CardElement id="card-element" onChange={handleChange} />
+          <div className="card-errors" role="alert">
+            {error}
+          </div>
+        </div>
+        <div className="form-group col-sm-12">
+          <button type="submit" className="btn btn-primary btn-block">
+            Pay Now
+          </button>
         </div>
       </section>
     </main>

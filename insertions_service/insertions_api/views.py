@@ -80,7 +80,6 @@ class InsertionsView(viewsets.ViewSet):
     def update_insertion(self, request, insertion_id=None): # PUT /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
         today = date.today()
-        
         if insertion.expiration_date < today:
             insertion.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -120,6 +119,39 @@ class BoxesView(viewsets.ViewSet):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def decrease_boxes(self, request, box_id=None):     # PATCH /api/boxes/<int:box_id>/decrease
+        try:
+            box = Box.objects.get(id=box_id)
+        except Exception as e:
+            print(e)
+        
+        n_boxes = box.number_of_available_boxes
+        if n_boxes > 1:
+            box.number_of_available_boxes -=1
+            box.save()
+        elif n_boxes == 1:
+            box.delete()
+        
+        return Response(status=status.HTTP_200_OK)
+    
+    def get_box(self, request, box_id=None):    # GET /api/insertions/box
+
+        box_id = request.data['box_id']
+
+        try:
+            box = Box.objects.get(id=box_id)
+        except Exception as e:
+            print(e)
+
+        response = HttpResponse()
+        response['price'] = box.price
+        response['size'] = box.size
+        response['weight'] = box.weight
+
+        return Response(response, status=status.HTTP_200_OK)
+
+
 
 ###
 #* Booking

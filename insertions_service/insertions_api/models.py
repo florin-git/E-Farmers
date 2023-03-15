@@ -28,6 +28,7 @@ class Insertion(models.Model):
     )
 
 class Box(models.Model):
+    id = models.BigAutoField(primary_key=True)
     insertion = models.ForeignKey(Insertion, on_delete=models.CASCADE)
     weight = models.DecimalField(default=0.0, decimal_places=3, max_digits=6, validators=[MinValueValidator(0)])
     size = models.IntegerField(choices=BOX_SIZES, default=0)

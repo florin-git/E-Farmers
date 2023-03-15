@@ -36,7 +36,7 @@ const Modal = ({ open, onClose }) => {
     return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
   }
   
-
+/*
   function getFarmer_id(user_id){
     axiosPrivate
       .get(`farmers/${user_id}/`)
@@ -48,9 +48,9 @@ const Modal = ({ open, onClose }) => {
   
   if(!farmer_id)
     getFarmer_id(user_id)
-
+*/
   const handleSubmit = async (event) => {
-  
+  /*
     console.log(stars);
     console.log(comment)
     console.log(user_id)
@@ -64,7 +64,7 @@ const Modal = ({ open, onClose }) => {
       })
       .catch((error)=> {
         console.log(error.response);
-      });
+      });*/
   };
   
 

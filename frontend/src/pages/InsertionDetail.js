@@ -74,13 +74,13 @@ function InsertionDetail({ insertion }) {
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
     box_sizes.push(box.size);
-
     /**
      * With the notation ...box are passed
      * all the attributes of box to the Component Box
      */
     return <Box key={box.id} {...box} />;
   });
+  
 
   var date = new Date();
   // `/image/?${date.getMinutes()}` in order to avoid caching of the images

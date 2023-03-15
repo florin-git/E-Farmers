@@ -38,6 +38,10 @@ urlpatterns = [
     })),
 
     path('booking/inbox/<int:farmer_id>/', BookingView.as_view({
-        'get': 'list_requests'
+        'get': 'list_requests'})),
+        
+    path('boxes/<int:box_id>/decrease/', BoxesView.as_view({
+        'patch' : 'decrease_boxes'
     }))
+
 ]

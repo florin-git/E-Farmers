@@ -27,7 +27,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return str(self.name)
+        return str(self.user)
 
 class Rider(models.Model):
     # Rider Properties 
@@ -49,7 +49,7 @@ class Farmer(models.Model):
     bio = models.CharField(max_length = 255)
     ext_user = models.OneToOneField (
         User,
-        related_name="external_user_f",
+        related_name="external_user_f",     
         on_delete=models.CASCADE,
         blank=True,
         null=True

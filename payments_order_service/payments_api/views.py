@@ -13,6 +13,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class NewView(viewsets.ViewSet):
+    
+    ## forse da cancellare
     def test_payment(self,request):  #POST
         test_payment_intent = stripe.PaymentIntent.create(
             amount=1000, currency='usd', 
@@ -21,6 +23,7 @@ class NewView(viewsets.ViewSet):
         )
 
         return Response(status=status.HTTP_200_OK, data=test_payment_intent)
+
 
     def save_stripe_info(self,request): #POST
         print(request.data)
@@ -38,10 +41,10 @@ class NewView(viewsets.ViewSet):
             customer = customer_data[0]
             extra_msg = "Customer already exist."
             stripe.PaymentIntent.create(
-                customer=customer, 
-                payment_method=payment_method_id,  
-                currency='usd', # you can provide any currency you want
-                amount=999,
+                customer = customer, 
+                payment_method = payment_method_id,  
+                currency = 'usd', # you can provide any currency you want
+                amount = (request.data['price']*100),
                 confirm = True
             )     
             try:

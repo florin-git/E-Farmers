@@ -30,6 +30,10 @@ urlpatterns = [
     path('farmers/<int:user_id>/' , UsersView.as_view({
         'get'  : 'get_farmer',
     })),
+    path('riders/<int:user_id>/' , UsersView.as_view({
+        'get' : 'get_rider',
+        'patch' : 'change_status',
+    })),
     path('users/farmers/<int:farmer_id>/' , UsersView.as_view({
         'post' : 'add_review',
     })),

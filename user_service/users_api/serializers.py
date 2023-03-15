@@ -76,6 +76,11 @@ class RiderSerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         rider = Rider.objects.create(**validated_data)
         return rider
+    
+    def update(self, instance, validated_data):
+        instance.avalaible = validated_data.get( 'avalaible' , instance.avalaible )
+        instance.save()
+        return instance   
 
 class ReviewSerializer(serializers.ModelSerializer):
 
