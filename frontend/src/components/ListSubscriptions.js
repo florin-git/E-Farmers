@@ -13,7 +13,7 @@ function ListSubscriptions() {
     const [subscriptionsArray, setSubscriptionsArray] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedId, setSelectedId] = useState(-1);
-    const [loading, setLoading] = useState(true);
+    const [showSubscriptions, setShowSubscriptions] = useState(false);
 
     useEffect(() => {
         axiosSubscription
@@ -27,15 +27,12 @@ function ListSubscriptions() {
                 .get(`farmers/${subscription_farmer_id}/`)
                 .then((res) => {
                   farmers_names[index] = [subscription_farmer_id, res.data.name];
-                  subscriptions_array[index] = 
+                  subscriptions_array[index] = [subscription_farmer_id,
                         <SubscriptionItem
                             farmer_id={subscription_farmer_id}
                             farmer_name={res.data.name}
                             onInteraction={handleShowModal}
-                        />;
-                  console.log("Set index: " + String(index));
-                  console.log("subscriptions_array: " + String(subscriptions_array));
-                  console.log("subscriptions_array.length: " + String(subscriptions_array.length));
+                        />];
                   setSubscriptionsArray(subscriptions_array);
                 })
                 .catch((error) => {
@@ -45,16 +42,6 @@ function ListSubscriptions() {
             setSubscriptions(farmers_names);
           })
     }, []);
-
-    useEffect(() => {
-        console.log("Inside useEffect for subscriptionsArray");
-        if(subscriptionsArray[subscriptionsArray.length - 1] != undefined){
-            console.log("Passed if test on undefined elements");
-            console.log("subscriptionsArray: " + String(subscriptionsArray[0]));
-            console.log("subscriptionsArray: " + String(subscriptionsArray[1]));
-            setLoading(false);
-        }
-    }, [subscriptionsArray]);
 
     // Manage Modal
     const handleCloseModal = () => {
@@ -79,24 +66,21 @@ function ListSubscriptions() {
         setShowModal(false); // Close modal
 
         setSubscriptions(
-            subscriptions.filter((prevSubscriptions) => prevSubscriptions[0] !== selectedId)
+            subscriptions.filter((prevSubscriptions) => prevSubscriptions[0] != selectedId)
         );
 
         setSubscriptionsArray(
-            subscriptionsArray.filter((prevSubscriptions) => prevSubscriptions[0] !== selectedId)
+            subscriptionsArray.filter((prevSubscriptions) => prevSubscriptions[0] != selectedId)
         );
 
         setSelectedId(-1); // Update again the variable for the reloading
     };
 
-    if(loading){
-        return (
-            <ul className="list-inline shadow g-3 pt-3 pb-3 text-center">
-                Loading...
-            </ul>
-        );
-    }
-    else{
+    const handleShowSubscriptions = (event) => {
+        setShowSubscriptions(true);
+    };
+
+    if(showSubscriptions){
         return (
             <div className="container-lg py-5">
                 <Modal show={showModal} onHide={handleCloseModal}>
@@ -118,8 +102,34 @@ function ListSubscriptions() {
                     </Modal.Footer>
                 </Modal>
                 <ul className="list-inline shadow g-3 pt-3 pb-3">
-                    {subscriptionsArray}
+                    {subscriptionsArray.map(subscription => subscription[1])}
                 </ul>
+            </div>
+        );
+    } else {
+        return (
+            <div className="container-lg py-5">
+                <Modal show={showModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>
+                            <span>Deletion</span>
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <span>Are you sure you want to cancel this subscription?</span>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-light" onClick={handleCloseModal}>
+                            Close
+                        </button>
+                        <button className="btn btn-danger" onClick={handleCancelling}>
+                            Confirm cancellation
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                <button className="btn btn-warning text-center" onClick={handleShowSubscriptions}>
+                    View subscriptions
+                </button>
             </div>
         );
     }

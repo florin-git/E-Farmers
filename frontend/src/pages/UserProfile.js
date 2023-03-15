@@ -257,7 +257,7 @@ function UserProfile(props) {
                         </div>
                       )}
                       <h6> Subscriptions: </h6>
-                      <div className="row pt-1">
+                      <div>
                         <ListSubscriptions />
                       </div>
                     </div>
