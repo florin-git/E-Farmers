@@ -25,6 +25,7 @@ import useAuth from "./hooks/useAuth";
 import FarmerUpdate from "./pages/FarmerUpdate";
 import RiderUpdate from "./pages/RiderUpdate";
 import UserProfile from "./pages/UserProfile";
+import ListSubscriptions from "./components/ListSubscriptions";
 import FarmerProfile from "./pages/FarmerProfile";
 import RiderProfile from "./pages/RiderProfile";
 // Import carrello + pagamenti

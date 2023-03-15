@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
+import ListSubscriptions from "../components/ListSubscriptions";
 
 // Account information to hold for representation
 let type;
@@ -255,6 +256,10 @@ function UserProfile(props) {
                           </div>
                         </div>
                       )}
+                      <h6> Subscriptions: </h6>
+                      <div>
+                        <ListSubscriptions />
+                      </div>
                     </div>
                   </div>
                 </div>
