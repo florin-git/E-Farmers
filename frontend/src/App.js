@@ -98,16 +98,6 @@ function App(props) {
               <Route element={<RequiredAuth allowedRoles={[0, 1, 2]} />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
                 <Route
-                  path="user/profile/farmer_update"
-                  exact
-                  element={<FarmerUpdate />}
-                />
-                <Route
-                  path="user/profile/rider_update"
-                  exact
-                  element={<RiderUpdate />}
-                />
-                <Route
                   path="farmer/profile"
                   exact
                   element={<FarmerProfile />}
