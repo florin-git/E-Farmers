@@ -142,6 +142,13 @@ function SeasonsCalendar() {
             .get(`farmers/${subscription_farmer_id}/`)
             .then((res) => {
               farmers_names[index] = [subscription_farmer_id, res.data.name];
+
+              // setFormData((prevFormData) => {
+              //   return {
+              //     ...prevFormData,
+              //     [farmer]: subscription_farmer_id,
+              //   };
+              // });
             })
             .catch((error) => {
               console.log(error.response);
@@ -444,6 +451,7 @@ function SeasonsCalendar() {
                       value={formData.farmer}
                       onChange={handleFarmerChange}
                     >
+                      <option value="">--Choose--</option>
                       {subscriptions.map((farmer) => {
                         return <option value={farmer[0]}>{farmer[1]}</option>;
                       })}
