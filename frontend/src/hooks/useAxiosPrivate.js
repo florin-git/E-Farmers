@@ -16,8 +16,8 @@ const useAxiosPrivate = () => {
    * If error 401 && token_not_valid
    *  If refresh token is available
    * 	  Get new access token
-   *  
-   *  Else If refresh token is exipered or not valid
+   *
+   *  Else If refresh token is expired or not valid
    *    Redirected and reset all authentication variables
    */
 
@@ -25,7 +25,7 @@ const useAxiosPrivate = () => {
     const accessToken = auth?.accessToken;
     axiosInstance.defaults.headers["Authorization"] = `JWT ${accessToken}`;
 
-    // The first request failes and so now we retry
+    // The first request fails and so now we retry
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
@@ -85,19 +85,21 @@ const useAxiosPrivate = () => {
                 });
             } else {
               console.log("Refresh token is expired", tokenParts.exp, now);
-              
+              alert("Your session has expired. You need to login again.");
+              window.location.href = "/login/";
             }
           } else {
             console.log("Refresh token not available.");
             window.location.href = "/";
           }
+          
+          // If refresh token is expired or null,
+          // reset all variables and tokens
+          axiosInstance.defaults.headers["Authorization"] = null;
+          localStorage.removeItem("refresh_token");
+          setAuth({});
+          return Promise.reject(error);
         }
-        // If refresh token is expired or null,
-        // reset all variables and tokens
-        axiosInstance.defaults.headers["Authorization"] = null;
-        localStorage.removeItem("refresh_token");
-        setAuth({});
-        return Promise.reject(error);
       }
     );
 

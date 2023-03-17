@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
-import axiosInstance from "../api/axiosUsers";
+import axiosUsers from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
+import OAuthLogin from "../components/OAuthLogin";
 
 function Login(props) {
   /**
@@ -67,7 +68,7 @@ function Login(props) {
     event.preventDefault();
 
     // Check if the credentials are correct
-    axiosInstance
+    axiosUsers
       .post("login/", {
         email: formData.email,
         password: formData.password,
@@ -80,7 +81,7 @@ function Login(props) {
         // console.log(res.data)
 
         // Generate the JWT token
-        axiosInstance
+        axiosUsers
           .post("token/", {
             email: formData.email,
             password: formData.password,
@@ -92,8 +93,8 @@ function Login(props) {
             // Store only the refresh token in the local storage
             localStorage.setItem("refresh_token", res.data.refresh);
 
-            // Update axiosInstance with the new tokens
-            axiosInstance.defaults.headers[
+            // Update axiosUsers with the new tokens
+            axiosUsers.defaults.headers[
               "Authorization"
             ] = `JWT ${accessToken}`;
 
@@ -222,6 +223,9 @@ function Login(props) {
                           </button>
                         </div>
                       </form>
+                      <div>
+                        <OAuthLogin />
+                      </div>
                     </div>
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                       <img

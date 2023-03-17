@@ -3,7 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
+import ListInsertions from "../components/ListInsertions";
+
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axiosSubscription from "../api/axiosSubscription";
+
 import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/FarmerProfile.css";
@@ -17,6 +21,7 @@ function FarmerProfile(props) {
   const userId = auth.userId;
   const axiosPrivate = useAxiosPrivate();
 
+  // Retrieve the id from the URL
   const farmerUserId = useParams()?.farmer_id;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
@@ -26,11 +31,11 @@ function FarmerProfile(props) {
 
   useEffect(() => {
     /**
-     * Retrieve the boxes of this insertion from backend
+     * Retrieve the farmer's info
      */
     (async () => {
       await axiosPrivate
-        .get(`farmers/${userId}/`)
+        .get(`farmers/${farmerUserId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
         })
@@ -39,6 +44,19 @@ function FarmerProfile(props) {
         });
     })();
   }, [farmerUserId]);
+
+  const handleSubscribe = (event) => {
+    axiosSubscription
+      .put(`customer/${userId}/`, {
+        farmer_id: farmerUserId,
+      })
+      .then((res) => {
+        console.log("You are subscribed");
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
 
   return (
     <div className="container bootstrap snippets bootdey">
@@ -58,10 +76,19 @@ function FarmerProfile(props) {
 
             <ul className="nav-pills nav-stacked">
               <li className="active">
-                <a href="#">
+                {/* <a href="#">
                   {" "}
-                  <i className="fa fa-user"></i> Profile
-                </a>
+                  <i className="fa fa-user"></i> Subscribe
+                </a> */}
+                <button
+                  type="button"
+                  // id={insertion.id}
+                  name="delete"
+                  onClick={(event) => handleSubscribe(event)}
+                  className="btn btn-outline-warning"
+                >
+                  Subscribe
+                </button>
               </li>
               <li>
                 <Link className="" to={"/insertions/new/"} replace>
@@ -128,41 +155,9 @@ function FarmerProfile(props) {
             <div className="row">
               <div className="py-4 px-4">
                 <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h5 className="mb-0">Recent Products</h5>
-                  <a href="#" className="btn btn-link text-muted">
-                    Show all
-                  </a>
+                  <h5 className="mb-0">Insertions</h5>
                 </div>
-                <div className="row">
-                  <div className="col-lg-6 mb-2 pr-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 mb-2 pl-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1493571716545-b559a19edd14?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 pr-lg-1 mb-2">
-                    <img
-                      src="https://images.unsplash.com/photo-1453791052107-5c843da62d97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                  <div className="col-lg-6 pl-lg-1">
-                    <img
-                      src="https://images.unsplash.com/photo-1475724017904-b712052c192a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-                      alt=""
-                      className="img-fluid rounded shadow-sm"
-                    />
-                  </div>
-                </div>
+                <ListInsertions farmerUserId={farmerUserId} />
               </div>
 
               {/*              <div className="col-md-6">

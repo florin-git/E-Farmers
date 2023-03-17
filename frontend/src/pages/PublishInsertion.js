@@ -3,7 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
-import axiosInstance from "../api/axiosInsertions";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axiosInsertions from "../api/axiosInsertions";
+import axiosSubscription from "../api/axiosSubscription";
 
 // Possible REGEX
 // https://www.youtube.com/watch?v=brcHK3P6ChQ
@@ -53,7 +55,8 @@ function PublishInsertion(props) {
   // Authentication data from context storage
   const { auth } = useAuth();
   const userId = auth.userId;
-
+  // axios function with JWT tokens
+  const axiosPrivate = useAxiosPrivate();
 
   /**
    ** FUNCTIONS
@@ -165,11 +168,30 @@ function PublishInsertion(props) {
       /**
        * Create new insertion through API call
        */
-      await axiosInstance
+      await axiosInsertions
         .post("insertions/", form_data, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
+          // Retrieve the farmer's info
+          axiosPrivate
+            .get(`farmers/${userId}/`)
+            .then((res) => {
+              const farmerInfo = res.data;
+
+              /**
+               * Send message on the RabbitMQ exchange.
+               * The message is composed by the user id and
+               *  the text of the message separated by '-'.
+               */
+              axiosSubscription.post(`farmer/${userId}/`, {
+                message: `${userId}-New insertion by ${farmerInfo.name} ${farmerInfo.last_name}`,
+              });
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+
           // If the submission was successful
           navigate("/insertions");
         })

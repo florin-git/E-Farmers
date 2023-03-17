@@ -21,6 +21,25 @@ urlpatterns = [
         'get': 'list_insertion_boxes',
         'post': 'add_boxes'
     })),
+
+    # Booking
+    path('booking/', BookingView.as_view({
+        'post': 'book_product'
+    })),
+
+    path('booking/<int:request_id>/', BookingView.as_view({
+        'get': 'get_request',
+        'put': 'accept_request',
+        'delete': 'cancel_booking'
+    })),
+
+    path('booking/requests/<int:user_id>/', BookingView.as_view({
+        'get': 'list_booked_products'
+    })),
+
+    path('booking/inbox/<int:farmer_id>/', BookingView.as_view({
+        'get': 'list_requests'})),
+        
     path('boxes/<int:box_id>/decrease/', BoxesView.as_view({
         'patch' : 'decrease_boxes'
     }))

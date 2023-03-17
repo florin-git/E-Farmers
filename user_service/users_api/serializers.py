@@ -71,7 +71,7 @@ class RiderSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Rider
-        fields = ('id','avalaible','bio','external_user_r')
+        fields = ('id','available','bio','external_user_r')
     
     def create(self,validated_data):
         rider = Rider.objects.create(**validated_data)

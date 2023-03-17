@@ -16,6 +16,24 @@ rabbitmq_service_addr = env('RABBITMQ_SERVICE')
 # Create a blueprint to be registered to the app
 bp = Blueprint('api', __name__)
 
+@bp.route('/customer/<string:user_id>/subscriptions/')
+def get_subscriptions(user_id):
+    # Returns the id of the farmers a user is subscribed to
+    db = get_db()
+    queue_name = "user_" + user_id
+    cursor = db.cursor()
+    cursor.execute(f"SELECT * FROM subscription WHERE customer LIKE '{queue_name}'")
+    res = cursor.fetchone()
+    if res != None:
+        subscriptions = []
+        while res != None:
+            cur_res = int(res[2].split('_')[1])
+            subscriptions.append(cur_res)
+            res = cursor.fetchone()
+        return jsonify(subscriptions)
+    else:
+        return 'No subscription for this user', 204
+
 def callback(messages, ch, method, properties, body):
     message = body.decode()
     messages.append(message)
@@ -56,6 +74,7 @@ class Queue(Resource):
         # Delete a binding
         db = get_db()
         queue_name = "user_" + user_id
+        print("PRINT: " + request.get_json()['farmer_id'])
         exchange_name = "farmer_" + request.get_json()['farmer_id']
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_service_addr))
         channel = connection.channel()

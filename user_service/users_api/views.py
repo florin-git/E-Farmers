@@ -1,14 +1,15 @@
-from errno import ESTALE
+import requests
 from .models import *
+from .serializers import *
+
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, NotAcceptable
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class LoginView(APIView):
@@ -99,7 +100,6 @@ class UsersView(viewsets.ViewSet):
         user = User.objects.get(id=user_id)
         # We use the parameter type to differentiate the user choose . Passed via url by
         if(type == 1):
-            print("Sono un fottuto farmer")
             serializer_farmer = FarmerSerializer(data=request.data)
             if serializer_farmer.is_valid(raise_exception=True):
                 serializer_farmer.save()
@@ -112,7 +112,6 @@ class UsersView(viewsets.ViewSet):
 
                 return Response(serializer_farmer.data, status=status.HTTP_201_CREATED)
         else:
-            print("Sono un fottuto rider")
             serializer = RiderSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -139,7 +138,10 @@ class UsersView(viewsets.ViewSet):
         farmer = Farmer.objects.get(ext_user_id=user_id)
         farmer_serializer = FarmerSerializer(farmer)
 
-        user_id = farmer.ext_user_id
+        #* Check
+        user_id = farmer.ext_user_id 
+        ###
+
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
         #print(user_serializer.data)
@@ -192,7 +194,6 @@ class UsersView(viewsets.ViewSet):
         if review_serializer.is_valid(raise_exception=True):
             # review_serializer.save()
             review_serializer.save(ext_farmer=farmer)
-            print(farmer)
             return Response(review_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print("ERROR HERE")
@@ -260,3 +261,40 @@ class BlacklistTokenView(APIView):
 
 class CustomTokenRefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
+
+
+class OAuthTokenObtainPairView(TokenObtainPairView):
+    def post(self, request):
+        # Get the access token from the request data
+        access_token = request.data.get('access_token')
+
+        # Make a request to the Google OAuth userinfo endpoint to get the user's email
+        response = requests.get(
+            f'https://oauth2.googleapis.com/tokeninfo?id_token={access_token}').json()
+        email = response['email']
+
+        # Check if a user with the given email already exists in the database
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # Create a new user with a random password
+            password = User.objects.make_random_password()
+
+            # TODO: If we add other attributes we should add them here
+            serializer = UserSerializer(
+                data={"email": email, "password": password, "name": response['name']})
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                user = User.objects.get(email=email)
+
+        # Generate a refresh token for the user
+        refresh = RefreshToken.for_user(user)
+        serializer = UserSerializer(user)
+
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user_id': serializer.data["id"],
+            'account_type': serializer.data['account_type'],
+        }
+        return Response(data, status=200)

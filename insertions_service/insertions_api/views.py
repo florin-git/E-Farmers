@@ -4,31 +4,41 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import *
 from django.http import HttpResponse
+from django.http import QueryDict
 
 ###
 #* Insertions
 ###
 class InsertionsView(viewsets.ViewSet):
     def list_insertions(self, request): # GET /api/insertions/
+        # Returns all the public insertions
         search_params = request.GET.get('search', '')
         expiring_search = request.GET.get('expiring', '')
+        farmer_param = None
+        try:
+            if(request.GET.get('farmer', '') != ''):
+                farmer_param = int(request.GET.get('farmer', ''))
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
         if expiring_search != "":
             today = date.today()
-            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day, private=False)
             insertions = insertions[:int(expiring_search)]
+        elif farmer_param != None:
+            insertions = Insertion.objects.filter(farmer=farmer_param, private=False)
         elif search_params == "":
-            insertions = Insertion.objects.all()
+            insertions = Insertion.objects.filter(private=False)
         elif search_params == "expiring_products":
             today = date.today()
-            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day)
+            insertions = Insertion.objects.filter(expiration_date__year=today.year, expiration_date__month=today.month, expiration_date__day=today.day, private=False)
         else:
             is_first_word = True
             for param in search_params.split():
                 if is_first_word:
-                    insertions = Insertion.objects.filter(title__icontains=param)
+                    insertions = Insertion.objects.filter(title__icontains=param, private=False)
                     is_first_word = False
                 else:
-                    insertions = (insertions | Insertion.objects.filter(title__icontains=param))
+                    insertions = (insertions | Insertion.objects.filter(title__icontains=param, private=False))
         serializer = InsertionSerializer(insertions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -111,9 +121,6 @@ class BoxesView(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def decrease_boxes(self, request, box_id=None):     # PATCH /api/boxes/<int:box_id>/decrease
-        
-        #box_id = request.data['box_id']
-        print('mecella')
         try:
             box = Box.objects.get(id=box_id)
         except Exception as e:
@@ -144,3 +151,68 @@ class BoxesView(viewsets.ViewSet):
 
 
 
+###
+#* Booking
+###
+class BookingView(viewsets.ViewSet):
+    def get_request(self, request, request_id): # GET /api/booking/<int:request_id>/
+        # Return the request specified
+        today = date.today()
+        # request = Request.objects.get(id=int(request.GET.get('request_id', '')))
+        request = Request.objects.get(id=request_id)
+        if request.deadline < today:
+            request.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = RequestSerializer(request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def accept_request(self, request, request_id): # PUT /api/booking/
+        # Set the request's insertion field
+        today = date.today()
+        product_request = Request.objects.get(id=request_id)
+        if product_request.deadline < today:
+            request.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = RequestSerializer(instance=product_request, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+    def list_booked_products(self, request, user_id): # GET /api/booking/requests/<int:user_id>/
+        # Returns the list of a user's requests (booked products)
+
+        # Delete all the expired requests
+        today = date.today()
+        requests_to_be_deleted = Request.objects.filter(user=user_id).exclude(deadline__gte = today)
+        for req in requests_to_be_deleted:
+            req.delete()
+
+        requests = Request.objects.filter(user=user_id)
+        serializer = RequestSerializer(requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def list_requests(self, request, farmer_id): # GET /api/booking/inbox/<int:farmer_id>/
+        # Returns the list of a farmer's requests received by users
+
+        # Delete all the expired requests
+        today = date.today()
+        requests_to_be_deleted = Request.objects.filter(farmer=farmer_id).exclude(deadline__gte = today)
+        for req in requests_to_be_deleted:
+            req.delete()
+        
+        list_of_requests = Request.objects.filter(farmer=farmer_id)
+        serializer = RequestSerializer(list_of_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def book_product(self, request): # POST /api/booking/
+        # Creates a new request
+        serializer = RequestSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def cancel_booking(self, request, request_id): # GET /api/booking/<int:id>
+        # Deletes a request
+        request_to_be_deleted = Request.objects.get(id=request_id)
+        request_to_be_deleted.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

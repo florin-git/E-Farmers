@@ -14,3 +14,4 @@ npm install --save @fortawesome/react-fontawesome
 npm i --save @fortawesome/fontawesome-svg-core
 
 npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+npm install @react-oauth/google@latest
