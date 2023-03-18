@@ -178,7 +178,6 @@ class UsersView(viewsets.ViewSet):
             status=status.HTTP_200_OK)
 
     def change_status(self, request, user_id=None):  # PATCH /api/riders/<int:id>/
-        print(request.data)
         rider = Rider.objects.get(ext_user_id=user_id)
         serializer = RiderSerializer(
             instance=rider, data=request.data, partial=True)

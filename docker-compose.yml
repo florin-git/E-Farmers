@@ -18,6 +18,10 @@ services:
       - REACT_APP_API_USERS=${REACT_APP_API_USERS}
       - REACT_APP_API_INSERTIONS=${REACT_APP_API_INSERTIONS}
       - REACT_APP_API_SUBSCRIPTION=${REACT_APP_API_SUBSCRIPTION}
+      - REACT_APP_API_CART=${REACT_APP_API_CART}
+      - REACT_APP_API_PAYMENTS_ORDERS=${REACT_APP_API_PAYMENTS_ORDERS}
+      - REACT_APP_GOOGLE_API_TOKEN=${REACT_APP_GOOGLE_API_TOKEN}
+
 
   insertions_service:
     build:
@@ -29,7 +33,7 @@ services:
       python3 wait-for-service.py user_service 8080 &&
       python3 manage.py makemigrations &&
       python3 manage.py migrate &&
-      python3 manage.py runserver 0.0.0.0:8081 "
+      python3 manage.py runserver "
 
     environment:
       - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
@@ -58,7 +62,7 @@ services:
       python3 wait-for-service.py -d -n $${DATABASE_NAME} -u $${DATABASE_USER} -p password $${DATABASE_HOSTNAME} $${DATABASE_PORT} && 
       python3 manage.py makemigrations && 
       python3 manage.py migrate && 
-      python3 manage.py runserver 0.0.0.0:8080 "
+      python3 manage.py runserver "
 
     environment:
       - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
@@ -73,6 +77,64 @@ services:
       - backend-net
     depends_on:
       - db
+
+
+  shoppingcart_service:
+    build:
+      context: .
+      dockerfile: ./shoppingcart_service/Dockerfile
+    image: shoppingcart_service:v1.0
+    container_name: shoppingcart_service
+    command: sh -c "
+      python3 wait-for-service.py user_service 8080 &&
+      python3 manage.py makemigrations &&
+      python3 manage.py migrate &&
+      python3 manage.py runserver "
+
+    environment:
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - "8082:8082"
+    networks:
+      - frontend-net
+      - backend-net
+    depends_on:
+      - db
+      - user_service
+      - insertions_service
+
+
+  payments_order_service:
+    build:
+      context: .
+      dockerfile: ./payments_order_service/Dockerfile
+    image: payments_order_service:v1.0
+    container_name: payments_order_service
+    command: sh -c "
+      python3 wait-for-service.py user_service 8080 &&
+      python3 manage.py makemigrations &&
+      python3 manage.py migrate &&
+      python3 manage.py runserver "
+
+    environment:
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - "8083:8083"
+    networks:
+      - frontend-net
+      - backend-net
+    depends_on:
+      - db
+      - user_service
+      - shoppingcart_service
 
   subscription_service:
     build:
@@ -96,7 +158,7 @@ services:
       - rabbitmq
 
   db:
-    image: library/postgres
+    image: library/postgres:13
     container_name: db
     environment:
       - POSTGRES_USER=${DATABASE_USER}
