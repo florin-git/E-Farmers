@@ -139,7 +139,7 @@ class UsersView(viewsets.ViewSet):
         farmer_serializer = FarmerSerializer(farmer)
 
         #* Check
-        user_id = farmer.ext_user_id 
+        # user_id = farmer.ext_user_id 
         ###
 
         user = User.objects.get(id=user_id)
@@ -162,7 +162,8 @@ class UsersView(viewsets.ViewSet):
         rider = Rider.objects.get(ext_user_id=user_id)
         rider_serializer = RiderSerializer(rider)
 
-        user_id = rider.ext_user_id
+        # user_id = rider.ext_user_id
+
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
 

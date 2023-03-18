@@ -11,6 +11,8 @@ function ShoppingCart({ cart }) {
   // Boxes of the cart
   const [boxes, setBoxes] = useState([]);
 
+  console.log(cart)
+
   /**
    ** FUNCTIONS
    */

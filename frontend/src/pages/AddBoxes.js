@@ -101,7 +101,7 @@ function AddBoxes(props) {
 
   /**
    * Manage the presence of particular sizes.
-   * You can add only sizes that are not alredy present
+   * You can add only sizes that are not already present
    */
   const sizes = [0, 1, 2]; // Possible sizes
   let not_available = [];

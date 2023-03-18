@@ -112,7 +112,7 @@ function Registration(props) {
               .then((res) => {
                 console.log("AutoLogin");
                 let userId = res.data.user_id;
-                let accountType_u = res.data.account_type;
+                let accountType = res.data.account_type;
 
                 // Generate JWT Token
                 axiosUsers
@@ -129,7 +129,7 @@ function Registration(props) {
                       "Authorization"
                     ] = `JWT ${accessToken}`;
 
-                    setAuth({ userId, accountType_u, accessToken });
+                    setAuth({ userId, accountType, accessToken });
 
                     navigate(from, { replace: true });
                   });

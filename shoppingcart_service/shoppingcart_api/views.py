@@ -75,7 +75,6 @@ class CartItemView(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        print(request.data)
 
         box = CartItem.objects.get(
             cart=shopping_cart.user,
@@ -84,6 +83,8 @@ class CartItemView(viewsets.ViewSet):
             price=request.data['price']
             )
             
+        print(box)
+        
         box.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

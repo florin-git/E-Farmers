@@ -115,6 +115,8 @@ class BoxesView(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def add_boxes(self, request, insertion_id=None): # POST /api/insertions/<int:id>/boxes
+        
+        print(request.data)
         serializer = BoxSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

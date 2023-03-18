@@ -13,6 +13,8 @@ function CartItem(props) {
 
   let nameCap = makeCapital(props.name);
   let weight = parseFloat(props.weight).toFixed(1);
+
+  console.log(props)
   
   const handleDeletion = (event) => {
     axiosInstance.delete(`/users/${userId}/cart/items/`, 
