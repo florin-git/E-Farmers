@@ -18,11 +18,8 @@ function CartItem(props) {
   
   const handleDeletion = (event) => {
     axiosInstance.delete(`/users/${userId}/cart/items/`, 
-    {data: {
-      name: props.name,
-      weight: props.weight,
-      price:props.price
-    }}).then((res) => {
+      { data: { box_id: props.id } }
+    ).then((res) => {
       alert('Cart Item deleted');
     })
   }
