@@ -131,6 +131,9 @@ function Registration(props) {
 
                     setAuth({ userId, accountType, accessToken });
 
+                    // If you are a new user, reset the session storage with the Farmers' messages
+                    sessionStorage.setItem("msg", "");
+
                     navigate(from, { replace: true });
                   });
               })

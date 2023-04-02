@@ -112,3 +112,11 @@ footer {
 .notification-dropdown {
   font-size: 12px;
 }
+
+
+// Card images of same size
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}

@@ -49,8 +49,7 @@ class CartItemView(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         box_farmer = request.data['farmer']
-        if(box_farmer == shopping_cart.current_farmer):
-
+        if box_farmer == shopping_cart.current_farmer:
             serializer = CartItemSerializer(data={
                 'cart': shopping_cart.pk,
                 'box_id': request.data['box_id'],
@@ -70,10 +69,10 @@ class CartItemView(viewsets.ViewSet):
             return Response(status=status.HTTP_409_CONFLICT)
     
     def remove_box(self, request, user_id=None):    # DELETE /api/users/<int:user_id>/cart/items/
-        try:
-            shopping_cart = Cart.objects.get(user=user_id)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        # try:
+        #     shopping_cart = Cart.objects.get(user=user_id)
+        # except:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
 
         box = CartItem.objects.get(id=request.data['box_id'])
 

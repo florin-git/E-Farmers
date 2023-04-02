@@ -10,9 +10,6 @@ import useAuth from "../hooks/useAuth";
 import axiosInstance from '../api/axiosCart';
 import axiosInsertions from '../api/axiosInsertions';
 
-// Cart components
-import CartItem from "../components/CartItem";
-
 const TempPayPage = () => {
 
     let price = 0;

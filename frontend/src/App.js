@@ -65,11 +65,6 @@ function App(props) {
                 element={<ProtectedRouteInsertion />}
               />
               <Route
-                path="insertions/:insertion_id/boxes/"
-                exact
-                element={<AddBoxes />}
-              />
-              <Route
                 path="farmer/profile/:farmer_id/"
                 exact
                 element={<FarmerProfile />}
@@ -127,6 +122,11 @@ function App(props) {
                     path="insertions/:insertion_id/edit/"
                     exact
                     element={<EditInsertion />}
+                  />
+                  <Route
+                    path="insertions/:insertion_id/boxes/"
+                    exact
+                    element={<AddBoxes />}
                   />
                   {/* You can receive and access booking orders only if you are a farmer */}
                   <Route path="inbox/" exact element={<Inbox />} />
