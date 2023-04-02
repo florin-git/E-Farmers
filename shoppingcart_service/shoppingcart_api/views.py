@@ -42,7 +42,7 @@ class CartItemView(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def add_box(self, request, user_id=None):   # PUT /api/users/<int:user_id>/cart/items/
-
+        
         try:
             shopping_cart = Cart.objects.get(user=user_id)
         except:
@@ -59,6 +59,7 @@ class CartItemView(viewsets.ViewSet):
                 'price': request.data['price']
             })
 
+            
             n_items = shopping_cart.number_of_items + 1 
             shopping_cart.number_of_items = n_items
 

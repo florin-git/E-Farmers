@@ -82,6 +82,7 @@ function Box(props) {
         /**
          * Get the farmer id that made the insertion
          */
+
         axiosInsertions
           .get(`/insertions/${props.insertion}/`)
           .then((res) => {
@@ -89,6 +90,9 @@ function Box(props) {
             setFarmerId(farmer_id)
             let insertion_name = res.data["title"];
             setInsertionName(insertion_name)
+
+
+            console.log(props)
 
             /**
              * Try to add the box to the cart
@@ -156,6 +160,7 @@ function Box(props) {
                       console.log(error);
                     });
                 } else {
+                  console.log("REGRE")
                   console.log(error);
                 }
               });
