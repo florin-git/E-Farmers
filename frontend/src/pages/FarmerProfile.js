@@ -107,7 +107,7 @@ function FarmerProfile(props) {
                 <div className="col">
                   {farmerInfo.number_insertions >= 100 && (
                       <img
-                        src={process.env.PUBLIC_URL+'/images/badge_sells.jpg'}
+                        src={process.env.PUBLIC_URL+'/images/badge_insertions.jpg'}
                         className="img-fluid"
                         alt="fresh"
                       />

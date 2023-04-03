@@ -192,7 +192,7 @@ function PublishInsertion(props) {
               console.log(error.response);
             });
           axiosPrivate
-            .patch(`farmers/${userId}/`, {'type': 1})
+            .patch(`farmers/${userId}/`)
           // If the submission was successful
           navigate("/insertions");
         })

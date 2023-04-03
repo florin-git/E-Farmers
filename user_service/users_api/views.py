@@ -159,13 +159,9 @@ class UsersView(viewsets.ViewSet):
         },
             status=status.HTTP_200_OK)
     
-    def change_number_insertions(self, request, user_id): # PATCH /api/farmer/<int:user_id>/
+    def increase_number_insertions(self, request, user_id): # PATCH /api/farmer/<int:user_id>/
         farmer = Farmer.objects.get(ext_user_id=user_id)
-        print(request.data['type'])
-        if request.data['type'] == 0:
-            farmer.number_insertions = farmer.number_insertions -1
-        elif request.data['type'] == 1:
-            farmer.number_insertions = farmer.number_insertions +1
+        farmer.number_insertions = farmer.number_insertions +1
         farmer.save()
         return Response(status=status.HTTP_200_OK)
 
