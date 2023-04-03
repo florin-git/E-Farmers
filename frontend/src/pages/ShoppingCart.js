@@ -3,6 +3,9 @@ import axiosInstance from "../api/axiosCart";
 import CartItem from "../components/CartItem";
 import { Link, useNavigate } from "react-router-dom";
 
+import Modal from "react-bootstrap/Modal";
+import { boxSizing } from "@mui/system";
+
 function ShoppingCart({ cart }) {
   /**
    ** VARIABLES
@@ -10,13 +13,17 @@ function ShoppingCart({ cart }) {
 
   // Boxes of the cart
   const [boxes, setBoxes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  console.log(cart)
+  // It will contain the id of the deleted insertion
+  const [idToDelete, setIdToDelete] = useState(-1);
+
+  console.log("CART", cart);
 
   /**
    ** FUNCTIONS
    */
-  useEffect(()  => {
+  useEffect(() => {
     (async () => {
       await axiosInstance
         .get(`users/${cart.user}/cart/items/`)
@@ -25,24 +32,93 @@ function ShoppingCart({ cart }) {
         })
         .catch((error) => {
           return error.response;
-        })
+        });
     })();
-  }, [cart.user]);
+  }, [cart.user, idToDelete]);
+
+  console.log("BOXES", boxes);
+
+  // Manage Modal
+  const handleCloseModal = () => setShowModal(false);
+
+  // If you push the 'Delete' button
+  const handleShowModal = (event) => {
+    setIdToDelete(event.target.id);
+    setShowModal(true);
+  };
+
+  // Deletion
+  const handleDeletion = async () => {
+    await axiosInstance.delete(`/users/${cart.user}/cart/items/`, {
+      data: { box_id: idToDelete },
+    });  
+    
+    setShowModal(false); // Close modal
+
+    // Keep all the boxes except the one deleted
+    setBoxes(boxes.filter((prevBox) => prevBox.id !== idToDelete));
+
+    setIdToDelete(-1); // Update again the variable for the reloading
+  };
 
   const boxes_array = boxes.map((box) => {
-    return (<CartItem key={box.id} {...box} />);
-  })
-
+    // return (<CartItem key={box.id} {...box} />);
+    return (
+      <div className="card mb-3" key={box.id}>
+        <div className="card-body">
+          <div className="d-flex justify-content-between">
+            <button
+              type="button"
+              id={box.id}
+              name="delete"
+              onClick={(event) => handleShowModal(event)}
+              className="btn btn-outline-danger"
+            >
+              Delete
+            </button>
+            <div className="d-flex flex-row align-items-center">
+              <div className="ms-3">
+                <p className="small mb-0">{box.name}</p>
+              </div>
+            </div>
+            <div className="d-flex flex-row align-items-center">
+              <div className="ms-3">
+                <p className="small mb-0">Kg {box.weight}</p>
+              </div>
+            </div>
+            <h5 className="mb-0">€ {box.price}</h5>
+          </div>
+          <i className="fas fa-trash-alt"></i>
+        </div>
+      </div>
+    );
+  });
 
   return (
-    
     <div className="container py-5 h-100">
+      {/* Modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <span>Deletion</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this insertion?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleCloseModal}>
+            Close
+          </button>
+          <button className="btn btn-primary" onClick={handleDeletion}>
+            Yes
+          </button>
+        </Modal.Footer>
+      </Modal>
+
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col">
           <div className="card">
             <div className="card-body p-4">
               <div className="row">
-
                 <div className="col-lg-7">
                   <div className="d-flex justify-content-center align-items-center mb-4">
                     <div>
@@ -58,20 +134,15 @@ function ShoppingCart({ cart }) {
           </div>
         </div>
       </div>
-      <Link
-        className="btn btn-primary mx-md-2"
-        to={"payment"}
-      >
-      Place Order
+
+      <Link className="btn btn-primary mx-md-2" to={"payment"}>
+        Place Order
       </Link>
     </div>
-
   );
 }
 
 export default ShoppingCart;
-
-
 
 /** 
   <section className="h-100 h-custom">

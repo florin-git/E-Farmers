@@ -123,8 +123,8 @@ function InsertionDetail({ insertion }) {
 
             <hr />
 
-            <div className="row mb-4">
-              {/* <div className=" col-4 mb-2">
+            {/* <div className="row mb-4">
+              <div className=" col-4 mb-2">
                 <label className="form-label fw-bold col" htmlFor="size">
                   Size
                 </label>
@@ -133,7 +133,7 @@ function InsertionDetail({ insertion }) {
                   <option>Medium</option>
                   <option>Large</option>
                 </select>
-              </div> */}
+              </div>
 
               <div className=" col-3 mb-2">
                 <label className="form-label fw-bold col" htmlFor="quantity">
@@ -148,7 +148,7 @@ function InsertionDetail({ insertion }) {
                   placeholder="0"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="row row-cols-1 row-cols-md-3 g-4 my-4">

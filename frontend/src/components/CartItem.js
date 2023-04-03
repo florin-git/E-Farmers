@@ -7,6 +7,9 @@ function CartItem(props) {
   const { auth } = useAuth();
   const userId = auth.userId;
 
+  // // It will contain the id of the deleted item
+  // const [idToDelete, setIdToDelete] = useState(-1);
+
   function makeCapital(word) {
     return word[0].toUpperCase() + word.substring(1);
   }
@@ -18,11 +21,8 @@ function CartItem(props) {
   
   const handleDeletion = (event) => {
     axiosInstance.delete(`/users/${userId}/cart/items/`, 
-    {data: {
-      name: props.name,
-      weight: props.weight,
-      price:props.price
-    }}).then((res) => {
+      { data: { box_id: props.id } }
+    ).then((res) => {
       alert('Cart Item deleted');
     })
   }

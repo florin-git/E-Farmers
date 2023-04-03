@@ -53,6 +53,7 @@ function FarmerProfile(props) {
         farmer_id: farmerUserId,
       })
       .then((res) => {
+        alert(`You are now subscribed to ${farmerInfo.name}!`);
         console.log("You are subscribed");
       })
       .catch((error) => {

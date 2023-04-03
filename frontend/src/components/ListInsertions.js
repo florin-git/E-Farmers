@@ -79,7 +79,7 @@ function ListInsertions({ farmerUserId, searchString }) {
     return (
       <div>
         <div className="col" key={insertion.id}>
-          <div className="card w-75">
+          <div className="card w-75" key={insertion.id}>
             <img
               src={
                 axiosInsertions.defaults.baseURL +

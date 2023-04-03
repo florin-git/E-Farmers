@@ -42,15 +42,14 @@ class CartItemView(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def add_box(self, request, user_id=None):   # PUT /api/users/<int:user_id>/cart/items/
-
+        
         try:
             shopping_cart = Cart.objects.get(user=user_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         box_farmer = request.data['farmer']
-        if(box_farmer == shopping_cart.current_farmer):
-
+        if box_farmer == shopping_cart.current_farmer:
             serializer = CartItemSerializer(data={
                 'cart': shopping_cart.pk,
                 'box_id': request.data['box_id'],
@@ -60,6 +59,7 @@ class CartItemView(viewsets.ViewSet):
                 'price': request.data['price']
             })
 
+            
             n_items = shopping_cart.number_of_items + 1 
             shopping_cart.number_of_items = n_items
 
@@ -70,21 +70,13 @@ class CartItemView(viewsets.ViewSet):
             return Response(status=status.HTTP_409_CONFLICT)
     
     def remove_box(self, request, user_id=None):    # DELETE /api/users/<int:user_id>/cart/items/
-        try:
-            shopping_cart = Cart.objects.get(user=user_id)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        # try:
+        #     shopping_cart = Cart.objects.get(user=user_id)
+        # except:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
 
+        box = CartItem.objects.get(id=request.data['box_id'])
 
-        box = CartItem.objects.get(
-            cart=shopping_cart.user,
-            name=request.data['name'],
-            weight=request.data['weight'],
-            price=request.data['price']
-            )
-            
-        print(box)
-        
         box.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

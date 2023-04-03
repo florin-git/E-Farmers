@@ -79,7 +79,9 @@ function Home(props) {
           <div className="row">
             <div className="col-lg text-center caption">
               <h1>100% FRESH AND ORGANIC FOODS</h1>
-              <button className="btn btn-primary fw-bold">Click here</button>
+              <Link className="btn btn-primary fw-bold" to={"insertions/"}>
+                Go to Insertions
+              </Link>
             </div>
           </div>
         </div>
