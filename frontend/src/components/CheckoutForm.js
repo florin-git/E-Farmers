@@ -6,10 +6,12 @@ import axiosOrder from "../api/axiosOrder";
 import axiosInsertions from "../api/axiosInsertions";
 import axiosCart from "../api/axiosCart";
 import useAuth from "../hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CheckoutForm = (props) => {
     // Getting parameters
-    const price = props.price;
+    const price_to_display = props.price;
+    const price = Math.floor(props.price);
     const email = props.email;
     const boxes_array = props.boxes_array;
     const box_names = props.box_names;
@@ -23,6 +25,9 @@ const CheckoutForm = (props) => {
     const [error, setError] = useState(null);
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     
     // Handle real-time validation errors from the CardElement.
     const handleChange = (event) => {
@@ -41,6 +46,7 @@ const CheckoutForm = (props) => {
             type: 'card',
             card: card
         });
+        
         axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price, box_names, farmer})
         .then(response => {
             boxes_array.map((box_id) => (
@@ -48,7 +54,14 @@ const CheckoutForm = (props) => {
             ))
             axiosCart.delete(`users/${userId}/cart/`)
             .then(() => {
-                alert('Cart deleted!');
+                console.log("Redirecting to the selection of rider")
+        
+                const url = location.pathname + '/Delivery';
+                const state = {
+                    payment_method_id : paymentMethod.id
+                }
+                // Navigate to the new URL
+                navigate(url, {state});
             })
         })
         .catch(error => {
@@ -65,7 +78,7 @@ const CheckoutForm = (props) => {
                   </div>
                   <form onSubmit={handleSubmit} className="stripe-form">
                   <div className="products">
-                      <div className="total">Total<span className="price">${price}</span></div>
+                      <div className="total">Total<span className="price">${price_to_display}</span></div>
                   </div>
                   <div className="card-details">
                       <h3 className="title">Credit Card Details</h3>

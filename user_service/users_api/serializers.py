@@ -36,49 +36,49 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class FarmerSerializer(serializers.ModelSerializer):
-    #get all the field of the nested user
-
-    #this give us the error NameError at /api/users/1/\nname 'user' is not defined\
-    #ext_user = UserSerializer()                                 
     external_user_f = serializers.PrimaryKeyRelatedField(many = False, read_only = True)
-    
-    #User = UserSerializer()
+
     class Meta:
         model = Farmer
         #fields = '__all__' # Get all fields
         fields = ('id','farm_location','bio','external_user_f')
-        #read_only_fields = ('ext_user')
-        #fields = ('farm_location','bio')
-        
 
     def create(self, validated_data):
-        #farmer = Farmer(**validated_data)
-        #farmer.id = instance.id
-        #farmer.user_id = CurrentUserDefault()
-        #farmer = Farmer.objects.create(**instance, user_id=validated_data)
-        #farmer.save()
-        #return farmer
-        
-        #user_id = instance.id
-        #validated_data["user_id"] = User.objects.create(id=user_id)
         farmer = Farmer.objects.create(**validated_data)
         return farmer
 
 
 
 class RiderSerializer(serializers.ModelSerializer):
-    external_user_r = serializers.PrimaryKeyRelatedField(many = False, read_only = True)
+    external_user_r = serializers.PrimaryKeyRelatedField(many = False, read_only = True )
     
     class Meta:
         model = Rider
         fields = ('id','available','bio','external_user_r')
     
     def create(self,validated_data):
+        available = validated_data.get('available', False)
+        if isinstance(available, str):
+            if available.lower() == 'true':
+                available = True
+            elif available.lower() == 'false':
+                available = False
+            else:
+                raise serializers.ValidationError("Value must be either True or False")
         rider = Rider.objects.create(**validated_data)
         return rider
     
     def update(self, instance, validated_data):
-        instance.avalaible = validated_data.get( 'avalaible' , instance.avalaible )
+        available = validated_data.get('available', instance.available)
+        if isinstance(available, str):
+            if available.lower() == 'true':
+                available = True
+            elif available.lower() == 'false':
+                available = False
+            else:
+                raise serializers.ValidationError("Value must be either True or False")
+        instance.available = available
+        instance.ext_user = validated_data.get('ext_user', instance.ext_user)
         instance.save()
         return instance   
 

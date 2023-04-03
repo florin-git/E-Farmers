@@ -74,7 +74,8 @@ const FormForFarmer = (props) => {
             farm_location: formData.farm_location,
             bio: formData.bio
           })
-          .then(() => {
+          .then((res) => {
+            console.log(res)
             axiosPrivate
               .post(`token/verify/`, {
                 user_id: userId,
@@ -118,9 +119,9 @@ const FormForFarmer = (props) => {
 
   return (
     <div>
-    <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+    <div className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
       Form for Farmer
-    </p>
+    </div>
         {/* Start Form */}
         <form onSubmit={handleSubmit} className="mx-1 mx-md-4">
         <div className="d-flex flex-row align-items-center mb-4">

@@ -29,6 +29,7 @@ import RiderProfile from "./pages/RiderProfile";
 // Import carrello + pagamenti
 import OrdersMainPage from "./pages/OrdersMainPage";
 import PaymentPage from "./pages/PaymentPage";
+import DeliveryPage from "./pages/Delivery";
 
 import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
@@ -147,7 +148,12 @@ function App(props) {
                   path="user/cart/payment"
                   exact
                   element={<PaymentPage />}
-                ></Route>
+                />
+                <Route
+                  path="user/cart/payment/delivery"
+                  exact
+                  element={<DeliveryPage />}
+                />
               </Route>
             </Route>
 

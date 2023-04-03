@@ -73,10 +73,11 @@ const RiderUpdate = (props) => {
       (async () => {
         await axiosPrivate
           .post(`users/${userId}/${type}/`, {
-            avalaible: false,
+            available: false,
             bio: formData.bio
           })
           .then((res) => {
+            console.log(res)
             axiosPrivate
               .post(`token/verify/`, {
                 user_id: userId,
@@ -120,9 +121,9 @@ const RiderUpdate = (props) => {
 
   return (
     <div>
-        <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+        <div className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
         Form For Rider
-        </p>
+        </div>
         <form onSubmit={handleSubmit} className="mx-1 mx-md-4">
         <div className="d-flex flex-row align-items-center mb-4">
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -152,7 +153,7 @@ const RiderUpdate = (props) => {
             color= "success"
             />
             } 
-            label="Avalaible" 
+            label="available" 
             />
 
         {/*

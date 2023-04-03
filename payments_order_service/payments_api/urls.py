@@ -12,6 +12,12 @@ urlpatterns = [
     path('save-stripe-info/', NewView.as_view({
         'post':'save_stripe_info'
     })),
+    path('getSpecificOrder/<str:payment_method_id>', NewView.as_view({
+        'get':'getSpecificOrder'
+    })),
+    path('update-order/', NewView.as_view({
+        'patch':'updateOrder'
+    })),
     path('get-orders/<str:email>', NewView.as_view({
         'get':'getOrders'
     }))
