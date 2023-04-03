@@ -105,14 +105,14 @@ function FarmerProfile(props) {
               <hr/>
               <div className="row">
                 <div className="col">
-                  {farmerInfo.number_insertions >= 2 && (
+                  {farmerInfo.number_insertions >= 100 && (
                       <img
                         src={process.env.PUBLIC_URL+'/images/badge_sells.jpg'}
                         className="img-fluid"
                         alt="fresh"
                       />
                   )}
-                  {farmerInfo.number_insertions < 2 && (
+                  {farmerInfo.number_insertions < 100 && (
                       <img
                         src={process.env.PUBLIC_URL+'/images/badge_not_yet.jpg'}
                         className="img-fluid"
