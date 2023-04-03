@@ -104,12 +104,12 @@ class UsersView(viewsets.ViewSet):
             if serializer_farmer.is_valid(raise_exception=True):
                 serializer_farmer.save()
                 serializer_farmer.save(ext_user=user)
+                serializer_farmer.save(since = datetime.datetime.today())
                 try:
                     rider = Rider.objects.get(ext_user_id=user_id)
                     rider.delete()
                 except Exception:
                     print("rider con il corrispettivo id non trovato no delete.")
-
                 return Response(serializer_farmer.data, status=status.HTTP_201_CREATED)
         else:
             serializer = RiderSerializer(data=request.data)
@@ -133,7 +133,7 @@ class UsersView(viewsets.ViewSet):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_farmer(self, request, user_id=None):  # GET /api/farmer/<int:user_id>/
+    def get_farmer(self, request, user_id=None):  # GET /api/farmers/<int:user_id>/
         
         farmer = Farmer.objects.get(ext_user_id=user_id)
         farmer_serializer = FarmerSerializer(farmer)
@@ -154,8 +154,17 @@ class UsersView(viewsets.ViewSet):
             'phone_number': user_serializer.data['phone_number'],
             'farm_location': farmer_serializer.data['farm_location'],
             'bio': farmer_serializer.data['bio'],
+            'number_insertions': farmer_serializer.data['number_insertions'],
+            'since': farmer_serializer.data['since'],
         },
             status=status.HTTP_200_OK)
+    
+    def increase_number_insertions(self, request, user_id): # PATCH /api/farmer/<int:user_id>/
+        farmer = Farmer.objects.get(ext_user_id=user_id)
+        farmer.number_insertions = farmer.number_insertions +1
+        farmer.save()
+        return Response(status=status.HTTP_200_OK)
+
     
     def get_rider(self, request, user_id=None): #GET /api/riders/<int:user_id>
 

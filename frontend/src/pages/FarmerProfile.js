@@ -25,6 +25,8 @@ function FarmerProfile(props) {
   const farmerUserId = useParams()?.farmer_id;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
+  let two_yrs_ago =  new Date(new Date().setFullYear(new Date().getFullYear() - 2));
+
   /**
    ** FUNCTIONS
    */
@@ -100,6 +102,43 @@ function FarmerProfile(props) {
               <li>
                 <a href="#"> {edit} Edit Insertions </a>
               </li>
+              <hr/>
+              <div className="row">
+                <div className="col">
+                  {farmerInfo.number_insertions >= 100 && (
+                      <img
+                        src={process.env.PUBLIC_URL+'/images/badge_insertions.jpg'}
+                        className="img-fluid"
+                        alt="fresh"
+                      />
+                  )}
+                  {farmerInfo.number_insertions < 100 && (
+                      <img
+                        src={process.env.PUBLIC_URL+'/images/badge_not_yet.jpg'}
+                        className="img-fluid"
+                        alt="fresh"
+                      />
+                  )}
+                </div>
+                <div className="col">
+                  {farmerInfo.since <= two_yrs_ago.toISOString().split('T')[0] && (
+                      <div className="col">
+                        <img
+                          src={process.env.PUBLIC_URL+'/images/badge_years.jpg'}
+                          className="img-fluid"
+                          alt="fresh"
+                        />
+                      </div>
+                  )}
+                  {farmerInfo.since > two_yrs_ago.toISOString().split('T')[0] && (
+                      <img
+                        src={process.env.PUBLIC_URL+'/images/badge_not_yet.jpg'}
+                        className="img-fluid"
+                        alt="fresh"
+                      />
+                  )}
+                </div>
+              </div>
               <div className="d-flex justify-content-center">
                 <div className="content text-center">
                   <div className="ratings">
@@ -123,10 +162,13 @@ function FarmerProfile(props) {
         </div>
         <div className="profile-info col-md-9">
           <div className="panel">
-            <div className="bio-graph-heading">{farmerInfo.bio}</div>
+            <div className="bio-graph-heading">
+              {farmerInfo.bio}
+            </div>
             <div className="panel-body bio-graph-info">
-              <h1> </h1>
-              <h1>Bio Graph</h1>
+              <div className="row">
+                  <h1>Bio Graph</h1>
+              </div>
               <div className="row">
                 <div className="bio-row">
                   <p>
