@@ -49,10 +49,10 @@ function ShoppingCart({ cart }) {
 
   // Deletion
   const handleDeletion = async () => {
-    axiosInstance.delete(`/users/${cart.user}/cart/items/`, {
+    await axiosInstance.delete(`/users/${cart.user}/cart/items/`, {
       data: { box_id: idToDelete },
-    });
-
+    });  
+    
     setShowModal(false); // Close modal
 
     // Keep all the boxes except the one deleted

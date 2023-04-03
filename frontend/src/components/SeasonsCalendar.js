@@ -413,6 +413,8 @@ function SeasonsCalendar() {
                       type="number"
                       className="form-control"
                       id="weight"
+                      min="0.00"
+                      step="0.1"
                       placeholder="0"
                       value={formData.weight}
                       name="weight"
@@ -422,13 +424,13 @@ function SeasonsCalendar() {
                   </div>
 
                   <div className="row">
-                    <div className="form-group col-lg-6 mt-3">
+                    <div className="form-group mt-3">
                       <label htmlFor="expiration_date">Deadline</label>
                       <input
                         type="date"
                         className={`form-control ${formValidationClass.deadline_for_class}`}
                         id="deadline"
-                        placeholder="Deadlinee"
+                        placeholder="Deadline"
                         value={formData.deadline}
                         name="deadline"
                         onChange={handleChange}

@@ -217,85 +217,91 @@ function AddBoxes(props) {
   };
 
   return (
-    <div className="container-md d-flex justify-content-center py-5">
-      <div className="w-25">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group mt-3">
-            <label htmlFor="weight">Weight (kg)</label>
-            <input
-              type="number"
-              className={`form-control ${formValidationClass.weight_for_class}`}
-              id="weight"
-              ref={weightRef}
-              min="0.00"
-              step="0.1"
-              value={formData.weight}
-              name="weight"
-              onChange={handleChange}
-              required
-            />
-            {formValidation.weight.length > 0 && (
-              <span className="invalid-feedback">{formValidation.weight}</span>
-            )}
-          </div>
+    <div>
+      <h1 className="text-center">Add Boxes</h1>
+      <hr />
+      <div className="container-md d-flex justify-content-center py-5">
+        <div className="w-25">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group mt-3">
+              <label htmlFor="weight">Weight (kg)</label>
+              <input
+                type="number"
+                className={`form-control ${formValidationClass.weight_for_class}`}
+                id="weight"
+                ref={weightRef}
+                min="0.00"
+                step="0.1"
+                value={formData.weight}
+                name="weight"
+                onChange={handleChange}
+                required
+              />
+              {formValidation.weight.length > 0 && (
+                <span className="invalid-feedback">
+                  {formValidation.weight}
+                </span>
+              )}
+            </div>
 
-          <div className="form-group mt-3">
-            <label htmlFor="size">Size</label>
-            <select
-              className={`form-control ${formValidationClass.size_for_class}`}
-              id="size"
-              name="size"
-              value={formData.size}
-              onChange={handleChange}
-            >
-              <option value="">--Choose--</option>
-              {available.includes(0) && <option value="0">Small</option>}
-              {available.includes(1) && <option value="1">Medium</option>}
-              {available.includes(2) && <option value="2">Large</option>}
-            </select>
-            {formValidation.size.length > 0 && (
-              <span className="invalid-feedback">{formValidation.size}</span>
-            )}
-          </div>
+            <div className="form-group mt-3">
+              <label htmlFor="size">Size</label>
+              <select
+                className={`form-control ${formValidationClass.size_for_class}`}
+                id="size"
+                name="size"
+                value={formData.size}
+                onChange={handleChange}
+              >
+                <option value="">--Choose--</option>
+                {available.includes(0) && <option value="0">Small</option>}
+                {available.includes(1) && <option value="1">Medium</option>}
+                {available.includes(2) && <option value="2">Large</option>}
+              </select>
+              {formValidation.size.length > 0 && (
+                <span className="invalid-feedback">{formValidation.size}</span>
+              )}
+            </div>
 
-          <div className="form-group mt-3">
-            <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              className={`form-control ${formValidationClass.price_for_class}`}
-              id="price"
-              min="0.00"
-              step="0.1"
-              value={formData.price}
-              name="price"
-              onChange={handleChange}
-              required
-            />
-            {formValidation.price.length > 0 && (
-              <span className="invalid-feedback">{formValidation.price}</span>
-            )}
-          </div>
+            <div className="form-group mt-3">
+              <label htmlFor="price">Price</label>
+              <input
+                type="number"
+                className={`form-control ${formValidationClass.price_for_class}`}
+                id="price"
+                min="0.00"
+                step="0.1"
+                value={formData.price}
+                name="price"
+                onChange={handleChange}
+                required
+              />
+              {formValidation.price.length > 0 && (
+                <span className="invalid-feedback">{formValidation.price}</span>
+              )}
+            </div>
 
-          <div className="form-group mt-3">
-            <label htmlFor="number_of_available_boxes">
-              Number of Available Boxes
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="number_of_available_boxes"
-              min="0"
-              value={formData.number_of_available_boxes}
-              name="number_of_available_boxes"
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div className="form-group mt-3">
+              <label htmlFor="number_of_available_boxes">
+                Number of Available Boxes
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                id="number_of_available_boxes"
+                min="0"
+                value={formData.number_of_available_boxes}
+                name="number_of_available_boxes"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <button className="mt-4 btn btn-primary" type="submit">
-            Add
-          </button>
-        </form>
+            <button className="mt-4 btn btn-primary" type="submit">
+              Add
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

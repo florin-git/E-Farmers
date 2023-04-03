@@ -53,7 +53,7 @@ function Box(props) {
             })
             .then((res) => {
               // alert that box has been added to cart
-              console.log("BOX HAS BEEN ADDED!");
+              alert("BOX HAS BEEN ADDED!");
               setFarmerId(-1)
               setInsertionName("")
               console.log(res);
@@ -150,6 +150,7 @@ function Box(props) {
                           farmer: farmer_id,
                         })
                         .then((res) => {
+                          alert("BOX HAS BEEN ADDED!");
                           console.log(res);
                         })
                         .catch((error) => {

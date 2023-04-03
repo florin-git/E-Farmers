@@ -296,7 +296,7 @@ function Registration(props) {
                         </div>
                       </div>
 
-                      <div className="d-flex flex-row align-items-center mb-4">
+                      {/* <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                         <div className="form-group flex-fill mb-0">
                           <Box sx={{ minWidth: 240 }}>
@@ -315,7 +315,7 @@ function Registration(props) {
                             </FormControl>
                           </Box>
                         </div>
-                      </div>
+                      </div> */}
 
                       <div className="form-check d-flex justify-content-center mb-5">
                         <input

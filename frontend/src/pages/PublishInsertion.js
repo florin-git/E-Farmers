@@ -191,11 +191,13 @@ function PublishInsertion(props) {
             .catch((error) => {
               console.log(error.response);
             });
-          
-          const insertionId = resInsertion.data['insertion_id']
+
+          const insertionId = resInsertion.data["insertion_id"];
 
           // If the submission was successful, you are redirected to inserting boxes
-          navigate(`${process.env.PUBLIC_URL}/insertions/${insertionId}/boxes/`)
+          navigate(
+            `${process.env.PUBLIC_URL}/insertions/${insertionId}/boxes/`
+          );
         })
         .catch((error) => {
           console.log(error.response);
@@ -205,7 +207,9 @@ function PublishInsertion(props) {
 
   return (
     <div className="container-md py-5">
-      <div className="row ">
+      <h1 className="text-center">Publish New Insertion</h1>
+      <hr />
+      <div className="row">
         <div className="d-flex justify-content-center align-items-center h-100">
           <form onSubmit={handleSubmit}>
             <div className="form-group mt-3">
