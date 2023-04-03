@@ -2,7 +2,7 @@ from pickle import FALSE
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
-import datetime
+from django.utils import timezone
 from users_api.account_type import *
 
 class User(AbstractUser):
@@ -48,7 +48,9 @@ class Farmer(models.Model):
     farm_location = models.CharField(max_length=255)
     bio = models.CharField(max_length = 255)
     number_insertions = models.SmallIntegerField(default=0)
-    since = models.DateField(default=datetime.datetime.now(), blank=True)
+    # since = models.DateField(default=datetime.datetime.now(), blank=True)
+    since = models.DateField(default=timezone.now, blank=True)
+    
     ext_user = models.OneToOneField (
         User,
         related_name="external_user_f",     
