@@ -46,7 +46,7 @@ class FarmerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Farmer
         #fields = '__all__' # Get all fields
-        fields = ('id','farm_location','bio','external_user_f')
+        fields = ('id','farm_location','bio','external_user_f', 'number_insertions', 'since')
         #read_only_fields = ('ext_user')
         #fields = ('farm_location','bio')
         

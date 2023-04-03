@@ -29,6 +29,7 @@ urlpatterns = [
     })),
     path('farmers/<int:user_id>/' , UsersView.as_view({
         'get'  : 'get_farmer',
+        'patch': 'change_number_insertions',
     })),
     path('riders/<int:user_id>/' , UsersView.as_view({
         'get' : 'get_rider',
