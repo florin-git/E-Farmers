@@ -31,9 +31,15 @@ urlpatterns = [
         'get'  : 'get_farmer',
         'patch': 'increase_number_insertions',
     })),
+    path('riders/', UsersView.as_view({
+        'get' : 'get_first_rider',
+    })),
     path('riders/<int:user_id>/' , UsersView.as_view({
         'get' : 'get_rider',
         'patch' : 'change_status',
+    })),
+    path('riders_change/<int:id>/',UsersView.as_view({
+        'patch' : 'change_status_aux',
     })),
     path('users/farmers/<int:farmer_id>/' , UsersView.as_view({
         'post' : 'add_review',

@@ -81,6 +81,7 @@ function UserProfile(props) {
     axiosPrivate
       .get(`users/${userId}/`)
       .then((res) => {
+        console.log(res)
         /**
          * The result is a list:
          *  the first JSON record contains user's info
@@ -173,10 +174,8 @@ function UserProfile(props) {
               Payments Page!
             </Link>
           </div>
-          <h6> Subscriptions: </h6>
-          <div>
+          <h6> Subscriptions: </h6> 
             <ListSubscriptions />
-          </div>
         </div>
         <div className="col-md-7 border-right">
           <div className="p-3 py-5">
@@ -263,10 +262,10 @@ function UserProfile(props) {
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
                   <Typography gutterBottom>
-                    <p className="text-center fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                    <span className="text-center fw-bold mb-5 mx-1 mx-md-4 mt-4">
                       You must compile this part for your desired specific
                       account.
-                    </p>
+                    </span>
                   </Typography>
                   <Typography gutterBottom>
                     {accountType === 1 && <FormForFarmer {...childProps} />}
@@ -320,7 +319,7 @@ function UserProfile(props) {
                 <div className="row mt-6">
                   <div className="col-md-6">
                     <label className="labels">
-                      <h6>Avalaible : </h6>
+                      <h6>Available : </h6>
                     </label>
                   </div>
                 </div>

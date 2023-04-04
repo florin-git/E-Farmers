@@ -30,6 +30,7 @@ function OrdersMainPage(props) {
                 .get(`users/${userId}/`)
                 .then((res) => {
                     email = res.data[0].email;
+                    console.log(email)
                         axiosOrder.getOrder(email)
                             .then((res) => {
                                 setOrders(res.data)

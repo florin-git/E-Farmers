@@ -26,8 +26,6 @@ class NewView(viewsets.ViewSet):
 
 
     def save_stripe_info(self,request): #POST
-        print(request.data)
-        
         # data
         data = request.data
         email = data['email']
@@ -46,8 +44,8 @@ class NewView(viewsets.ViewSet):
             stripe.PaymentIntent.create(
                 customer = customer, 
                 payment_method = payment_method_id,  
-                currency = 'usd', # you can provide any currency you want
-                amount = (request.data['price']*100),
+                currency = 'eur', # you can provide any currency you want
+                amount= str(int(float(request.data['price']) * 100)),
                 confirm = True
             )     
             try:
@@ -67,7 +65,31 @@ class NewView(viewsets.ViewSet):
             }
         )
 
-    def getOrders(self, request, email=None):
+    def getOrders(self, request, email=None):     #GET /api/orders/<str:email>/
         orders = Orders.objects.filter(email = email)
         serializer = OrdersSerializer(orders, many = True)
         return Response(serializer.data, status.HTTP_200_OK)
+
+    def getSpecificOrder(self,request,payment_method_id=None):  #GET /api/orders/<str:payment_method_id>/
+        print("helloo")
+        try:
+            order = Orders.objects.get(payment_method_id = payment_method_id)
+        except ObjectDoesNotExist:
+            return Response("Object not found", status.HTTP_400_BAD_REQUEST)
+        else:
+            order_serializer = OrdersSerializer(order)
+            return Response (order_serializer.data, status.HTTP_200_OK)
+
+    def updateOrder(self,request): #PATCH /api/update-order
+        try: 
+            order = Orders.objects.get(payment_method_id = request.data['payment_method_id'])
+            riderId = request.data['riderId']
+            serializer = OrdersSerializer(instance=order, data={'rider':riderId}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status.HTTP_200_OK)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Orders.DoesNotExist:
+            return Response({'error': 'Order not found'}, status=404)
+
+       

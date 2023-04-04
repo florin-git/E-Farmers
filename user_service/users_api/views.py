@@ -1,6 +1,7 @@
 import requests
 from .models import *
 from .serializers import *
+import datetime
 
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
@@ -84,7 +85,7 @@ class UsersView(viewsets.ViewSet):
             elif account_type == 2:
                 rider = Rider.objects.get(ext_user=user_id)
                 rider_serializer = RiderSerializer(rider)
-
+                print("get del rider")
                 serializers.append(rider_serializer.data)
 
             return Response(serializers, status=status.HTTP_200_OK)
@@ -97,37 +98,34 @@ class UsersView(viewsets.ViewSet):
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
         JWT_authenticator.authenticate(request)
-        user = User.objects.get(id=user_id)
         # We use the parameter type to differentiate the user choose . Passed via url by
         if(type == 1):
+            user = User.objects.get(id=user_id)
             serializer_farmer = FarmerSerializer(data=request.data)
             if serializer_farmer.is_valid(raise_exception=True):
                 serializer_farmer.save()
                 serializer_farmer.save(ext_user=user)
                 serializer_farmer.save(since = datetime.datetime.today())
-                try:
-                    rider = Rider.objects.get(ext_user_id=user_id)
-                    rider.delete()
-                except Exception:
-                    print("rider con il corrispettivo id non trovato no delete.")
+                
                 return Response(serializer_farmer.data, status=status.HTTP_201_CREATED)
         else:
-            serializer = RiderSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                serializer.save(ext_user=user)
-                try:
-                    farmer = Farmer.objects.filter(ext_user_id=user_id)
-                    farmer.delete()
-                except Exception:
-                    print("farmer con il corrispettivo id non trovato no delete.")
-
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user = User.objects.get(id=user_id)
+            available = request.data.get('available',False)
+            serializer_rider = RiderSerializer(data=request.data)
+            if serializer_rider.is_valid(raise_exception=True):
+                serializer_rider.save()
+                #serializer_rider.save(available=available)
+                serializer_rider.save(ext_user=user)
+                #try:
+                #    farmer = Farmer.objects.filter(ext_user_id=user_id)
+                #    farmer.delete()
+                #except Exception:
+                #    print("farmer con il corrispettivo id non trovato no delete.")
+                return Response(serializer_rider.data, status=status.HTTP_201_CREATED)
 
     def account_change(self, request, user_id=None):  # PATCH /api/users/<int:id>/
         user = User.objects.get(id=user_id)
-        serializer = UserSerializer(
-            instance=user, data=request.data, partial=True)
+        serializer = UserSerializer(instance=user, data=request.data, partial=True)
         #serializer = UserSerializer(user, data = request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -170,9 +168,7 @@ class UsersView(viewsets.ViewSet):
 
         rider = Rider.objects.get(ext_user_id=user_id)
         rider_serializer = RiderSerializer(rider)
-
         # user_id = rider.ext_user_id
-
         user = User.objects.get(id=user_id)
         user_serializer = UserSerializer(user)
 
@@ -182,15 +178,30 @@ class UsersView(viewsets.ViewSet):
             'last_name': user_serializer.data['last_name'],
             'email': user_serializer.data['email'],
             'phone_number': user_serializer.data['phone_number'],
-            'avalaible': rider_serializer.data['avalaible'],
+            'available': rider_serializer.data['available'],
             'bio': rider_serializer.data['bio'],
         },
             status=status.HTTP_200_OK)
+    
+    def get_first_rider(self, request): #GET /api/riders/
+        try:
+            rider = Rider.objects.filter(available=True).first()
+            rider_serializer = RiderSerializer(rider)
+        except Rider.DoesNotExist:            
+            return Response({'error': 'Rider not found'}, status=404)
+        else:
+            return Response(rider_serializer.data)
 
     def change_status(self, request, user_id=None):  # PATCH /api/riders/<int:id>/
         rider = Rider.objects.get(ext_user_id=user_id)
-        serializer = RiderSerializer(
-            instance=rider, data=request.data, partial=True)
+        serializer = RiderSerializer(instance=rider, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def change_status_aux(self,request,id=None): #PATCH /api/riders_change/<int:id>/
+        rider = Rider.objects.get(id=id)
+        serializer = RiderSerializer(instance=rider, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

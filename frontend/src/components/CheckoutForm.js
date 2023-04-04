@@ -6,6 +6,7 @@ import axiosOrder from "../api/axiosOrder";
 import axiosInsertions from "../api/axiosInsertions";
 import axiosCart from "../api/axiosCart";
 import useAuth from "../hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CheckoutForm = (props) => {
     // Getting parameters
@@ -23,6 +24,9 @@ const CheckoutForm = (props) => {
     const [error, setError] = useState(null);
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     
     // Handle real-time validation errors from the CardElement.
     const handleChange = (event) => {
@@ -41,6 +45,7 @@ const CheckoutForm = (props) => {
             type: 'card',
             card: card
         });
+        
         axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price, box_names, farmer})
         .then(response => {
             boxes_array.map((box_id) => (
@@ -48,7 +53,14 @@ const CheckoutForm = (props) => {
             ))
             axiosCart.delete(`users/${userId}/cart/`)
             .then(() => {
-                alert('Cart deleted!');
+                console.log("Redirecting to the selection of rider")
+        
+                const url = location.pathname + '/Delivery';
+                const state = {
+                    payment_method_id : paymentMethod.id
+                }
+                // Navigate to the new URL
+                navigate(url, {state});
             })
         })
         .catch(error => {
