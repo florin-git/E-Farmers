@@ -44,8 +44,8 @@ class NewView(viewsets.ViewSet):
             stripe.PaymentIntent.create(
                 customer = customer, 
                 payment_method = payment_method_id,  
-                currency = 'usd', # you can provide any currency you want
-                amount = (request.data['price']*100),
+                currency = 'eur', # you can provide any currency you want
+                amount= str(int(float(request.data['price']) * 100)),
                 confirm = True
             )     
             try:

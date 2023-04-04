@@ -10,8 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const CheckoutForm = (props) => {
     // Getting parameters
-    const price_to_display = props.price;
-    const price = Math.floor(props.price);
+    const price = props.price;
     const email = props.email;
     const boxes_array = props.boxes_array;
     const box_names = props.box_names;
@@ -78,7 +77,7 @@ const CheckoutForm = (props) => {
                   </div>
                   <form onSubmit={handleSubmit} className="stripe-form">
                   <div className="products">
-                      <div className="total">Total<span className="price">${price_to_display}</span></div>
+                      <div className="total">Total<span className="price">${price}</span></div>
                   </div>
                   <div className="card-details">
                       <h3 className="title">Credit Card Details</h3>

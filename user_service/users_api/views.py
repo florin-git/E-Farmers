@@ -175,7 +175,7 @@ class UsersView(viewsets.ViewSet):
         try:
             rider = Rider.objects.filter(available=True).first()
             rider_serializer = RiderSerializer(rider)
-        except ObjectDoesNotExist:
+        except Rider.DoesNotExist:            
             return Response({'error': 'Rider not found'}, status=404)
         else:
             return Response(rider_serializer.data)
