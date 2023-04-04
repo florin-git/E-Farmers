@@ -29,7 +29,7 @@ import RiderProfile from "./pages/RiderProfile";
 // Import carrello + pagamenti
 import OrdersMainPage from "./pages/OrdersMainPage";
 import PaymentPage from "./pages/PaymentPage";
-import DeliveryPage from "./pages/Delivery";
+import Delivery from "./pages/Delivery";
 
 import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
@@ -152,7 +152,7 @@ function App(props) {
                 <Route
                   path="user/cart/payment/delivery"
                   exact
-                  element={<DeliveryPage />}
+                  element={<Delivery />}
                 />
               </Route>
             </Route>

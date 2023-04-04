@@ -229,7 +229,7 @@ function UserProfile(props) {
                         label="TypeOfAccount"
                         onChange={(event) => {
                           if (accountTypeFlag === 1 || accountTypeFlag === 2)
-                            console.log(
+                            alert(
                               "Operation non allowed : Please contact an administrator"
                             );
                           else {
