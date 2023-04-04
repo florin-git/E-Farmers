@@ -30,6 +30,7 @@ import RiderProfile from "./pages/RiderProfile";
 import OrdersMainPage from "./pages/OrdersMainPage";
 import PaymentPage from "./pages/PaymentPage";
 import Delivery from "./pages/Delivery";
+import UserChanges from "./pages/UserChanges";
 
 import ProtectedRouteCart from "./components/ProtectedRouteCart";
 
@@ -93,6 +94,7 @@ function App(props) {
               {/* You can access these components only if you are logged in */}
               <Route element={<RequiredAuth allowedRoles={[0, 1, 2]} />}>
                 <Route path="user/profile/" exact element={<UserProfile />} />
+                <Route path="user/profile/UserChanges" exact element={<UserChanges />} />
                 <Route
                   path="farmer/profile"
                   exact

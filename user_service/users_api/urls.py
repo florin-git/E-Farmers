@@ -20,6 +20,9 @@ urlpatterns = [
         'get': 'list_users',
         'post': 'register_user',
     })),    
+    path('users/<int:user_id>/changes/', UsersView.as_view({
+        'patch' : 'change_profile',
+    })),
     path('users/<int:user_id>/', UsersView.as_view({
         'get': 'user_info',
         'patch' : 'account_change',

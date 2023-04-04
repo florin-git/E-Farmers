@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 import ListSubscriptions from "../components/ListSubscriptions";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 // Change Account GUI
 import Box from "@mui/material/Box";
@@ -11,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
+import SettingsIcon from '@mui/icons-material/Settings';
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -63,7 +66,7 @@ function UserProfile(props) {
 
   // Authentication data from context storage
   const { auth } = useAuth();
-  const userId = auth.userId;
+  const user_id = auth.userId;
   // axios function with JWT tokens
   const axiosPrivate = useAxiosPrivate();
   // User information
@@ -76,10 +79,15 @@ function UserProfile(props) {
   const [open, setOpen] = useState(false);
   const [trigger, setTrigger] = useState(false);
 
+  // To update changes on users : 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
   useEffect(() => {
     //Retrieve the user info
     axiosPrivate
-      .get(`users/${userId}/`)
+      .get(`users/${user_id}/`)
       .then((res) => {
         console.log(res)
         /**
@@ -97,7 +105,7 @@ function UserProfile(props) {
       .catch((error) => {
         console.log(error.response);
       });
-  }, [userId, axiosPrivate, accountTypeFlag]);
+  }, [user_id, axiosPrivate, accountTypeFlag]);
 
   // Function for spawning farmer or rider info for form
   const handleClickOpen = (selectedValue) => {
@@ -106,18 +114,6 @@ function UserProfile(props) {
   const closeWithSaving = () => {
     //Starta la post al child.
     setTrigger(true);
-    /*
-        axiosPrivate
-            .get(`users/${userId}/`)
-            .then((res) => {
-                if(res.data[0].account_type !== 0)
-                    setAccountTypeFlag(accountType);
-            })
-            .catch((error)=>{
-                console.log(error.response);
-            });
-        setOpen(false);
-        */
   };
   const closeWithoutSaving = () => {
     setaccountType(accountTypeFlag);
@@ -139,6 +135,16 @@ function UserProfile(props) {
     trigger: trigger,
     parentFunction: parentFunction,
   };
+
+  //Call form for updating the new value of user
+  function modifyUser (){
+    const url = location.pathname + 'UserChanges';
+    const state = {
+        userInfo : userInfo
+    }
+    // Navigate to the new URL
+    navigate(url, {state});
+  }
 
   return (
     <div className="container rounded bg-white mt-5 mb-5">
@@ -181,6 +187,9 @@ function UserProfile(props) {
           <div className="p-3 py-5">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="text-right">Account Information </h4>
+              <IconButton aria-label="delete" onClick={modifyUser}>
+                <SettingsIcon />
+              </IconButton>
             </div>
             <div className="row mt-2">
               <div className="col-md-6">
@@ -199,17 +208,17 @@ function UserProfile(props) {
             <div className="row mt-4">
               <div className="col-md-6">
                 <label className="labels">
-                  <h6>Mobile Number : {userInfo.phone}</h6>
+                  <h6>Mobile Number : {userInfo.phone_number}</h6>
                 </label>
               </div>
               <div className="col-md-6">
                 <label className="labels">
-                  <h6>Shipping Address : {userInfo.saddress}</h6>
+                  <h6>Shipping Address : {userInfo.shipping_address}</h6>
                 </label>
               </div>
               <div className="col-md-6">
                 <label className="labels">
-                  <h6>Billing Address : {userInfo.baddress}</h6>
+                  <h6>Billing Address : {userInfo.billing_address}</h6>
                 </label>
               </div>
             </div>
@@ -306,7 +315,7 @@ function UserProfile(props) {
                 <div className="mt-5 text-center">
                   <Link
                     className="btn btn-warning"
-                    to={`/farmer/profile/${userId}`}
+                    to={`/farmer/profile/${user_id}`}
                     replace
                   >
                     Personal Farmer Page
@@ -333,7 +342,7 @@ function UserProfile(props) {
                 <div className="mt-5 text-center">
                   <Link
                     className="btn btn-warning"
-                    to={`/rider/profile/${userId}`}
+                    to={`/rider/profile/${user_id}`}
                     replace
                   >
                     Personal Rider Page

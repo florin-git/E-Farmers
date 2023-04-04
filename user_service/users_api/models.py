@@ -18,7 +18,7 @@ class User(AbstractUser):
     # Account Type
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPE, default=0)
    # age = models.IntegerField(default=0)
-    phone_number = models.CharField( default= ' ' , max_length=10 )
+    phone_number = models.CharField( default= ' ' , max_length=12 )
     billing_address = models.CharField(default = ' ' , max_length = 60)
     shipping_address = models.CharField(default = ' ' , max_length = 60)
 

@@ -207,7 +207,6 @@ class UsersView(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def add_review(self, request, farmer_id=None):  # POST /api/farmer/<int:farmer_id>/
-
         farmer = Farmer.objects.get(id=farmer_id)
         review_serializer = ReviewSerializer(data=request.data)
 
@@ -217,6 +216,16 @@ class UsersView(viewsets.ViewSet):
             return Response(review_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print("ERROR HERE")
+
+    def change_profile(self, request, user_id = None ): # PATCH /api/users/<int:user_id>/change/
+        print(request.data)
+        user = User.objects.get(id=user_id)
+        serializer = UserSerializer(instance=user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            print(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomTokenVerifyView(APIView):

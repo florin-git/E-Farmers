@@ -30,7 +30,11 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        instance.account_type = validated_data.get( 'account_type' , instance.account_type )
+        instance.name = validated_data.get('name', instance.name)
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        instance.billing_address = validated_data.get('billing_address', instance.billing_address)
+        instance.shipping_address = validated_data.get('shipping_address', instance.shipping_address)
+        instance.account_type = validated_data.get('account_type', instance.account_type)
         instance.save()
         return instance   
     
