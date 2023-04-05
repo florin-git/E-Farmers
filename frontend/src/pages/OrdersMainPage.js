@@ -3,14 +3,10 @@ import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosOrder from "../api/axiosOrder";
-import MyModal from "../components/MyModal";
 import Modal from "../hooks/Modal";
 
 function OrdersMainPage(props) {
   const [orders, setOrders] = useState([]);
-
-  // Modal per display info ordine
-  const [modalShow, setModalShow] = React.useState(false);
 
   // Modal per la review
   const [openModal, setOpenModal] = useState(false);
@@ -75,9 +71,9 @@ function OrdersMainPage(props) {
               Farmer: {order.farmer}
             </h5>
             <h5 className="mt-0 font-weight-bold mb-2">
-              {order.rider == 0 ? (
+              {order.rider === 0 ? (
                 "Pick up at Warehouse"
-              ) : order.rider == -1 ? (
+              ) : order.rider === -1 ? (
                 "Delivery Completed"
               ) : (
                 <Link className="" to={`/rider/profile/${order.rider}`}>

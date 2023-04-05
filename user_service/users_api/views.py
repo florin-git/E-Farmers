@@ -210,13 +210,41 @@ class UsersView(viewsets.ViewSet):
         else:
             print("ERROR HERE")
 
-    def change_profile(self, request, user_id = None ): # PATCH /api/users/<int:user_id>/change/
-        print(request.data)
+    def change_profile(self, request, user_id = None ): # PATCH /api/users/<int:user_id>/changes/
         user = User.objects.get(id=user_id)
-        serializer = UserSerializer(instance=user, data=request.data, partial=True)
+        user_params = {}
+        farmer_params = {}
+        rider_params = {}
+
+        # Extract params for user
+        user_params['name'] = request.data.get('name', None)
+        user_params['email'] = request.data.get('email', None)
+        user_params['account_type'] = request.data.get('account_type', None)
+        user_params['billing_address'] = request.data.get('billing_address', None)
+        user_params['shipping_address'] = request.data.get('shipping_address', None)
+        user_params['phone_number'] = request.data.get('phone_number', None)
+
+        # Extract params for farmer
+        farmer_params['bio'] = request.data.get('bio', None)
+        farmer_params['farm_location'] = request.data.get('farm_location', None)
+
+        # Extract params for rider
+        rider_params['bio'] = request.data.get('bio', None)
+
+        if request.data['account_type'] == 1:
+            farmer = Farmer.objects.get(ext_user=user_id)
+            serializer_farmer = FarmerSerializer(instance = farmer, data=farmer_params, partial=True)
+            if serializer_farmer.is_valid(raise_exception=True):
+                serializer_farmer.save()
+        elif request.data['account_type'] == 2:
+            rider = Rider.objects.get(ext_user=user_id)
+            serializer_rider = RiderSerializer(instance = rider, data=rider_params, partial=True)
+            if serializer_rider.is_valid(raise_exception=True):
+                serializer_rider.save()
+
+        serializer = UserSerializer(instance=user, data=user_params, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 

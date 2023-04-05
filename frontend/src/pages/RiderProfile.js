@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import axiosOrder from "../api/axiosOrder";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -7,7 +7,6 @@ import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/RiderProfile.css";
 import Button from "@mui/material/Button";
-import { ButtonGroup } from "@mui/material";
 
 function RiderProfile(props) {
   // Authentication data from context storage
@@ -41,25 +40,30 @@ function RiderProfile(props) {
   };
 
   const handleDeliveryCompleted = (event) => {
-    axiosPrivate
-      .patch(`riders/${riderUserId}/`, {
-        available: true,
-      })
-      .then((res) => {
-        setRiderStatus(res.data.available ? "Available" : "Not Available");
+    if(flag)
+      alert("You don't have any delivery, waiting...")
+    else{
+      axiosPrivate
+        .patch(`riders/${riderUserId}/`, {
+          available: true,
+        })
+        .then((res) => {
+          setRiderStatus(res.data.available ? "Available" : "Not Available");
 
-        axiosOrder
-          .updateStatusRider({ riderId: riderUserId })
-          .then((res) => {
-            console.log("Delivery completed");
-          })
-          .catch((res) => {
-            console.log(res.response);
-          });
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+          axiosOrder
+            .updateStatusRider({ riderId: riderUserId })
+            .then((res) => {
+              console.log("Delivery completed");
+            })
+            .catch((res) => {
+              console.log(res.response);
+            });
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+
   };
 
   useEffect(() => {
@@ -87,10 +91,10 @@ function RiderProfile(props) {
           <div className="user text-center">
             <div className="profile">
               <img
-                src="https://i.imgur.com/JgYD2nQ.jpg"
                 className="rounded-circle"
-                width="80"
-              />
+                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                alt="Pennello Cinghiale"
+              ></img> 
             </div>
           </div>
 
@@ -101,9 +105,11 @@ function RiderProfile(props) {
               <h6>STATUS : {riderStatus} </h6>
             </span>
 
+          </div>  
+          <div className="d-flex flex-column align-items-center">
             {userId == riderUserId && (
               <Button
-                className="btn btn-primary btn-sm follow"
+                className="btn btn-primary"
                 onClick={handleClick}
               >
                 Change status
@@ -112,30 +118,14 @@ function RiderProfile(props) {
 
             {userId == riderUserId && (
               <Button
-                className="btn btn-primary btn-sm follow"
+                className="btn btn-primary"
                 onClick={handleDeliveryCompleted}
               >
                 Delivery Completed
               </Button>
             )}
-
-            <div className="d-flex justify-content-between align-items-center mt-4 px-4">
-              <div className="stats">
-                <h6 className="mb-0">Like</h6>
-                <span>8,797</span>
-              </div>
-
-              <div className="stats">
-                <h6 className="mb-0">Completed Delivery</h6>
-                <span>142</span>
-              </div>
-
-              <div className="stats">
-                <h6 className="mb-0">Ranks</h6>
-                <span>2</span>
-              </div>
-            </div>
           </div>
+            
         </div>
       </div>
 

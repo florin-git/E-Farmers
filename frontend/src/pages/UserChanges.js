@@ -1,4 +1,4 @@
-import React, { useState , useRef } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../my_css/UserFE/UserProfile.css"
 
@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 const UserChanges = (props) => {
     // Way to pass props by navigate and location
     const { state } = useLocation();
-    const { userInfo } = state;
+    const { userInfo , extraInfo } = state;
     const user_id = userInfo.id
     const axiosPrivate = useAxiosPrivate();
 
@@ -28,10 +28,11 @@ const UserChanges = (props) => {
         billing: userInfo.billing_address,
         phone: userInfo.phone_number,
         email: userInfo.email,
+        bio: extraInfo.bio,
+        available: extraInfo.available,
+        farm_location: extraInfo.farm_location,
     });
     const [formData, setFormData] = useState(initialFormData);
-
-    console.log(userInfo)
 
     function handleChange(event) {
         // Get name and value of the changed field
@@ -57,10 +58,11 @@ const UserChanges = (props) => {
                     billing_address: formData.billing,
                     shipping_address: formData.shipping,
                     phone_number: formData.phone,
+                    bio: formData.bio,
+                    farm_location: formData.farm_location,
                 })
                 .then((res) => {
                     handleExit()
-                    console.log(res);
                 })
                 .catch((error) => {
                     console.log(error.response);
@@ -112,6 +114,37 @@ const UserChanges = (props) => {
                                     <input type="text" id="phone" name="phone" placeholder={userInfo.phone_number} onChange={(event) => { handleChange(event); }}/>
                                 </div>
                             </div>
+                            {initialFormData.account_type == 1 && (
+                                <div>
+                                    <h5 className="text-center mb-4">Additional Information</h5>    
+                                    <h3> Farmer </h3>
+                                    <div className="row justify-content-between text-left">
+                                        <div className="form-group col-sm-6 flex-column d-flex"> 
+                                            <label className="form-control-label px-3">Bio
+                                            <span className="text-danger"> *</span></label> 
+                                            <input type="text" id="bio" name="bio" placeholder={extraInfo.bio} onChange={(event) => { handleChange(event); }}/>
+                                        </div>
+                                        <div className="form-group col-sm-6 flex-column d-flex"> 
+                                            <label className="form-control-label px-3">Farm Location
+                                            <span className="text-danger"> *</span></label> 
+                                            <input type="text" id="farm_location" name="farm_location" placeholder={extraInfo.farm_location} onChange={(event) => { handleChange(event); }}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {initialFormData.account_type == 2 && (
+                                <div>
+                                    <h3> Rider </h3>
+                                    <div className="row justify-content-between text-left">
+                                        <div className="form-group col-sm-6 flex-column d-flex"> 
+                                            <label className="form-control-label px-3">Bio
+                                            <span className="text-danger"> *</span></label> 
+                                            <input type="text" id="bio" name="bio" placeholder={extraInfo.bio} onChange={(event) => { handleChange(event); }}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            )}
                             <div className="row justify-content">
                                 <div className="form-group col-sm-6"> 
                                     

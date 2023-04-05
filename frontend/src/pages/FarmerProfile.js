@@ -67,11 +67,12 @@ function FarmerProfile(props) {
         <div className="profile-nav col-md-3">
           <div className="panel">
             <div className="user-heading round">
-              <a href="#">
+              <a href="" class="disabled-link" >
                 <img
-                  src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                  alt=""
-                />
+                  className="rounded-circle"
+                  src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                  alt="Pennello Cinghiale"
+                ></img> 
               </a>
               <h1>{farmerInfo.name}</h1>
               <p>{farmerInfo.email}</p>
@@ -203,54 +204,16 @@ function FarmerProfile(props) {
                 <ListInsertions farmerUserId={farmerUserId} />
               </div>
 
-              {/*              <div className="col-md-6">
-                  <div className="panel">
-                      <div className="panel-body">
-                          <div className="bio-chart">
-                              <div style={{display:"inline",width:"100px",height:"100px"}}>
-                                <canvas width="100" height="100px"></canvas>
-                                  METTERE COUNTER
-                              </div>
-                          </div>
-                          <div className="bio-desk">
-                              <h4 className="purple">Adobe Muse Template</h4>
-                              <p>Started : 15 July</p>
-                              <p>Deadline : 15 August</p>
-                          </div>
-                      </div>
-                  </div>
-              </div>*/}
             </div>
             <div className="card3">
               <div className="row">
-                <div className="col-2">
-                  <img
-                    src="https://i.imgur.com/xELPaag.jpg"
-                    width="70"
-                    className="rounded-circle mt-2"
-                    alt="logo"
-                  />
-                </div>
-                <div className="col-10">
+                <div className="col-8">
                   <div className="comment-box ml-2">
                     <h4>Add a comment</h4>
-                    <div className="rating">
-                      <input type="radio" name="rating" value="5" id="5" />
-                      <label htmlFor="5">☆</label>
-                      <input type="radio" name="rating" value="4" id="4" />
-                      <label htmlFor="4">☆</label>
-                      <input type="radio" name="rating" value="3" id="3" />
-                      <label htmlFor="3">☆</label>
-                      <input type="radio" name="rating" value="2" id="2" />
-                      <label htmlFor="2">☆</label>
-                      <input type="radio" name="rating" value="1" id="1" />
-                      <label htmlFor="1">☆</label>
-                    </div>
-
                     <div className="comment-area">
                       <textarea
                         className="form-control"
-                        placeholder="what is your view?"
+                        placeholder="Please write your feedback"
                         rows="4"
                       ></textarea>
                     </div>

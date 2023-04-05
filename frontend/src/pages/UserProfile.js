@@ -139,6 +139,7 @@ function UserProfile(props) {
     const url = location.pathname + "UserChanges";
     const state = {
       userInfo: userInfo,
+      extraInfo: extraInfo,
     };
     // Navigate to the new URL
     navigate(url, { state });
@@ -163,18 +164,7 @@ function UserProfile(props) {
               Orders
             </Link>
           </div>
-          {/*<div className="row d-flex justify-content-center align-items-center">
-            <Link className="btn btn-primary m-1 " to={"/"}>
-              Utils
-            </Link>
-          </div> */}
-          {/* <div className="row d-flex justify-content-center align-items-center">
-            <Link className="btn btn-warning" to={"payments/"} id="payments">
-              Payments Page!
-            </Link>
-          </div> */}
           <div>
-            {/* <h6> Subscriptions: </h6> */}
             <ListSubscriptions />
           </div>
         </div>

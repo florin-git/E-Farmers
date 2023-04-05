@@ -54,6 +54,13 @@ class FarmerSerializer(serializers.ModelSerializer):
         farmer = Farmer.objects.create(**validated_data)
         return farmer
 
+    def update(self, instance, validated_data):
+        instance.bio = validated_data.get('bio', instance.bio)
+        instance.farm_location = validated_data.get('farm_location', instance.farm_location)
+        instance.save()
+        return instance
+
+
 
 
 class RiderSerializer(serializers.ModelSerializer):
@@ -86,6 +93,7 @@ class RiderSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Value must be either True or False")
         instance.available = available
         instance.ext_user = validated_data.get('ext_user', instance.ext_user)
+        instance.bio = validated_data.get('bio', instance.bio)
         instance.save()
         return instance   
 
