@@ -91,5 +91,18 @@ class NewView(viewsets.ViewSet):
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except Orders.DoesNotExist:
             return Response({'error': 'Order not found'}, status=404)
+        
+
+    def updateStatusRider(self,request): #PATCH /api/update-status-rider
+        try: 
+            riderId = request.data['riderUserId']
+            order = Orders.objects.get(rider=riderId)
+            serializer = OrdersSerializer(instance=order, data={'rider': -1}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status.HTTP_200_OK)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Orders.DoesNotExist:
+            return Response({'error': 'Order not found'}, status=404)
 
        

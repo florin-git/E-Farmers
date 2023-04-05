@@ -186,21 +186,14 @@ class UsersView(viewsets.ViewSet):
     def get_first_rider(self, request): #GET /api/riders/
         try:
             rider = Rider.objects.filter(available=True).first()
-            rider_serializer = RiderSerializer(rider)
+            # rider_serializer = RiderSerializer(rider)
         except Rider.DoesNotExist:            
             return Response({'error': 'Rider not found'}, status=404)
         else:
-            return Response(rider_serializer.data)
+            return Response(rider.ext_user_id)
 
     def change_status(self, request, user_id=None):  # PATCH /api/riders/<int:id>/
         rider = Rider.objects.get(ext_user_id=user_id)
-        serializer = RiderSerializer(instance=rider, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def change_status_aux(self,request,id=None): #PATCH /api/riders_change/<int:id>/
-        rider = Rider.objects.get(id=id)
         serializer = RiderSerializer(instance=rider, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

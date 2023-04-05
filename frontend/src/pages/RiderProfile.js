@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
+import axiosOrder from "../api/axiosOrder";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/RiderProfile.css";
 import Button from "@mui/material/Button";
+import { ButtonGroup } from "@mui/material";
 
 function RiderProfile(props) {
   // Authentication data from context storage
@@ -13,17 +15,18 @@ function RiderProfile(props) {
   const userId = auth.userId;
   const axiosPrivate = useAxiosPrivate();
 
-  const riderUserId = useParams()?.user_id;
+  const riderUserId = useParams()?.rider_id;
+
   const [riderInfo, setRiderInfo] = useState([]);
   const [flag, setFlag] = useState(false);
   const [riderStatus, setRiderStatus] = useState();
 
   const handleClick = (event) => {
-    const flagNow = !flag
-    setFlag(flagNow) 
+    const flagNow = !flag;
+    setFlag(flagNow);
 
     axiosPrivate
-      .patch(`riders/${userId}/`, {
+      .patch(`riders/${riderUserId}/`, {
         /*email : email,
         password : "password",*/
         available: flagNow,
@@ -37,10 +40,32 @@ function RiderProfile(props) {
       });
   };
 
+  const handleDeliveryCompleted = (event) => {
+    axiosPrivate
+      .patch(`riders/${riderUserId}/`, {
+        available: true,
+      })
+      .then((res) => {
+        setRiderStatus(res.data.available ? "Available" : "Not Available");
+
+        axiosOrder
+          .updateStatusRider({ riderId: riderUserId })
+          .then((res) => {
+            console.log("Delivery completed");
+          })
+          .catch((res) => {
+            console.log(res.response);
+          });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+
   useEffect(() => {
     (async () => {
       await axiosPrivate
-        .get(`riders/${userId}/`)
+        .get(`riders/${riderUserId}/`)
         .then((res) => {
           setRiderInfo(res.data);
           setRiderStatus(res.data.available ? "Available" : "Not Available");
@@ -75,12 +100,24 @@ function RiderProfile(props) {
             <span className="text-muted d-block mb-2">
               <h6>STATUS : {riderStatus} </h6>
             </span>
-            <Button
-              className="btn btn-primary btn-sm follow"
-              onClick={handleClick}
-            >
-              Change status
-            </Button>
+
+            {userId == riderUserId && (
+              <Button
+                className="btn btn-primary btn-sm follow"
+                onClick={handleClick}
+              >
+                Change status
+              </Button>
+            )}
+
+            {userId == riderUserId && (
+              <Button
+                className="btn btn-primary btn-sm follow"
+                onClick={handleDeliveryCompleted}
+              >
+                Delivery Completed
+              </Button>
+            )}
 
             <div className="d-flex justify-content-between align-items-center mt-4 px-4">
               <div className="stats">

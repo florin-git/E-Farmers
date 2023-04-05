@@ -27,7 +27,7 @@ function Delivery() {
           if (riderId !== undefined && riderId !== 0) {
             const id = riderId;
             axiosPrivate
-              .patch(`riders_change/${id}/`, {
+              .patch(`riders/${id}/`, {
                 available: false,
               })
               .then((res) => {
@@ -56,13 +56,14 @@ function Delivery() {
           .then((res) => {
             console.log(res.data);
 
-            if (res.data.id === undefined) {
+            const userRiderId = res.data
+            if (userRiderId === undefined) {
               alert(
                 "There are no available riders at the moment. You can only collect the purchase by yourself."
               );
             } else {
               // Ok adesso in res ho il primo rider disponibile.
-              handleUpdate(res.data.id);
+              handleUpdate(userRiderId);
             }
           })
           .catch((error) => {

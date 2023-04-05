@@ -7,7 +7,7 @@ class Orders(models.Model):
     price = models.DecimalField(default=0.0, decimal_places=2, max_digits=16)
     box_names = models.CharField(max_length=500, default='')
     farmer = models.IntegerField(default=-1)
-    rider = models.IntegerField(default=-1)
+    rider = models.IntegerField(default=-2)
 
     def __str__(self):
         return self.payment_method_id

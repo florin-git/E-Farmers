@@ -18,6 +18,9 @@ urlpatterns = [
     path('update-order/', NewView.as_view({
         'patch':'updateOrder'
     })),
+    path('update-status-rider/', NewView.as_view({
+        'patch':'updateStatusRider'
+    })),
     path('get-orders/<str:email>', NewView.as_view({
         'get':'getOrders'
     }))

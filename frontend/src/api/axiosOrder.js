@@ -23,5 +23,8 @@ export default class axiosOrder{
   static updateOrder(data = {}){
     return api.patch(`${order_paymentURL}/update-order/`,data)
   }
+  static updateStatusRider(data = {}){
+    return api.patch(`${order_paymentURL}/update-status-rider/`,data)
+  }
 }
 
