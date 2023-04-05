@@ -301,7 +301,7 @@ function PublishInsertion(props) {
               </div>
             </div>
             <button className="mt-4 btn btn-primary" type="submit">
-              Save
+              Continue
             </button>
           </form>
         </div>

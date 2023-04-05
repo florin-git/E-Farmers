@@ -5,7 +5,6 @@ import useAuth from "../hooks/useAuth";
 import ListSubscriptions from "../components/ListSubscriptions";
 import { useNavigate, useLocation } from "react-router-dom";
 
-
 // Change Account GUI
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -79,17 +78,16 @@ function UserProfile(props) {
   const [open, setOpen] = useState(false);
   const [trigger, setTrigger] = useState(false);
 
-  // To update changes on users : 
+  // To update changes on users :
   const navigate = useNavigate();
   const location = useLocation();
-
 
   useEffect(() => {
     //Retrieve the user info
     axiosPrivate
       .get(`users/${user_id}/`)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         /**
          * The result is a list:
          *  the first JSON record contains user's info
@@ -137,13 +135,13 @@ function UserProfile(props) {
   };
 
   //Call form for updating the new value of user
-  function modifyUser (){
-    const url = location.pathname + 'UserChanges';
+  function modifyUser() {
+    const url = location.pathname + "UserChanges";
     const state = {
-        userInfo : userInfo
-    }
+      userInfo: userInfo,
+    };
     // Navigate to the new URL
-    navigate(url, {state});
+    navigate(url, { state });
   }
 
   return (
@@ -165,23 +163,20 @@ function UserProfile(props) {
               Orders
             </Link>
           </div>
-          <div className="row d-flex justify-content-center align-items-center">
-            <Link className="btn btn-primary m-1 " to={"/"}>
-              Cards
-            </Link>
-          </div>
-          <div className="row d-flex justify-content-center align-items-center">
+          {/*<div className="row d-flex justify-content-center align-items-center">
             <Link className="btn btn-primary m-1 " to={"/"}>
               Utils
             </Link>
-          </div>
-          <div className="row d-flex justify-content-center align-items-center">
+          </div> */}
+          {/* <div className="row d-flex justify-content-center align-items-center">
             <Link className="btn btn-warning" to={"payments/"} id="payments">
               Payments Page!
             </Link>
-          </div>
-          <h6> Subscriptions: </h6> 
+          </div> */}
+          <div>
+            {/* <h6> Subscriptions: </h6> */}
             <ListSubscriptions />
+          </div>
         </div>
         <div className="col-md-7 border-right">
           <div className="p-3 py-5">
@@ -308,7 +303,7 @@ function UserProfile(props) {
                 <div className="row mt-7">
                   <div className="col-md-6">
                     <label className="labels">
-                      <h6>Biografy : {extraInfo.bio} </h6>
+                      <h6>Biography : {extraInfo.bio} </h6>
                     </label>
                   </div>
                 </div>
@@ -335,7 +330,7 @@ function UserProfile(props) {
                 <div className="row mt-7">
                   <div className="col-md-6">
                     <label className="labels">
-                      <h6>Biografy : {extraInfo.bio} </h6>
+                      <h6>Biography : {extraInfo.bio} </h6>
                     </label>
                   </div>
                 </div>

@@ -23,7 +23,7 @@ function PublishPrivateInsertion(props) {
     image: "",
     reported: false,
   });
-  const [price, setPrice] = useState(0.00);
+  const [price, setPrice] = useState(0.5);
 
   /**
    * Variables for managing the input checks.
@@ -274,8 +274,8 @@ function PublishPrivateInsertion(props) {
                     type="number"
                     className={`form-control ${formValidationClass.price_for_class}`}
                     id="price"
-                    min="0.00"
-                    step="0.01"
+                    min="0.5"
+                    step="0.1"
                     value={price}
                     name="price"
                     onChange={handlePriceChange}

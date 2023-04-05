@@ -12,7 +12,7 @@ function AddBoxes(props) {
   const [formData, setFormData] = useState({
     weight: 0,
     size: "",
-    price: 0.0,
+    price: 0.5,
     number_of_available_boxes: 0,
   });
 
@@ -269,7 +269,7 @@ function AddBoxes(props) {
                 type="number"
                 className={`form-control ${formValidationClass.price_for_class}`}
                 id="price"
-                min="0.00"
+                min="0.5"
                 step="0.1"
                 value={formData.price}
                 name="price"
