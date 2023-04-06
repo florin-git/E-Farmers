@@ -71,10 +71,18 @@ class NewView(viewsets.ViewSet):
         return Response(serializer.data, status.HTTP_200_OK)
 
     def getSpecificOrder(self,request,payment_method_id=None):  #GET /api/orders/<str:payment_method_id>/
-        print("helloo")
         try:
             order = Orders.objects.get(payment_method_id = payment_method_id)
-        except ObjectDoesNotExist:
+        except Orders.DoesNotExist:
+            return Response("Object not found", status.HTTP_400_BAD_REQUEST)
+        else:
+            order_serializer = OrdersSerializer(order)
+            return Response (order_serializer.data, status.HTTP_200_OK)
+        
+    def getSpecificOrderByRider(self, request, rider_id=None):  #GET /api/orders/<int:rider_id>/
+        try:
+            order = Orders.objects.get(rider=rider_id)
+        except Orders.DoesNotExist:
             return Response("Object not found", status.HTTP_400_BAD_REQUEST)
         else:
             order_serializer = OrdersSerializer(order)

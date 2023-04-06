@@ -56,7 +56,7 @@ function Delivery() {
           .then((res) => {
             console.log(res.data);
 
-            const userRiderId = res.data
+            const userRiderId = res.data;
             if (userRiderId === undefined) {
               alert(
                 "There are no available riders at the moment. You can only collect the purchase by yourself."
@@ -67,6 +67,9 @@ function Delivery() {
             }
           })
           .catch((error) => {
+            alert(
+              "There are no available riders at the moment. You can only collect the purchase by yourself."
+            );
             console.log(error.response);
           });
       })();

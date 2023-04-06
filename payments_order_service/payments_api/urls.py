@@ -15,6 +15,9 @@ urlpatterns = [
     path('getSpecificOrder/<str:payment_method_id>', NewView.as_view({
         'get':'getSpecificOrder'
     })),
+    path('getSpecificOrderByRider/<int:rider_id>', NewView.as_view({
+        'get':'getSpecificOrderByRider'
+    })),
     path('update-order/', NewView.as_view({
         'patch':'updateOrder'
     })),

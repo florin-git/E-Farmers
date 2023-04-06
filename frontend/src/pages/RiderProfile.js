@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 
 import "../my_css/UserFE/RiderProfile.css";
 import Button from "@mui/material/Button";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 function RiderProfile(props) {
   // Authentication data from context storage
@@ -17,7 +18,8 @@ function RiderProfile(props) {
   const riderUserId = useParams()?.rider_id;
 
   const [riderInfo, setRiderInfo] = useState([]);
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState();
+  const [isDelivering, setIsDelivering] = useState();
   const [riderStatus, setRiderStatus] = useState();
 
   const handleClick = (event) => {
@@ -26,8 +28,6 @@ function RiderProfile(props) {
 
     axiosPrivate
       .patch(`riders/${riderUserId}/`, {
-        /*email : email,
-        password : "password",*/
         available: flagNow,
       })
       .then((res) => {
@@ -40,30 +40,26 @@ function RiderProfile(props) {
   };
 
   const handleDeliveryCompleted = (event) => {
-    if(flag)
-      alert("You don't have any delivery, waiting...")
-    else{
-      axiosPrivate
-        .patch(`riders/${riderUserId}/`, {
-          available: true,
-        })
-        .then((res) => {
-          setRiderStatus(res.data.available ? "Available" : "Not Available");
+    axiosPrivate
+      .patch(`riders/${riderUserId}/`, {
+        available: true,
+      })
+      .then((res) => {
+        setRiderStatus(res.data.available ? "Available" : "Not Available");
 
-          axiosOrder
-            .updateStatusRider({ riderId: riderUserId })
-            .then((res) => {
-              console.log("Delivery completed");
-            })
-            .catch((res) => {
-              console.log(res.response);
-            });
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-    }
-
+        axiosOrder
+          .updateStatusRider({ riderUserId })
+          .then((res) => {
+            console.log("Delivery completed");
+            setIsDelivering(false);
+          })
+          .catch((res) => {
+            console.log(res.response);
+          });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   };
 
   useEffect(() => {
@@ -71,10 +67,26 @@ function RiderProfile(props) {
       await axiosPrivate
         .get(`riders/${riderUserId}/`)
         .then((res) => {
+          setFlag(res.data.available);
           setRiderInfo(res.data);
           setRiderStatus(res.data.available ? "Available" : "Not Available");
         })
         .catch((error) => {
+          console.log(error.response);
+        });
+    })();
+  }, [riderUserId]);
+
+  useEffect(() => {
+    (async () => {
+      await axiosOrder
+        .getSpecificOrderByRider(riderUserId)
+        .then((res) => {
+          console.log(res.data);
+          setIsDelivering(true);
+        })
+        .catch((error) => {
+          setIsDelivering(false);
           console.log(error.response);
         });
     })();
@@ -94,7 +106,7 @@ function RiderProfile(props) {
                 className="rounded-circle"
                 src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
                 alt="Pennello Cinghiale"
-              ></img> 
+              ></img>
             </div>
           </div>
 
@@ -104,19 +116,15 @@ function RiderProfile(props) {
             <span className="text-muted d-block mb-2">
               <h6>STATUS : {riderStatus} </h6>
             </span>
-
-          </div>  
+          </div>
           <div className="d-flex flex-column align-items-center">
             {userId == riderUserId && (
-              <Button
-                className="btn btn-primary"
-                onClick={handleClick}
-              >
+              <Button className="btn btn-primary" onClick={handleClick}>
                 Change status
               </Button>
             )}
 
-            {userId == riderUserId && (
+            {userId == riderUserId && isDelivering && (
               <Button
                 className="btn btn-primary"
                 onClick={handleDeliveryCompleted}
@@ -125,7 +133,6 @@ function RiderProfile(props) {
               </Button>
             )}
           </div>
-            
         </div>
       </div>
 

@@ -20,6 +20,9 @@ export default class axiosOrder{
   static getSpecificOrder(payment_method_id){
     return api.get(`${order_paymentURL}/getSpecificOrder/${payment_method_id}`)
   }
+  static getSpecificOrderByRider(rider_id){
+    return api.get(`${order_paymentURL}/getSpecificOrderByRider/${rider_id}`)
+  }
   static updateOrder(data = {}){
     return api.patch(`${order_paymentURL}/update-order/`,data)
   }
