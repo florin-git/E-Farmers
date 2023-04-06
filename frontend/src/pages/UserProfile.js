@@ -310,13 +310,6 @@ function UserProfile(props) {
             )}
             {accountTypeFlag === 2 && (
               <div>
-                <div className="row mt-6">
-                  <div className="col-md-6">
-                    <label className="labels">
-                      <h6>Available : </h6>
-                    </label>
-                  </div>
-                </div>
                 <div className="row mt-7">
                   <div className="col-md-6">
                     <label className="labels">
