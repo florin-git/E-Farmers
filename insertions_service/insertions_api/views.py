@@ -132,6 +132,8 @@ class BoxesView(viewsets.ViewSet):
         if n_boxes > 1:
             box.number_of_available_boxes -=1
             box.save()
+        else:
+            box.delete()
         
         return Response(status=status.HTTP_200_OK)
     
