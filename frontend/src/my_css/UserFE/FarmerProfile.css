@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: 'Open Sans', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -6,15 +6,15 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
-}
+} */
 
 .profile-nav, .profile-info{
     margin-top:30px;   
 }
 
 .profile-nav .user-heading {
-    background: #4bb421;
-    color: #fff;
+    background: #82ae46;
+    color: #000;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     padding: 30px;
@@ -68,7 +68,7 @@ body {
 
 .profile-nav ul > li > a:hover, .profile-nav ul > li > a:focus, .profile-nav ul li.active  a {
     background: #f8f7f5 !important;
-    border-left: 5px solid #1ea725;
+    border-left: 5px solid #82ae46;
     color: #000000 !important;
 }
 
@@ -107,8 +107,8 @@ body {
 }
 
 .bio-graph-heading {
-    background: #4cc434;
-    color: #fff;
+    background: #82ae46;
+    color: #000;
     text-align: center;
     font-style: italic;
     padding: 40px 110px;

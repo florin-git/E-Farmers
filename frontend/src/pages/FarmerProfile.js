@@ -78,8 +78,8 @@ function FarmerProfile(props) {
               <p>{farmerInfo.email}</p>
             </div>
 
-            <ul className="nav-pills nav-stacked">
-              <li className="active">
+            <div className="nav-pills nav-stacked">
+              <div className="active text-center mt-3">
                 {/* <a href="#">
                   {" "}
                   <i className="fa fa-user"></i> Subscribe
@@ -93,8 +93,8 @@ function FarmerProfile(props) {
                 >
                   Subscribe
                 </button>
-              </li>
-              <li>
+              </div>
+              {/* <li>
                 <Link className="" to={"/insertions/new/"} replace>
                   <i className="fa fa-edit"></i>
                   Publish an Insertion
@@ -103,7 +103,7 @@ function FarmerProfile(props) {
               </li>
               <li>
                 <a href="#"> {edit} Edit Insertions </a>
-              </li>
+              </li> */}
               <hr/>
               <div className="row">
                 <div className="col">
@@ -159,7 +159,7 @@ function FarmerProfile(props) {
                   </div>
                 </div>
               </div>
-            </ul>
+            </div>
           </div>
         </div>
         <div className="profile-info col-md-9">
