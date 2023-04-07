@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const CheckoutForm = (props) => {
     // Getting parameters
-    const price = props.price;
+    const price = parseFloat(props.price).toFixed(2);
     const email = props.email;
     const boxes_array = props.boxes_array;
     const box_names = props.box_names;
