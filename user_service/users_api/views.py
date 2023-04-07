@@ -1,12 +1,13 @@
 import requests
 from .models import *
 from .serializers import *
-import datetime
+from datetime import date
 
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, NotAcceptable
+from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -77,15 +78,13 @@ class UsersView(viewsets.ViewSet):
             account_type = user_serializer.data["account_type"]
 
             if account_type == 1:
-                farmer = Farmer.objects.get(ext_user=user_id)
+                farmer = Farmer.objects.get(ext_user_id=user_id)
                 farmer_serializer = FarmerSerializer(farmer)
-
                 serializers.append(farmer_serializer.data)
 
             elif account_type == 2:
-                rider = Rider.objects.get(ext_user=user_id)
+                rider = Rider.objects.get(ext_user_id=user_id)
                 rider_serializer = RiderSerializer(rider)
-                print("get del rider")
                 serializers.append(rider_serializer.data)
 
             return Response(serializers, status=status.HTTP_200_OK)
@@ -98,24 +97,22 @@ class UsersView(viewsets.ViewSet):
         JWT_authenticator = JWTAuthentication()
         # Authenticate the token in the Authorization header
         JWT_authenticator.authenticate(request)
+
+        user = User.objects.get(id=user_id)
         # We use the parameter type to differentiate the user choose . Passed via url by
-        if(type == 1):
-            user = User.objects.get(id=user_id)
+        if type == 1:
             serializer_farmer = FarmerSerializer(data=request.data)
             if serializer_farmer.is_valid(raise_exception=True):
-                serializer_farmer.save()
                 serializer_farmer.save(ext_user=user)
-                serializer_farmer.save(since = datetime.datetime.today())
+                serializer_farmer.save(since=timezone.now().date())
+                serializer_farmer.save()
                 
                 return Response(serializer_farmer.data, status=status.HTTP_201_CREATED)
         else:
-            user = User.objects.get(id=user_id)
-            available = request.data.get('available',False)
             serializer_rider = RiderSerializer(data=request.data)
             if serializer_rider.is_valid(raise_exception=True):
-                serializer_rider.save()
-                #serializer_rider.save(available=available)
                 serializer_rider.save(ext_user=user)
+                serializer_rider.save()
                 #try:
                 #    farmer = Farmer.objects.filter(ext_user_id=user_id)
                 #    farmer.delete()
@@ -237,12 +234,12 @@ class UsersView(viewsets.ViewSet):
         rider_params['bio'] = request.data.get('bio', None)
 
         if request.data['account_type'] == 1:
-            farmer = Farmer.objects.get(ext_user=user_id)
+            farmer = Farmer.objects.get(ext_user_id=user_id)
             serializer_farmer = FarmerSerializer(instance = farmer, data=farmer_params, partial=True)
             if serializer_farmer.is_valid(raise_exception=True):
                 serializer_farmer.save()
         elif request.data['account_type'] == 2:
-            rider = Rider.objects.get(ext_user=user_id)
+            rider = Rider.objects.get(ext_user_id=user_id)
             serializer_rider = RiderSerializer(instance = rider, data=rider_params, partial=True)
             if serializer_rider.is_valid(raise_exception=True):
                 serializer_rider.save()
@@ -251,6 +248,7 @@ class UsersView(viewsets.ViewSet):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 

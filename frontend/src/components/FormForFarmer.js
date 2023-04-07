@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 //import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import axiosInstance from "../api/axiosUsers";
-
 
 
 const FormForFarmer = (props) => {
@@ -81,7 +79,7 @@ const FormForFarmer = (props) => {
                 user_id: userId,
               })
               .then(() => {
-                axiosInstance
+                axiosPrivate
                   .patch(`users/${userId}/`, {
                     /*email : email,
                     password : "password",*/

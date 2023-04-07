@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 //import { useNavigate } from "react-router-dom";
-import axiosInstance from "../api/axiosUsers";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {FormControlLabel,Switch} from "@mui/material";
@@ -83,7 +82,7 @@ const RiderUpdate = (props) => {
                 user_id: userId,
               })
               .then(() => {
-                axiosInstance
+                axiosPrivate
                   .patch(`users/${userId}/`, {
                     /*email : email,
                     password : "password",*/

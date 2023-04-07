@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
 from users_api.account_type import *
+import datetime
 
 class User(AbstractUser):
     # first_name = models.CharField(verbose_name="First Name", max_length=255)
@@ -18,9 +19,9 @@ class User(AbstractUser):
     # Account Type
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPE, default=0)
    # age = models.IntegerField(default=0)
-    phone_number = models.CharField( default= ' ' , max_length=12 )
-    billing_address = models.CharField(default = ' ' , max_length = 60)
-    shipping_address = models.CharField(default = ' ' , max_length = 60)
+    phone_number = models.CharField( default= ' ' , max_length=12, blank=True)
+    billing_address = models.CharField(default = ' ' , max_length = 60, blank=True)
+    shipping_address = models.CharField(default = ' ' , max_length = 60, blank=True)
 
     USERNAME_FIELD = "email"
     # REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -48,9 +49,8 @@ class Farmer(models.Model):
     farm_location = models.CharField(max_length=255)
     bio = models.CharField(max_length = 255)
     number_insertions = models.SmallIntegerField(default=0)
-    # since = models.DateField(default=datetime.datetime.now(), blank=True)
-    since = models.DateField(default=timezone.now, blank=True)
-    
+    since = models.DateField(default=datetime.date.today, blank=True)
+ 
     ext_user = models.OneToOneField (
         User,
         related_name="external_user_f",     
