@@ -83,6 +83,13 @@ class InsertionsView(viewsets.ViewSet):
         if insertion.expiration_date < today:
             insertion.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+    
+        if request.data['setPrivate'] is not None and request.data['setPrivate'] == True:
+            insertion.private = True
+            insertion.save()
+            print('set to private' + insertion.private)
+            return Response(status=status.HTTP_100_CONTINUE)
+
         request.data['reported'] = insertion.reported
         request.data['expiration_date'] = insertion.expiration_date
         serializer = InsertionSerializer(instance=insertion, data=request.data)
@@ -94,6 +101,23 @@ class InsertionsView(viewsets.ViewSet):
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except Exception as e:
             print(e)
+
+    def increase_n_boxes(self, request, insertion_id=None): # PUT api/insertions/<int:id>/increase 
+        insertion = Insertion.objects.get(id=insertion_id)
+        insertion.n_boxes += 1
+        insertion.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def decrease_n_boxes(self, request, insertion_id=None): # PUT api/insertions/<int:id>/decrease 
+        insertion = Insertion.objects.get(id=insertion_id)
+        if insertion.n_boxes == 0:
+            insertion.delete()
+            return Response(status=status.HTTP_100_CONTINUE)
+        else:
+            insertion.n_boxes -= 1
+            insertion.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
 
     def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
@@ -134,6 +158,7 @@ class BoxesView(viewsets.ViewSet):
             box.save()
         else:
             box.delete()
+            return Response(status=status.HTTP_100_CONTINUE)
         
         return Response(status=status.HTTP_200_OK)
     
@@ -151,6 +176,15 @@ class BoxesView(viewsets.ViewSet):
         response['size'] = box.size
         response['weight'] = box.weight
 
+        return Response(response, status=status.HTTP_200_OK)
+    
+    def get_ins_from_box(self, request, box_id=None):   # GET /api/insertions/<int:id>/box/
+        box_id = request.data['box_id']
+        box = Box.objects.get(id=box_id)
+
+        insertion = box.insertion
+        response = HttpResponse()
+        response['insertion_id'] = insertion
         return Response(response, status=status.HTTP_200_OK)
 
 

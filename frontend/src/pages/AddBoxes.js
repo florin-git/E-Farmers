@@ -208,6 +208,7 @@ function AddBoxes(props) {
         .post(`insertions/${insertion_id}/boxes/`, form_data)
         .then(() => {
           // If the submission was successful
+          axiosInstance.put(`insertions/${insertion_id}/increase`).then((res) => console.log('INCREASED'))
           navigate(`/insertions/${insertion_id}`);
         })
         .catch((error) => {
