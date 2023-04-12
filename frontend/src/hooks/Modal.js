@@ -50,21 +50,16 @@ const Modal = ({ open, onClose }) => {
     getFarmer_id(user_id)
 */
   const handleSubmit = async (event) => {
-  /*
-    console.log(stars);
-    console.log(comment)
-    console.log(user_id)
-    console.log(farmer_id)
     event.preventDefault();
     axiosPrivate
-      .post(`users/farmers/${farmer_id}/`, {
+      .post(`review/${user_id}/`, {
         rating : stars,
         comment : comment,
         
       })
       .catch((error)=> {
         console.log(error.response);
-      });*/
+      });
   };
   
 

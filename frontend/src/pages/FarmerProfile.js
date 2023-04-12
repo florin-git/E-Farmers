@@ -25,6 +25,9 @@ function FarmerProfile(props) {
   const farmerUserId = useParams()?.farmer_id;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
+  //Review information
+  const [review , setReview] = useState([]);
+
   let two_yrs_ago =  new Date(new Date().setFullYear(new Date().getFullYear() - 2));
 
   /**
@@ -40,6 +43,15 @@ function FarmerProfile(props) {
         .get(`farmers/${farmerUserId}/`)
         .then((res) => {
           setFarmerInfo(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+        await axiosPrivate
+        .get(`review/${userId}/`)
+        .then((res) => {
+          setReview(res.data);
+          console.log(res.data)
         })
         .catch((error) => {
           console.log(error.response);
@@ -210,34 +222,22 @@ function FarmerProfile(props) {
                 <div className="col-8">
                   <div className="comment-box ml-2">
                     <h4>Add a comment</h4>
-                    <div className="comment-area">
-                      <textarea
-                        className="form-control"
-                        placeholder="Please write your feedback"
-                        rows="4"
-                      ></textarea>
+                    
+                    <div class="col-md-8">
+                      <div class="media g-mb-30 media-comment">
+                          <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Image Description"/>
+                            <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                              <div class="g-mb-15">
+                                <h5 class="h5 g-color-gray-dark-v1 mb-0">John Doe</h5>
+                                  <span class="g-color-gray-dark-v4 g-font-size-12">{review.rating}</span>
+                              </div>
+                            <h4> Review</h4>
+                          <p> {review.comment}</p>
+ 
                     </div>
+                </div>
+            </div>
 
-                    <div className="comment-btns mt-2">
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="pull-left">
-                            <button className="btn btn-success btn-sm">
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="col-6">
-                          <div className="pull-right">
-                            <button className="btn btn-success send btn-sm">
-                              Send{" "}
-                              <i className="fa fa-long-arrow-right ml-1"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
