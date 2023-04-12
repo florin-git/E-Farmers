@@ -9,7 +9,9 @@ import useAuth from "../hooks/useAuth";
 
 let farmer_id=false;
 
-const Modal = ({ open, onClose }) => {
+const Modal = ({ farmer , open, onClose }) => {
+
+  
 
   const { auth } = useAuth();
   const user_id = auth.userId;
@@ -55,11 +57,13 @@ const Modal = ({ open, onClose }) => {
       .post(`review/${user_id}/`, {
         rating : stars,
         comment : comment,
+        farmer_user : farmer,
         
       })
       .catch((error)=> {
         console.log(error.response);
       });
+      onClose()
   };
   
 
@@ -73,11 +77,14 @@ const Modal = ({ open, onClose }) => {
         }}
         className='modalContainer'
       >
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Farmer_meme.jpg" alt='/' />
+        <img
+              className="rounded-circle mt-5"
+              width="150px"
+              src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+              alt="Pennello Cinghiale"
+            ></img>
         <div className='modalRight'>
-          <button className='btn btn-primary' onClick={onClose}>
-            X
-          </button>
+          
           <div className='content'>
           
           <Box
@@ -123,6 +130,7 @@ const Modal = ({ open, onClose }) => {
           <div className='btnContainer'>
             <button className="btn btn-primary m-1" 
             onClick = {handleSubmit}>
+            
               
               <span className='bold'>Send Review!</span> 
             </button>

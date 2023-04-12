@@ -208,21 +208,22 @@ class UsersView(viewsets.ViewSet):
 
         if review_serializer.is_valid(raise_exception=True):
             # review_serializer.save()
-            review_serializer.save(ext_user=user)
+            review_serializer.save(writer_user=user)
             return Response(review_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print("ERROR HERE")
 
     def retrieve_review(self, request, user_id=None) :  #GET /api/review/<int:user_id>/
 
-        review = Review.objects.filter(ext_user=user_id).last()
+        review = Review.objects.filter(farmer_user=user_id).last()
         review_serializer = ReviewSerializer(review)
 
         return Response({
-            'rating': review_serializer.data['rating'],
-            'comment': review_serializer.data['comment'],
-        },
+                'rating': review_serializer.data['rating'],
+                'comment': review_serializer.data['comment'],
+            },
             status=status.HTTP_200_OK)
+       
 
     def change_profile(self, request, user_id = None ): # PATCH /api/users/<int:user_id>/changes/
         user = User.objects.get(id=user_id)
