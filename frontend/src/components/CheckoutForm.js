@@ -48,31 +48,8 @@ const CheckoutForm = (props) => {
         
         axiosOrder.saveStripeInfo({ email, payment_method_id: paymentMethod.id , price, box_names, farmer})
         .then(response => {
-            console.log('SAVE STRIPE INFO')
             boxes_array.map((box_id) => (
-                axiosInsertions.patch(`boxes/${box_id}/decrease/`).then((res) => {
-                    // box has been deleted
-                    console.log('PATCH NUMBER BOX')
-                    console.log('STATUS ::' + res.status)
-                    if(res.status == 100) {
-                        axiosInsertions.get(`insertions/${box_id}/boxes/`).then((res) => {
-                            let insertion_id = res.data['insertion']
-                            axiosInsertions.patch(`insertions/${insertion_id}/decrease`).then((res) => {
-                                if(res.status == 100) {
-                                    console.log('INSERTION DELETED')
-                                    console.log(res)
-                                } else {
-                                    console.log('BOX DECREASED')
-                                    console.log(res)
-                                }
-                            })
-                        })
-                        
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+                axiosInsertions.patch(`boxes/${box_id}/decrease/`)
             ))
             axiosCart.delete(`users/${userId}/cart/`)
             .then(() => {

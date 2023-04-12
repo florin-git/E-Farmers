@@ -19,7 +19,6 @@ class Insertion(models.Model):
     reported = models.BooleanField(default=False)
     farmer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insertion_farmer')
     private = models.BooleanField(default=False)
-    n_boxes = models.IntegerField(default=0)
     request = models.OneToOneField(
         'Request',
         related_name="insertion_request",

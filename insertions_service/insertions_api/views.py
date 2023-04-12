@@ -102,23 +102,6 @@ class InsertionsView(viewsets.ViewSet):
         except Exception as e:
             print(e)
 
-    def increase_n_boxes(self, request, insertion_id=None): # PUT api/insertions/<int:id>/increase 
-        insertion = Insertion.objects.get(id=insertion_id)
-        insertion.n_boxes += 1
-        insertion.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    def decrease_n_boxes(self, request, insertion_id=None): # PUT api/insertions/<int:id>/decrease 
-        insertion = Insertion.objects.get(id=insertion_id)
-        if insertion.n_boxes == 0:
-            insertion.delete()
-            return Response(status=status.HTTP_100_CONTINUE)
-        else:
-            insertion.n_boxes -= 1
-            insertion.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        
-
     def delete_insertion(self, request, insertion_id=None): # DELETE /api/insertions/<int:id>/
         insertion = Insertion.objects.get(id=insertion_id)
         insertion.delete()

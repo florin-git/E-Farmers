@@ -15,10 +15,10 @@ urlpatterns = [
         'put': 'update_insertion',
         'delete': 'delete_insertion'
     })),
-    path('insertions/<int:insertion_id>/increase', InsertionsView.as_view({
+    path('insertions/<int:insertion_id>/increase/', InsertionsView.as_view({
         'put': 'increase_n_boxes'
     })),
-    path('insertions/<int:insertion_id>/decrease', InsertionsView.as_view({
+    path('insertions/<int:insertion_id>/decrease/', InsertionsView.as_view({
         'put': 'decrease_n_boxes'
     })),
 

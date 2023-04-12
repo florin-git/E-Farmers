@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from "../components/Box";
+import Modal from "react-bootstrap/Modal";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInsertions from "../api/axiosInsertions";
@@ -28,6 +29,9 @@ function InsertionDetail({ insertion }) {
   // axios function with JWT tokens
   const axiosPrivate = useAxiosPrivate();
 
+  const [showModal, setShowModal] = useState(false);
+  // It will contain the id of the deleted insertion
+
   // Farmer info
   const farmerId = insertion.farmer;
   const [farmerInfo, setFarmerInfo] = useState([]);
@@ -36,21 +40,25 @@ function InsertionDetail({ insertion }) {
    ** FUNCTIONS
    */
 
-  useEffect(() => {
-    /**
-     * Retrieve the boxes of this insertion from backend
-     */
-    (async () => {
-      await axiosInsertions
-        .get(`insertions/${insertion_id}/boxes/`)
-        .then((res) => {
-          setBoxes(res.data);
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-    })();
-  }, [insertion_id]);
+  // Manage Modal
+  const handleCloseModal = () => setShowModal(false);
+
+  // If there's no box
+  const handleShowModal = () => {
+    console.log('Insertion ID to delete :: ' + insertion_id)
+    setShowModal(true);
+  };
+
+  // Deletion
+  const handleDeletion = async () => {
+    await axiosInsertions.delete(`insertions/${insertion_id}/`).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    });
+
+    setShowModal(false); // Close modal
+  };
 
   useEffect(() => {
     /**
@@ -71,6 +79,29 @@ function InsertionDetail({ insertion }) {
     })();
   }, [farmerId]);
 
+  useEffect(() => {
+    /**
+     * Retrieve the boxes of this insertion from backend
+     */
+    (async () => {
+      console.log('Getting the boxes...')
+      await axiosInsertions
+        .get(`insertions/${insertion_id}/boxes/`)
+        .then((res) => {
+          console.log('FARMER ID ' + farmerId);
+          console.log('USER ID ' + userId)
+          if (res.data.length == 0 && farmerId == userId) {
+            // there are no boxes
+            handleShowModal()
+          }
+          setBoxes(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })();
+  }, [insertion_id]);
+
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
     box_sizes.push(box.size);
@@ -80,13 +111,32 @@ function InsertionDetail({ insertion }) {
      */
     return <Box key={box.id} {...box} />;
   });
-  
+
 
   var date = new Date();
   // `/image/?${date.getMinutes()}` in order to avoid caching of the images
   return (
     <section>
       <div className="container py-5">
+
+        {/* Modal */}
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <span>Deletion</span>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>There are no boxes. Do you want to delete the insertion?</Modal.Body>
+          <Modal.Footer>
+            <button className="btn btn-secondary" onClick={handleCloseModal}>
+              Close
+            </button>
+            <button className="btn btn-primary" onClick={handleDeletion}>
+              Yes
+            </button>
+          </Modal.Footer>
+        </Modal>
+
         <div className="row">
           <div className="col-lg-6">
             <img
