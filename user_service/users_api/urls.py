@@ -27,6 +27,9 @@ urlpatterns = [
         'get': 'user_info',
         'patch' : 'account_change',
     })),
+    path('users/<int:user_id>/name/', UsersView.as_view({
+        'get': 'user_name',
+    })),
     path('users/<int:user_id>/<int:type>/' , UsersView.as_view({
         'post' : 'user_update',
     })),

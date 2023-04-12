@@ -223,7 +223,7 @@ function Login(props) {
                           </button>
                         </div>
                       </form>
-                      <div>
+                      <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <OAuthLogin />
                       </div>
                     </div>

@@ -58,6 +58,11 @@ class UsersView(viewsets.ViewSet):
             if serializer.errors['email'][0] == "user with this Email already exists.":
                 return Response("Email already used", status=status.HTTP_406_NOT_ACCEPTABLE)
 
+    def user_name(self, request, user_id=None): # GET /api/users/<int:user_id>/name/
+        user = User.objects.get(id=user_id)
+        user_serializer = UserSerializer(user)
+
+        return Response(user_serializer.data['name'], status=status.HTTP_200_OK)
 
 
     def user_info(self, request, user_id=None):  # GET /api/users/<int:id>/
@@ -214,13 +219,13 @@ class UsersView(viewsets.ViewSet):
             print("ERROR HERE")
 
     def retrieve_review(self, request, user_id=None) :  #GET /api/review/<int:user_id>/
-
         review = Review.objects.filter(farmer_user=user_id).last()
         review_serializer = ReviewSerializer(review)
 
         return Response({
                 'rating': review_serializer.data['rating'],
                 'comment': review_serializer.data['comment'],
+                'writer_user': review_serializer.data['writer_user'],
             },
             status=status.HTTP_200_OK)
        

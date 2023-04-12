@@ -26,9 +26,12 @@ function FarmerProfile(props) {
   const [farmerInfo, setFarmerInfo] = useState([]);
 
   //Review information
-  const [review , setReview] = useState([]);
+  const [review, setReview] = useState([]);
+  const [writerName, setWriterName] = useState();
 
-  let two_yrs_ago =  new Date(new Date().setFullYear(new Date().getFullYear() - 2));
+  let two_yrs_ago = new Date(
+    new Date().setFullYear(new Date().getFullYear() - 2)
+  );
 
   /**
    ** FUNCTIONS
@@ -47,11 +50,20 @@ function FarmerProfile(props) {
         .catch((error) => {
           console.log(error.response);
         });
-        await axiosPrivate
-        .get(`review/${userId}/`)
+      await axiosPrivate
+        .get(`review/${farmerUserId}/`)
         .then((res) => {
           setReview(res.data);
-          console.log(res.data)
+          console.log(res.data);
+          const writer_user_id = res.data.writer_user;
+          axiosPrivate
+            .get(`users/${writer_user_id}/name`)
+            .then((res) => {
+              setWriterName(res.data);
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         })
         .catch((error) => {
           console.log(error.response);
@@ -79,12 +91,12 @@ function FarmerProfile(props) {
         <div className="profile-nav col-md-3">
           <div className="panel">
             <div className="user-heading round">
-              <a href="" class="disabled-link" >
+              <a href="" class="disabled-link">
                 <img
                   className="rounded-circle"
                   src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
                   alt="Pennello Cinghiale"
-                ></img> 
+                ></img>
               </a>
               <h1>{farmerInfo.name}</h1>
               <p>{farmerInfo.email}</p>
@@ -116,44 +128,48 @@ function FarmerProfile(props) {
               <li>
                 <a href="#"> {edit} Edit Insertions </a>
               </li> */}
-              <hr/>
+              <hr />
               <div className="row">
                 <div className="col">
                   {farmerInfo.number_insertions >= 100 && (
-                      <img
-                        src={process.env.PUBLIC_URL+'/images/badge_insertions.jpg'}
-                        className="img-fluid"
-                        alt="fresh"
-                      />
+                    <img
+                      src={
+                        process.env.PUBLIC_URL + "/images/badge_insertions.jpg"
+                      }
+                      className="img-fluid"
+                      alt="fresh"
+                    />
                   )}
                   {farmerInfo.number_insertions < 100 && (
-                      <img
-                        src={process.env.PUBLIC_URL+'/images/badge_not_yet.jpg'}
-                        className="img-fluid"
-                        alt="fresh"
-                      />
+                    <img
+                      src={process.env.PUBLIC_URL + "/images/badge_not_yet.jpg"}
+                      className="img-fluid"
+                      alt="fresh"
+                    />
                   )}
                 </div>
                 <div className="col">
-                  {farmerInfo.since <= two_yrs_ago.toISOString().split('T')[0] && (
-                      <div className="col">
-                        <img
-                          src={process.env.PUBLIC_URL+'/images/badge_years.jpg'}
-                          className="img-fluid"
-                          alt="fresh"
-                        />
-                      </div>
-                  )}
-                  {farmerInfo.since > two_yrs_ago.toISOString().split('T')[0] && (
+                  {farmerInfo.since <=
+                    two_yrs_ago.toISOString().split("T")[0] && (
+                    <div className="col">
                       <img
-                        src={process.env.PUBLIC_URL+'/images/badge_not_yet.jpg'}
+                        src={process.env.PUBLIC_URL + "/images/badge_years.jpg"}
                         className="img-fluid"
                         alt="fresh"
                       />
+                    </div>
+                  )}
+                  {farmerInfo.since >
+                    two_yrs_ago.toISOString().split("T")[0] && (
+                    <img
+                      src={process.env.PUBLIC_URL + "/images/badge_not_yet.jpg"}
+                      className="img-fluid"
+                      alt="fresh"
+                    />
                   )}
                 </div>
               </div>
-              <div className="d-flex justify-content-center">
+              {/* <div className="d-flex justify-content-center">
                 <div className="content text-center">
                   <div className="ratings">
                     <span className="product-rating">4.6</span>
@@ -170,18 +186,16 @@ function FarmerProfile(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
         <div className="profile-info col-md-9">
           <div className="panel">
-            <div className="bio-graph-heading">
-              {farmerInfo.bio}
-            </div>
+            <div className="bio-graph-heading">{farmerInfo.bio}</div>
             <div className="panel-body bio-graph-info">
               <div className="row">
-                  <h1>Bio Graph</h1>
+                <h1>Bio Graph</h1>
               </div>
               <div className="row">
                 <div className="bio-row">
@@ -215,29 +229,34 @@ function FarmerProfile(props) {
                 </div>
                 <ListInsertions farmerUserId={farmerUserId} />
               </div>
-
             </div>
             <div className="card3">
               <div className="row">
                 <div className="col-8">
                   <div className="comment-box ml-2">
-                    <h4>Add a comment</h4>
-                    
+                    <h4>Comment</h4>
+
                     <div class="col-md-8">
                       <div class="media g-mb-30 media-comment">
-                          <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Image Description"/>
-                            <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
-                              <div class="g-mb-15">
-                                <h5 class="h5 g-color-gray-dark-v1 mb-0">John Doe</h5>
-                                  <span class="g-color-gray-dark-v4 g-font-size-12">{review.rating}</span>
-                              </div>
-                            
-                          <p> {review.comment}</p>
- 
-                    </div>
-                </div>
-            </div>
+                        <img
+                          class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15"
+                          src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                          alt="Image Description"
+                        />
+                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                          <div class="g-mb-15">
+                            <h5 class="h5 g-color-gray-dark-v1 mb-0">
+                              {writerName}
+                            </h5>
+                            <span class="g-color-gray-dark-v4 g-font-size-12">
+                              {review.rating} rating
+                            </span>
+                          </div>
 
+                          <p> {review.comment}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

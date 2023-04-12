@@ -71,9 +71,10 @@ function OrdersMainPage(props) {
             <h5 className="mt-0 font-weight-bold mb-2">
               Farmer: {order.farmer}
             </h5>
+            <h5 className="mt-0 font-weight-bold mb-2">Boxes: {names_dedup}</h5>
             <h5 className="mt-0 font-weight-bold mb-2">
               {order.rider === 0 ? (
-                "Pick up at Warehouse"
+                "Picked up at Warehouse"
               ) : order.rider === -1 ? (
                 "Delivery Completed"
               ) : (
@@ -82,7 +83,6 @@ function OrdersMainPage(props) {
                 </Link>
               )}
             </h5>
-            <h5 className="mt-0 font-weight-bold mb-2">Boxes: {names_dedup}</h5>
             <p className="font-italic text-muted mb-0 small"></p>
             <div className="d-flex align-items-center justify-content-between mt-1">
               <h6 className="font-weight-bold my-2">Total : {order.price} €</h6>
