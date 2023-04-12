@@ -28,6 +28,7 @@ function OrdersMainPage(props) {
           console.log(email);
           axiosOrder.getOrder(email).then((res) => {
             setOrders(res.data);
+            console.log(res.data)
           });
         })
         .catch((error) => {
@@ -93,7 +94,7 @@ function OrdersMainPage(props) {
                   >
                     Leave a Review!
                   </button>
-                  <Modal open={openModal} onClose={() => setOpenModal(false)} />
+                  <Modal farmer={order.farmer} open={openModal} onClose={() => setOpenModal(false)} />
                 </div>
               </ul>
             </div>

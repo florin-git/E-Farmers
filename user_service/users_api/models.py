@@ -65,12 +65,13 @@ class Review(models.Model):
     
     rating = models.DecimalField(default = 0.0, decimal_places =1, max_digits = 3)
     comment = models.TextField(default = None)
-    ext_user = models.ForeignKey(
+    writer_user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         blank = True,
         null = True
     )
+    farmer_user = models.IntegerField(default=0)
 
     def __strd__(self):
         return self.comment

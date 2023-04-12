@@ -104,7 +104,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model= Review
-        fields= ('id','rating','comment','ext_user')
+        fields= ('id','rating','comment','writer_user','farmer_user')
 
     def create(self, validated_data):
         review = Review.objects.create(**validated_data)

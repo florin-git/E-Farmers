@@ -231,7 +231,7 @@ function FarmerProfile(props) {
                                 <h5 class="h5 g-color-gray-dark-v1 mb-0">John Doe</h5>
                                   <span class="g-color-gray-dark-v4 g-font-size-12">{review.rating}</span>
                               </div>
-                            <h4> Review</h4>
+                            
                           <p> {review.comment}</p>
  
                     </div>
