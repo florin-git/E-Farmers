@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosCart";
-import CartItem from "../components/CartItem";
 import { Link, useNavigate } from "react-router-dom";
 
 import Modal from "react-bootstrap/Modal";
@@ -62,7 +61,6 @@ function ShoppingCart({ cart }) {
   };
 
   const boxes_array = boxes.map((box) => {
-    // return (<CartItem key={box.id} {...box} />);
     return (
       <div className="card mb-3" key={box.id}>
         <div className="card-body">

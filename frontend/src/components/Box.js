@@ -53,7 +53,7 @@ function Box(props) {
             })
             .then((res) => {
               // alert that box has been added to cart
-              alert("BOX HAS BEEN ADDED!");
+              alert("BOX HAS BEEN ADDED TO THE CART!");
               setFarmerId(-1)
               setInsertionName("")
               console.log(res);
@@ -109,7 +109,7 @@ function Box(props) {
               })
               .then((res) => {
                 // alert that box has been added to cart
-                alert("BOX HAS BEEN ADDED!");
+                alert("BOX HAS BEEN ADDED TO THE CART!");
 
                 console.log(res);
               })
@@ -150,7 +150,7 @@ function Box(props) {
                           farmer: farmer_id,
                         })
                         .then((res) => {
-                          alert("BOX HAS BEEN ADDED!");
+                          alert("BOX HAS BEEN ADDED TO THE CART!");
                           console.log(res);
                         })
                         .catch((error) => {
@@ -161,7 +161,6 @@ function Box(props) {
                       console.log(error);
                     });
                 } else {
-                  console.log("REGRE")
                   console.log(error);
                 }
               });

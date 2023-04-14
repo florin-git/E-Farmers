@@ -49,7 +49,7 @@ function ProtectedRouteCart() {
               alert('ADD A BOX!');
               // If cart doesn't exist
               setExistsURL(false);
-              navigate("/");
+              navigate("/insertions");
             });
         })
         .catch((error) => {

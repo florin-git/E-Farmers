@@ -195,28 +195,14 @@ function FarmerProfile(props) {
             <div className="bio-graph-heading">{farmerInfo.bio}</div>
             <div className="panel-body bio-graph-info">
               <div className="row">
-                <h1>Bio Graph</h1>
+                <h1>Info</h1>
               </div>
               <div className="row">
                 <div className="bio-row">
-                  <p>
-                    <span>Name </span>: {farmerInfo.name}
-                  </p>
+                  <span>Farm Location: {farmerInfo.farm_location}</span>
                 </div>
                 <div className="bio-row">
-                  <p>
-                    <span>Last Name </span>: {farmerInfo.last_name}
-                  </p>
-                </div>
-                <div className="bio-row">
-                  <p>
-                    <span>Farm Location </span>: {farmerInfo.farm_location}
-                  </p>
-                </div>
-                <div className="bio-row">
-                  <p>
-                    <span>Mobile </span>: {farmerInfo.phone_number}
-                  </p>
+                  <span>Mobile: {farmerInfo.phone_number}</span>
                 </div>
               </div>
             </div>
@@ -225,7 +211,7 @@ function FarmerProfile(props) {
             <div className="row">
               <div className="py-4 px-4">
                 <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h5 className="mb-0">Insertions</h5>
+                  <h4 className="mb-0">Insertions</h4>
                 </div>
                 <ListInsertions farmerUserId={farmerUserId} />
               </div>
@@ -233,31 +219,31 @@ function FarmerProfile(props) {
             <div className="card3">
               <div className="row">
                 <div className="col-8">
-                  <div className="comment-box ml-2">
-                    <h4>Comment</h4>
-
-                    <div class="col-md-8">
-                      <div class="media g-mb-30 media-comment">
-                        <img
-                          class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15"
-                          src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                          alt="Image Description"
-                        />
-                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
-                          <div class="g-mb-15">
-                            <h5 class="h5 g-color-gray-dark-v1 mb-0">
-                              {writerName}
-                            </h5>
-                            <span class="g-color-gray-dark-v4 g-font-size-12">
-                              {review.rating} rating
-                            </span>
+                  {review.comment != "" && (
+                    <div className="comment-box ml-2">
+                      <h4>Comment</h4>
+                      <div class="col-md-8">
+                        <div class="media g-mb-30 media-comment">
+                          <img
+                            class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15"
+                            src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                            alt="Image Description"
+                          />
+                          <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                            <div class="g-mb-15">
+                              <h5 class="h5 g-color-gray-dark-v1 mb-0">
+                                {writerName}
+                              </h5>
+                              <span class="g-color-gray-dark-v4 g-font-size-12">
+                                {review.rating} rating
+                              </span>
+                            </div>
+                            <p> {review.comment}</p>
                           </div>
-
-                          <p> {review.comment}</p>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
