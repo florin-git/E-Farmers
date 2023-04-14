@@ -1,7 +1,6 @@
-## Requirements to add : 
-> pip install --upgrade stripe
+## Keep in mind
 
-> Sign up to the Stripe dashboard and get your test key (public and secret)
+Pay attention to the usage of this microservice, because to monitor the stripe payments we inserted our public and secret key available after the registration on [stripe](https://stripe.com/it) .
 
 ## Usage
 - Install dependencies: `/path_to_E-Farmers/payments_order_service$ pip install -r requirements.txt`
@@ -19,7 +18,4 @@ DATABASE_NAME=efarmers
 DATABASE_PORT=5432
 ```
 
-## Keep in mind
-
-Pay attention to the usage of this microservice, because to monitor the stripe payments we inserted our public and secret key available after the registration on [stripe](https://stripe.com/it) .
 
