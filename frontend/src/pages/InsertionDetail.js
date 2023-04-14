@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from "../components/Box";
 import Modal from "react-bootstrap/Modal";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosInsertions from "../api/axiosInsertions";
@@ -36,6 +37,8 @@ function InsertionDetail({ insertion }) {
   const farmerId = insertion.farmer;
   const [farmerInfo, setFarmerInfo] = useState([]);
 
+  const navigate = useNavigate();
+
   /**
    ** FUNCTIONS
    */
@@ -58,6 +61,7 @@ function InsertionDetail({ insertion }) {
     });
 
     setShowModal(false); // Close modal
+    navigate("/insertions");
   };
 
   useEffect(() => {
@@ -100,7 +104,7 @@ function InsertionDetail({ insertion }) {
           console.log(error);
         });
     })();
-  }, [insertion_id]);
+  }, [farmerId, userId, insertion_id]);
 
   const boxes_array = boxes.map((box) => {
     // Add sizes already present
