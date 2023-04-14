@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axiosOrder from "../api/axiosOrder";
-import Modal from "../hooks/Modal";
+import Order from "../components/Order";
 
 function OrdersMainPage(props) {
   const [orders, setOrders] = useState([]);
@@ -37,71 +36,8 @@ function OrdersMainPage(props) {
     })();
   }, [userId]);
 
-  //   function getFarmerName(farmerId) {
-  //     let name = "Farmer";
-
-  //     axiosPrivate
-  //       .get(`farmers/${farmerId}/`)
-  //       .then((res) => {
-  //         return res.data.name;
-  //         name = res.data.name;
-  //       })
-  //       .catch((error) => {
-  //         console.log(error.response);
-  //       });
-  //     console.log(name);
-  //     return name;
-  //   }
-
   const orders_array = orders.map((order) => {
-    /*Deduplicate boxes names */
-    let names = [...new Set(order.box_names.split(" "))];
-    let names_dedup = "";
-    names.map((word) => {
-      names_dedup += word + " ";
-    });
-
-    return (
-      <li key={order.id} className="list-group-item">
-        <div className="media align-items-lg-center flex-column flex-lg-row p-3">
-          <div className="media-body order-2 order-lg-1">
-            <h5 className="mt-0 font-weight-bold mb-2">
-              Order Number: {order.payment_method_id}
-            </h5>
-            <h5 className="mt-0 font-weight-bold mb-2">
-              Farmer: {order.farmer}
-            </h5>
-            <h5 className="mt-0 font-weight-bold mb-2">Boxes: {names_dedup}</h5>
-            <h5 className="mt-0 font-weight-bold mb-2">
-              {order.rider === 0 ? (
-                "Picked up at Warehouse"
-              ) : order.rider === -1 ? (
-                "Delivery Completed"
-              ) : (
-                <Link className="" to={`/rider/profile/${order.rider}`}>
-                  Rider: {order.rider}
-                </Link>
-              )}
-            </h5>
-            <p className="font-italic text-muted mb-0 small"></p>
-            <div className="d-flex align-items-center justify-content-between mt-1">
-              <h6 className="font-weight-bold my-2">Total : {order.price} €</h6>
-              <ul className="list-inline small">
-                <div>
-                  <button
-                    onClick={() => setOpenModal(true)}
-                    className="btn btn-primary m-1"
-                  >
-                    Leave a Review!
-                  </button>
-                  <Modal farmer={order.farmer} open={openModal} onClose={() => setOpenModal(false)} />
-                </div>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </li>
-    );
+    return <Order key={order.id} {...order} />;
   });
 
   return (

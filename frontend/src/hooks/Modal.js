@@ -70,7 +70,7 @@ const Modal = ({ farmer , open, onClose }) => {
 
   if (!open) return null;
   return (
-    <div onClick={onClose} className='overlay'>
+    <div onClick={onClose} className='overlay' style={{"zIndex": '100'}}>
       <div
         onClick={(e) => {
           e.stopPropagation();
