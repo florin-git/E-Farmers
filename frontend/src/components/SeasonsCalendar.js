@@ -368,7 +368,7 @@ function SeasonsCalendar() {
   return (
     <div>
       <div id="events-log">
-        <h3>The calendar of seasonal food</h3>
+        <h1 className="text-center">The Calendar of Seasonal Food</h1>
       </div>
       {showModal == false && (
         <Calendar

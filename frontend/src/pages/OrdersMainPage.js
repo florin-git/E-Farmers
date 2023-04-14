@@ -108,7 +108,7 @@ function OrdersMainPage(props) {
     <div className="container py-5">
       <div className="row text-center mb-5">
         <div className="col-lg-7 mx-auto">
-          <h1 className="display-4">Orders List</h1>
+          <h1 className="text-center">Orders List</h1>
         </div>
       </div>
 
