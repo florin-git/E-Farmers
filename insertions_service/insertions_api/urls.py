@@ -15,11 +15,23 @@ urlpatterns = [
         'put': 'update_insertion',
         'delete': 'delete_insertion'
     })),
+    path('insertions/<int:insertion_id>/increase/', InsertionsView.as_view({
+        'put': 'increase_n_boxes'
+    })),
+    path('insertions/<int:insertion_id>/decrease/', InsertionsView.as_view({
+        'put': 'decrease_n_boxes'
+    })),
 
     # Boxes
     path('insertions/<int:insertion_id>/boxes/', BoxesView.as_view({
         'get': 'list_insertion_boxes',
         'post': 'add_boxes'
+    })),
+    path('insertions/<int:id>/boxes/', BoxesView.as_view({
+        'get': 'get_ins_from_box',
+    })),
+    path('boxes/<int:box_id>/decrease/', BoxesView.as_view({
+        'patch' : 'decrease_boxes'
     })),
 
     # Booking
@@ -38,10 +50,6 @@ urlpatterns = [
     })),
 
     path('booking/inbox/<int:farmer_id>/', BookingView.as_view({
-        'get': 'list_requests'})),
-        
-    path('boxes/<int:box_id>/decrease/', BoxesView.as_view({
-        'patch' : 'decrease_boxes'
+        'get': 'list_requests'
     }))
-
 ]

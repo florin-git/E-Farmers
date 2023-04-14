@@ -39,7 +39,7 @@ function Box(props) {
           farmer: farmerId,
         })
         .then((res) => {
-          console.log("CART CREATED! FIRST IF");
+          console.log("CART CREATED!");
 
           axiosCart
             .put(`users/${userId}/cart/items/`, {
