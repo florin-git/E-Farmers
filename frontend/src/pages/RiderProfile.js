@@ -112,7 +112,7 @@ function RiderProfile(props) {
 
           <div className="mt-5 text-center">
             <h3 className="mb-0">{riderInfo.name}</h3>
-            <span className="text-muted d-block mb-2">El salvador</span>
+            <span className="text-muted d-block mb-2">{riderInfo.bio}</span>
             <span className="text-muted d-block mb-2">
               <h6>STATUS : {riderStatus} </h6>
             </span>

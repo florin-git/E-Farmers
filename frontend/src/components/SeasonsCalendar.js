@@ -413,8 +413,8 @@ function SeasonsCalendar() {
                       type="number"
                       className="form-control"
                       id="weight"
-                      min="0.00"
-                      step="0.1"
+                      min="0.0000"
+                      step="0.001"
                       placeholder="0"
                       value={formData.weight}
                       name="weight"

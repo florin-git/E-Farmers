@@ -231,8 +231,8 @@ function AddBoxes(props) {
                 className={`form-control ${formValidationClass.weight_for_class}`}
                 id="weight"
                 ref={weightRef}
-                min="0.00"
-                step="0.1"
+                min="0.0000"
+                step="0.001"
                 value={formData.weight}
                 name="weight"
                 onChange={handleChange}
