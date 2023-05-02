@@ -85,7 +85,5 @@ REACT_APP_API_CART=http://localhost:8082/api/
 REACT_APP_API_PAYMENTS_ORDERS=http://localhost:8083/api
 REACT_APP_API_SUBSCRIPTION=http://localhost:5000/
 
-REACT_APP_GOOGLE_API_TOKEN=801601549331-hin4teb1mbk2rt9t2dgt09vlbqc8ta43.apps.googleusercontent.com
+REACT_APP_GOOGLE_API_TOKEN=<YOUR_GOOGLE_API_TOKEN_FOR_OAUTH>
 ```
-
-*The google API showed above is used only for testing purposes.*
